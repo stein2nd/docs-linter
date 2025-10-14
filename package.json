@@ -1,0 +1,31 @@
+{
+  "name": "docs-linter",
+  "version": "0.1.0",
+  "description": "Shared textlint configuration for Markdown files across WordPress and Xcode projects.",
+  "type": "module",
+  "author": "Koutarou ISHIKAWA",
+  "license": "GPL-2.0-or-later",
+  "keywords": [
+    "textlint",
+    "markdown",
+    "wordpress",
+    "xcode",
+    "swift"
+  ],
+  "scripts": {
+    "lint": "textlint '**/*.md'",
+    "lint:wp": "textlint --config ./wordpress/.textlintrc.wp.json '**/*.md'",
+    "lint:xcode": "textlint --config ./xcode/.textlintrc.xc.json '**/*.md'"
+  },
+  "dependencies": {
+  },
+  "overrides": {
+  },
+  "devDependencies": {
+    "textlint": "^15.2.3",
+    "textlint-rule-no-dead-link": "^6.0.1",
+    "textlint-rule-preset-ja-technical-writing": "^12.0.2",
+    "textlint-rule-preset-jtf-style": "^3.0.3",
+    "textlint-rule-prh": "^6.1.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "filters": {},
+  "rules": {
+    "preset-ja-technical-writing": true,
+    "preset-jtf-style": true,
+    "prh": {
+      "rulePaths": ["./base/rules/prh.yml"]
+    },
+    "no-dead-link": true,
+    "./base/rules/no-long-kanji": true
+  }
+}

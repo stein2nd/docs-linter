@@ -1,0 +1,8 @@
+{
+  "extends": "../base/.textlintrc.base.json",
+  "rules": {
+    "prh": {
+      "rulePaths": ["../base/rules/prh.yml", "./rules/wp-terms.yml"]
+    }
+  }
+}
