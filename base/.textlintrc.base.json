@@ -4,7 +4,7 @@
     "preset-ja-technical-writing": true,
     "preset-jtf-style": true,
     "prh": {
-      "rulePaths": ["./base/rules/prh.yml"]
+      "rulePaths": []
     },
     "no-dead-link": true,
     "./base/rules/no-long-kanji": true
