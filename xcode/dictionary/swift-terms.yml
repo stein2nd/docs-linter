@@ -1,0 +1,30 @@
+version: 1
+rules:
+  - expected: "SwiftUI"
+    patterns: ["Swift UI", "swiftui"]
+  - expected: "UIKit"
+    patterns: ["UI Kit"]
+  - expected: "AppKit"
+    patterns: ["App Kit"]
+  - expected: "Xcode"
+    patterns: ["xcode", "XCode"]
+  - expected: "Auto Layout"
+    patterns: ["AutoLayout", "Auto-Layout"]
+  - expected: "Storyboard"
+    patterns: ["Story Board"]
+  - expected: "Interface Builder"
+    patterns: ["InterfaceBuilder"]
+  - expected: "View"
+    patterns: ["view"]
+  - expected: "Modifier"
+    patterns: ["modifier"]
+  - expected: "SceneDelegate"
+    patterns: ["Scene Delegate"]
+  - expected: "AppDelegate"
+    patterns: ["App Delegate"]
+  - expected: "Target"
+    patterns: ["target"]
+  - expected: "Scheme"
+    patterns: ["scheme"]
+  - expected: "Simulator"
+    patterns: ["simulator"]
