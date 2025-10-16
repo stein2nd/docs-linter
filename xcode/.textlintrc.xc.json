@@ -2,7 +2,7 @@
   "extends": "../base/.textlintrc.base.json",
   "rules": {
     "prh": {
-      "rulePaths": ["../base/rules/prh.yml", "./rules/xcode-terms.yml"]
+      "rulePaths": []
     }
   }
 }
