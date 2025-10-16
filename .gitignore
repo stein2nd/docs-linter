@@ -1,10 +1,34 @@
+# Node modules
 node_modules/
-.vscode/
-.idea/
-.DS_Store
-logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
 *.log
+logs/
+*.pid
+*.seed
+*.tgz
+
+# Editor settings
+.vscode/*
+!.vscode/settings.json
+
+.idea/
+*.swp
+
+# Env files
+.env
+.env.local
+
+# Build / cache
 dist/
 .cache/
 coverage/
+
+# macOS
+.DS_Store
+
+# OS or system files
 Thumbs.db
