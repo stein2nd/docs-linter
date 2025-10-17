@@ -42,8 +42,9 @@ git submodule update --init --recursive
 # npm を初期化してない場合は、このタイミングで実施
 npm init -y
 
-# textlint を devDependencies に追加
+# textlint 他を devDependencies に追加
 npm install --save-dev textlint
+npm install --save-dev github:jawordpressorg/textlint-rule-preset-wp-docs-ja
 ```
 
 続いて、VS Code / Cursor 設定を追加します。
