@@ -55,10 +55,10 @@ npm install --save-dev textlint
   "textlint.configPath": "./tools/docs-linter/base/.textlintrc.base.json",
   "textlint.nodePath": "./node_modules",
   "editor.codeActionsOnSave": {
-    "source.fixAll.textlint": true
+    "source.fixAll.textlint": "always"
   },
   "[markdown]": {
-    "editor.defaultFormatter": "taichi.vscode-textlint"
+    "editor.defaultFormatter": "3w36zj6.textlint"
   }
 }
 ```
@@ -133,10 +133,10 @@ cat <<'JSON' > .vscode/settings.json
 {
   "textlint.configPath": "./tools/docs-linter/base/.textlintrc.base.json",
   "editor.codeActionsOnSave": {
-    "source.fixAll.textlint": true
+    "source.fixAll.textlint": "always"
   },
   "[markdown]": {
-    "editor.defaultFormatter": "taichi.vscode-textlint"
+    "editor.defaultFormatter": "3w36zj6.textlint"
   }
 }
 JSON
