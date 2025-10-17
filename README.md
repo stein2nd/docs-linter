@@ -8,10 +8,13 @@
 
 ## 📝 Description
 
-WordPress プラグイン／テーマ開発、Xcode (Swift/SwiftUI) アプリ開発の両方で利用可能です。
+Markdown ドキュメントを lint (構文・文体チェック) するためのルールセットです。
+WordPress プラグイン/テーマ開発、Xcode (Swift/SwiftUI) アプリ開発の両方で利用可能です。
 また、それらに関連するドキュメント制作での表記統一にも利用可能です。
 
 ## ⚙️ Installation
+
+Git サブモジュールとして利用します。
 
 ### 1. リポジトリの追加 (既存プロジェクトに追加する場合)
 
@@ -160,6 +163,8 @@ git push -u origin main
 
 ## 📋 List of Configuration Files
 
+設定ファイルを、3つ用意してます。
+
 ### `base/.textlintrc.base.json` - 基本設定
 
 すべてのプロジェクトで共通して使用する基本設定です。
@@ -234,6 +239,8 @@ npm run lint:xcode
 ```
 
 ## 🔧 Editor-Specific Settings
+
+代表的なエディターでの設定例を紹介します。
 
 ### VS Code / Cursor
 
@@ -313,6 +320,8 @@ fi
 
 ## 💻 Command-line execution
 
+CLI 実行例です。
+
 ```zsh
 # 基本設定で実行
 npm run lint
@@ -325,6 +334,8 @@ npm run lint:xcode
 ```
 
 ## 🛠️ Custom Rules
+
+プロジェクト固有ルールを追加できます。
 
 ### `base/rules/no-long-kanji.js`
 
@@ -350,6 +361,10 @@ npm run lint:xcode
 
 ## 📚 Glossary of Terms
 
+共通用語集 (Swift/Xcode 用語など) について。
+
+WordPress 用語集については、`node_modules/textlint-rule-preset-wp-docs-ja/prh-rules/wordpress.yml` を参照してください。
+
 ### `xcode/dictionary/swift-terms.yml`
 
 Swift 開発でよく使われる用語の統一ルールを定義しています。
@@ -364,6 +379,8 @@ Swift 開発でよく使われる用語の統一ルールを定義していま�
 
 ## 🧭 Updates and Operations
 
+サブモジュール更新、ルール拡張、メンテナンス手順です。
+
 | 操作 | コマンド |
 | --- | --- |
 | **サブモジュールを最新化** | `git submodule update --remote --merge` |
@@ -373,6 +390,8 @@ Swift 開発でよく使われる用語の統一ルールを定義していま�
 💡 `docs-linter` 側のルール変更をすぐ反映したいときは、各プロジェクトで上記「update --remote --merge」を実行します。
 
 ## 🎯 Practical Points
+
+実務での使い方ヒント (CI 連携、PR チェックなど) について。
 
 * **WordPress 開発者**は `.textlintrc.wp.json` を指定
 * **Xcode/Swift 開発者**は `.textlintrc.xcode.json` を指定
