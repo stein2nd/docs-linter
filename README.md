@@ -161,6 +161,17 @@ git push -u origin main
 
 プロジェクトの種類に応じて、適切な設定ファイルを選択してください。
 
+## 💡 Examples (Usage Samples)
+
+このリポジトリは、さまざまな開発環境向けの設定例を提供します。
+各例には、Textlint 設定と GitHub Actions 用の CI テンプレートの両方が含まれています。
+
+| 対象環境 | Textlint 設定ファイル | CI テンプレート | 概要 |
+|--------------------|----------------------|--------------|--------------|
+| 一般的な技術ドキュメント | [`examples/.textlintrc.jsonc`](examples/.textlintrc.jsonc) | [`examples/lint-docs.yml`](examples/lint-docs.yml) | 一般的なドキュメント・プロジェクト向けの基本設定。 |
+| WordPress 開発 | [`examples/.textlintrc.wp.jsonc`](examples/.textlintrc.wp.jsonc) | [`examples/lint-docs.wp.yml`](examples/lint-docs.wp.yml) | WordPress プラグインまたはテーマのドキュメント用に調整されたルール (和訳スタイル)。 |
+| Swift / SwiftUI 開発 | [`examples/.textlintrc.swift.jsonc`](examples/.textlintrc.swift.jsonc) | [`examples/lint-docs.swift.yml`](examples/lint-docs.swift.yml) | Apple 開発者向けドキュメントおよび技術用語向けに最適化されたルール。 |
+
 ## 📋 List of Configuration Files
 
 設定ファイルを、3つ用意してます。
@@ -320,7 +331,7 @@ fi
 
 ## 💻 Command-line execution
 
-CLI 実行例です。
+コマンドラインでの実行例です。
 
 ```zsh
 # 基本設定で実行
@@ -335,7 +346,7 @@ npm run lint:xcode
 
 ## 🛠️ Custom Rules
 
-プロジェクト固有ルールを追加できます。
+プロジェクト固有ルールを、カスタムルールとして追加できます。
 
 ### `base/rules/no-long-kanji.js`
 
@@ -389,7 +400,7 @@ Swift 開発でよく使われる用語の統一ルールを定義していま�
 
 💡 `docs-linter` 側のルール変更をすぐ反映したいときは、各プロジェクトで上記「update --remote --merge」を実行します。
 
-## 🎯 Practical Points
+## ⚡ Practical Points
 
 実務での使い方ヒント (CI 連携、PR チェックなど) について。
 
