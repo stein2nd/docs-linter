@@ -6,7 +6,6 @@
     "prh": {
       "rulePaths": []
     },
-    "no-dead-link": true,
-    "./base/rules/no-long-kanji": true
+    "no-dead-link": true
   }
 }
