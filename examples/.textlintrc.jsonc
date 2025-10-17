@@ -1,0 +1,52 @@
+{
+  // ============================================================
+  // Example textlint configuration for general projects
+  // ------------------------------------------------------------
+  // この設定は docs-linter の共通ルールを継承し、
+  // 一般的なプロジェクト用に最適化しています。
+  // ============================================================
+
+  "extends": [
+    "./docs-linter/base/.textlintrc.base.json"
+  ],
+
+  "rules": {
+    // ------------------------------------------------------------
+    // 共通ルール調整
+    // ------------------------------------------------------------
+    "@textlint-rule/no-exclamation-question-mark": true, // ！や？の連続使用を防止
+    "textlint-rule-ja-no-weak-phrase": true, // 弱い言い回しを検出
+    "textlint-rule-ja-no-redundant-expression": true, // 冗長な表現を指摘
+    "textlint-rule-no-mix-dearu-desumasu": {
+      "preferInHeader": "である",
+      "preferInBody": "ですます",
+      "strict": false
+    },
+    "textlint-rule-max-kanji-continuous-len": {
+      "max": 7 // 漢字の連続7文字以上を警告
+    },
+
+    // ------------------------------------------------------------
+    // Markdown ドキュメント固有ルール
+    // ------------------------------------------------------------
+    "no-todo": true,                // TODO の放置防止
+    "no-empty-section": true,       // 空のセクション防止
+    "no-dead-link": {
+      "ignore": [
+        "^https://localhost",
+        "^https://example.com"
+      ]
+    }
+  },
+
+  // ------------------------------------------------------------
+  // 対象ファイル
+  // ------------------------------------------------------------
+  "filters": {
+    "comments": true // コメントブロック内を無視
+  },
+
+  "plugins": {
+    "@textlint/markdown": true
+  }
+}

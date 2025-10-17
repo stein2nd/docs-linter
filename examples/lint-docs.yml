@@ -1,0 +1,164 @@
+# ============================================================
+# Sample CI for Docs Linter
+# ------------------------------------------------------------
+# このワークフローは、docs-linter を submodule または npm パッケージとして
+# 利用するリポジトリで、Markdown ドキュメントの自動 lint を実行するサンプルです。
+#
+# 利用方法:
+#  1. このファイルをコピーして、利用側リポジトリの
+#     `.github/workflows/lint-docs.yml` に配置します。
+#  2. 対象パスなどを各プロジェクトに合わせて調整します。
+#  3. プロジェクトに応じた .textlintrc 設定ファイルを配置します。
+#
+# 必須要件:
+#  - Node.js v20+
+#  - textlint と docs-linter が package.json に登録済みであること
+#  - プロジェクトに応じた .textlintrc 設定ファイル
+# ============================================================
+
+name: Lint Docs
+
+on:
+  push:
+    paths:
+      - "docs/**/*.md"
+      - "**/*.md"
+      - ".textlintrc*"
+      - "package.json"
+  pull_request:
+    paths:
+      - "docs/**/*.md"
+      - "**/*.md"
+      - ".textlintrc*"
+      - "package.json"
+
+jobs:
+  lint-docs:
+    name: Run Docs Linter
+    runs-on: ubuntu-latest
+
+    steps:
+      # --------------------------------------------------------
+      # 1. チェックアウト
+      # submodules: true により docs-linter を取得
+      # --------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      # --------------------------------------------------------
+      # 2. Node.js セットアップ
+      # --------------------------------------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: 'npm'
+
+      # --------------------------------------------------------
+      # 3. 依存関係のインストール
+      # docs-linter が submodule の場合は個別に npm ci を実行
+      # --------------------------------------------------------
+      - name: Install dependencies
+        run: |
+          if [ -d "./docs-linter" ]; then
+            echo "Installing docs-linter dependencies..."
+            cd docs-linter
+            npm ci
+            cd ..
+            npm install --no-save ./docs-linter
+          else
+            echo "docs-linter not found as submodule. Installing via npm..."
+            npm install --save-dev @stein2nd/docs-linter || true
+          fi
+
+      # --------------------------------------------------------
+      # 4. 設定ファイルの確認
+      # --------------------------------------------------------
+      - name: Check textlint configuration
+        run: |
+          if [ -f ".textlintrc.jsonc" ]; then
+            echo "Using .textlintrc.jsonc"
+          elif [ -f ".textlintrc" ]; then
+            echo "Using .textlintrc"
+          else
+            echo "::warning::No textlint configuration found. Using default settings."
+          fi
+
+      # --------------------------------------------------------
+      # 5. Lint 実行
+      # --------------------------------------------------------
+      - name: Run textlint
+        if: "!contains(github.event.head_commit.message, '[skip-lint]')"
+        run: |
+          # 対象ファイルの確認
+          if [ -d "docs" ]; then
+            echo "Linting docs directory..."
+            npx textlint "docs/**/*.md" || {
+              echo "::error::Textlint found issues in docs directory."
+              exit 1
+            }
+          fi
+          
+          # README ファイルの確認
+          if [ -f "README.md" ]; then
+            echo "Linting README.md..."
+            npx textlint "README.md" || {
+              echo "::error::Textlint found issues in README.md."
+              exit 1
+            }
+          fi
+
+      # --------------------------------------------------------
+      # 6. レポート出力（失敗時）
+      # --------------------------------------------------------
+      - name: Save lint report
+        if: failure()
+        run: |
+          mkdir -p reports
+          npx textlint "docs/**/*.md" "README.md" -f json > reports/textlint-report.json 2>/dev/null || true
+        continue-on-error: true
+
+      # --------------------------------------------------------
+      # 7. アーティファクトとしてアップロード
+      # --------------------------------------------------------
+      - name: Upload lint report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: textlint-report-${{ github.run_number }}
+          path: reports/textlint-report.json
+          if-no-files-found: ignore
+
+      # --------------------------------------------------------
+      # 8. コメント投稿（PR の場合）
+      # --------------------------------------------------------
+      - name: Comment PR
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let report = '';
+            try {
+              report = fs.readFileSync('reports/textlint-report.json', 'utf8');
+            } catch (e) {
+              report = 'Lint report not available.';
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 📝 Documentation Lint Results
+              
+              Textlint found issues in the documentation. Please review and fix the following:
+              
+              \`\`\`json
+              ${report}
+              \`\`\`
+              
+              For more information, see the [Actions tab](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}).
+              `
+            });
