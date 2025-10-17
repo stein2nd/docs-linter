@@ -1,0 +1,282 @@
+# ============================================================
+# Sample CI for Docs Linter (Swift Projects)
+# ------------------------------------------------------------
+# このワークフローは、Swift/Xcode 開発プロジェクトで
+# docs-linter を使用して Markdown ドキュメントの自動 lint を実行するサンプルです。
+#
+# 利用方法:
+#  1. このファイルをコピーして、利用側リポジトリの
+#     `.github/workflows/lint-docs.yml` に配置します。
+#  2. 対象パスなどを各プロジェクトに合わせて調整します。
+#  3. .textlintrc.swift.jsonc 設定ファイルを配置します。
+#
+# 必須要件:
+#  - Node.js v20+
+#  - textlint と docs-linter が package.json に登録済みであること
+#  - .textlintrc.swift.jsonc 設定ファイル
+# ============================================================
+
+name: Lint Docs (Swift)
+
+on:
+  push:
+    paths:
+      - "docs/**/*.md"
+      - "**/*.md"
+      - ".textlintrc*"
+      - "package.json"
+      - "*.swift"
+      - "*.xcodeproj"
+      - "*.xcworkspace"
+  pull_request:
+    paths:
+      - "docs/**/*.md"
+      - "**/*.md"
+      - ".textlintrc*"
+      - "package.json"
+      - "*.swift"
+      - "*.xcodeproj"
+      - "*.xcworkspace"
+
+jobs:
+  lint-docs:
+    name: Run Docs Linter (Swift)
+    runs-on: ubuntu-latest
+
+    steps:
+      # --------------------------------------------------------
+      # 1. チェックアウト
+      # submodules: true により docs-linter を取得
+      # --------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      # --------------------------------------------------------
+      # 2. Node.js セットアップ
+      # --------------------------------------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: 'npm'
+
+      # --------------------------------------------------------
+      # 3. 依存関係のインストール
+      # docs-linter が submodule の場合は個別に npm ci を実行
+      # --------------------------------------------------------
+      - name: Install dependencies
+        run: |
+          if [ -d "./docs-linter" ]; then
+            echo "Installing docs-linter dependencies..."
+            cd docs-linter
+            npm ci
+            cd ..
+            npm install --no-save ./docs-linter
+          else
+            echo "docs-linter not found as submodule. Installing via npm..."
+            npm install --save-dev @stein2nd/docs-linter || true
+          fi
+
+      # --------------------------------------------------------
+      # 4. Swift 設定ファイルの確認
+      # --------------------------------------------------------
+      - name: Check Swift textlint configuration
+        run: |
+          if [ -f ".textlintrc.swift.jsonc" ]; then
+            echo "Using .textlintrc.swift.jsonc (Swift configuration)"
+          elif [ -f ".textlintrc.jsonc" ]; then
+            echo "Using .textlintrc.jsonc (fallback to general configuration)"
+          elif [ -f ".textlintrc" ]; then
+            echo "Using .textlintrc (fallback to general configuration)"
+          else
+            echo "::warning::No Swift-specific textlint configuration found. Using default settings."
+          fi
+
+      # --------------------------------------------------------
+      # 5. Swift プロジェクト情報の確認
+      # --------------------------------------------------------
+      - name: Check Swift project structure
+        run: |
+          if [ -f "Package.swift" ]; then
+            echo "Swift Package Manager project detected"
+            # パッケージ名を抽出
+            PACKAGE_NAME=$(grep -E "name:" Package.swift | head -1 | cut -d: -f2 | tr -d '",' | xargs || echo "Unknown")
+            echo "Package Name: $PACKAGE_NAME"
+          elif [ -f "*.xcodeproj" ] || [ -f "*.xcworkspace" ]; then
+            echo "Xcode project detected"
+            # Xcode プロジェクト名を抽出
+            if [ -f "*.xcodeproj" ]; then
+              PROJECT_NAME=$(ls *.xcodeproj | sed 's/\.xcodeproj$//' | head -1)
+              echo "Xcode Project: $PROJECT_NAME"
+            fi
+          else
+            echo "::warning::No Swift project structure detected."
+          fi
+
+      # --------------------------------------------------------
+      # 6. Lint 実行（Swift 設定）
+      # --------------------------------------------------------
+      - name: Run textlint (Swift)
+        if: "!contains(github.event.head_commit.message, '[skip-lint]')"
+        run: |
+          # Swift 設定ファイルを使用
+          if [ -f ".textlintrc.swift.jsonc" ]; then
+            CONFIG_FILE=".textlintrc.swift.jsonc"
+          elif [ -f ".textlintrc.jsonc" ]; then
+            CONFIG_FILE=".textlintrc.jsonc"
+          else
+            CONFIG_FILE=".textlintrc"
+          fi
+          
+          echo "Using configuration file: $CONFIG_FILE"
+          
+          # 対象ファイルの確認
+          if [ -d "docs" ]; then
+            echo "Linting docs directory with Swift rules..."
+            npx textlint --config "$CONFIG_FILE" "docs/**/*.md" || {
+              echo "::error::Textlint found issues in docs directory."
+              exit 1
+            }
+          fi
+          
+          # README ファイルの確認
+          if [ -f "README.md" ]; then
+            echo "Linting README.md with Swift rules..."
+            npx textlint --config "$CONFIG_FILE" "README.md" || {
+              echo "::error::Textlint found issues in README.md."
+              exit 1
+            }
+          fi
+          
+          # CHANGELOG ファイルの確認（Swift プロジェクトでよく使用される）
+          if [ -f "CHANGELOG.md" ]; then
+            echo "Linting CHANGELOG.md with Swift rules..."
+            npx textlint --config "$CONFIG_FILE" "CHANGELOG.md" || {
+              echo "::error::Textlint found issues in CHANGELOG.md."
+              exit 1
+            }
+          fi
+
+      # --------------------------------------------------------
+      # 7. Swift 特有のチェック
+      # --------------------------------------------------------
+      - name: Swift-specific checks
+        run: |
+          echo "Running Swift-specific documentation checks..."
+          
+          # Package.swift の必須項目チェック
+          if [ -f "Package.swift" ]; then
+            echo "Checking Package.swift structure..."
+            
+            # 必須項目の確認
+            REQUIRED_FIELDS=("name:" "products:" "dependencies:")
+            for field in "${REQUIRED_FIELDS[@]}"; do
+              if ! grep -q "$field" Package.swift; then
+                echo "::warning::Missing required field in Package.swift: $field"
+              fi
+            done
+            
+            # バージョン形式の確認
+            if grep -q "version:" Package.swift; then
+              VERSION=$(grep "version:" Package.swift | cut -d: -f2 | tr -d '",' | xargs)
+              if [[ ! $VERSION =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
+                echo "::warning::Version format in Package.swift may be incorrect: $VERSION"
+              fi
+            fi
+          fi
+          
+          # Xcode プロジェクトの確認
+          if [ -f "*.xcodeproj" ]; then
+            echo "Checking Xcode project structure..."
+            # プロジェクトファイルの存在確認
+            if [ ! -f "*.xcodeproj/project.pbxproj" ]; then
+              echo "::warning::Xcode project file may be corrupted or missing."
+            fi
+          fi
+
+      # --------------------------------------------------------
+      # 8. Swift コードコメントのチェック（オプション）
+      # --------------------------------------------------------
+      - name: Check Swift code comments
+        run: |
+          echo "Checking Swift code comments for documentation..."
+          
+          # Swift ファイル内のコメントをチェック
+          if find . -name "*.swift" -type f | head -1 | grep -q .; then
+            echo "Found Swift files, checking comments..."
+            
+            # ドキュメントコメントの確認
+            DOC_COMMENTS=$(find . -name "*.swift" -type f -exec grep -l "///" {} \; | wc -l)
+            if [ "$DOC_COMMENTS" -gt 0 ]; then
+              echo "Found $DOC_COMMENTS Swift files with documentation comments"
+            else
+              echo "::info::No documentation comments found in Swift files"
+            fi
+            
+            # TODO コメントの確認
+            TODO_COUNT=$(find . -name "*.swift" -type f -exec grep -c "TODO" {} \; | awk '{sum += $1} END {print sum}')
+            if [ "$TODO_COUNT" -gt 0 ]; then
+              echo "::warning::Found $TODO_COUNT TODO comments in Swift files"
+            fi
+          fi
+
+      # --------------------------------------------------------
+      # 9. レポート出力（失敗時）
+      # --------------------------------------------------------
+      - name: Save lint report
+        if: failure()
+        run: |
+          mkdir -p reports
+          npx textlint "docs/**/*.md" "README.md" "CHANGELOG.md" -f json > reports/textlint-report.json 2>/dev/null || true
+        continue-on-error: true
+
+      # --------------------------------------------------------
+      # 10. アーティファクトとしてアップロード
+      # --------------------------------------------------------
+      - name: Upload lint report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: textlint-report-swift-${{ github.run_number }}
+          path: reports/textlint-report.json
+          if-no-files-found: ignore
+
+      # --------------------------------------------------------
+      # 11. コメント投稿（PR の場合）
+      # --------------------------------------------------------
+      - name: Comment PR
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let report = '';
+            try {
+              report = fs.readFileSync('reports/textlint-report.json', 'utf8');
+            } catch (e) {
+              report = 'Lint report not available.';
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 📝 Swift Documentation Lint Results
+              
+              Textlint found issues in the Swift documentation. Please review and fix the following:
+              
+              \`\`\`json
+              ${report}
+              \`\`\`
+              
+              **Swift-specific notes:**
+              - Make sure technical terms follow Apple's Japanese translation guidelines
+              - Check that code examples are properly formatted
+              - Verify that the documentation follows Swift API Design Guidelines
+              - Ensure proper spacing around English terms and code blocks
+              
+              For more information, see the [Actions tab](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}).
+              `
+            });

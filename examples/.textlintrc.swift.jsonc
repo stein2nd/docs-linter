@@ -1,0 +1,130 @@
+{
+  // ============================================================
+  // Example textlint configuration for Swift projects
+  // ------------------------------------------------------------
+  // この設定は docs-linter の共通ルールを継承し、
+  // Swift/Xcode 開発用に最適化しています。
+  // ============================================================
+
+  "extends": [
+    "./docs-linter/base/.textlintrc.base.json"
+  ],
+
+  "rules": {
+    // ------------------------------------------------------------
+    // Swift 開発向け辞書ルール
+    // ------------------------------------------------------------
+    "textlint-rule-prh": {
+      "rulePaths": [
+        "./docs-linter/xcode/dictionary/swift-terms.yml"
+      ]
+    },
+
+    // ------------------------------------------------------------
+    // 技術用語の統一
+    // ------------------------------------------------------------
+    "terminology": {
+      "defaultTerms": false,
+      "terms": [
+        "SwiftUI",
+        "UIKit",
+        "AppKit",
+        "Xcode",
+        "Storyboard",
+        "Auto Layout",
+        "Interface Builder",
+        "View",
+        "Modifier",
+        "SceneDelegate",
+        "AppDelegate",
+        "Target",
+        "Scheme",
+        "Simulator",
+        "iOS",
+        "macOS",
+        "watchOS",
+        "tvOS",
+        "Swift",
+        "Objective-C",
+        "Cocoa",
+        "Cocoa Touch",
+        "Core Data",
+        "Core Animation",
+        "Metal",
+        "ARKit",
+        "Core ML",
+        "CloudKit",
+        "Combine",
+        "SwiftUI",
+        "UIKit",
+        "AppKit"
+      ]
+    },
+
+    // ------------------------------------------------------------
+    // 日本語文書ルール
+    // ------------------------------------------------------------
+    "no-hankaku-kana": true, // 半角カナの使用を禁止
+    "no-mix-dearu-desumasu": {
+      "preferInHeader": "ですます",
+      "preferInBody": "である"
+    },
+    "ja-space-arround-code": true, // コードブロック周りのスペース
+    "ja-no-mixed-period": true, // 句読点の統一
+
+    // ------------------------------------------------------------
+    // 文章品質ルール
+    // ------------------------------------------------------------
+    "sentence-length": {
+      "max": 120 // 文の最大長
+    },
+
+    // ------------------------------------------------------------
+    // 共通ルール調整
+    // ------------------------------------------------------------
+    "@textlint-rule/no-exclamation-question-mark": true, // ！や？の連続使用を防止
+    "textlint-rule-ja-no-weak-phrase": true, // 弱い言い回しを検出
+    "textlint-rule-ja-no-redundant-expression": true, // 冗長な表現を指摘
+    "textlint-rule-max-kanji-continuous-len": {
+      "max": 7 // 漢字の連続7文字以上を警告
+    },
+
+    // ------------------------------------------------------------
+    // Xcode 固有ルール
+    // ------------------------------------------------------------
+    "xcode/space-around-english": true,
+
+    // ------------------------------------------------------------
+    // Markdown ドキュメント固有ルール
+    // ------------------------------------------------------------
+    "no-todo": true,                // TODO の放置防止
+    "no-empty-section": true,       // 空のセクション防止
+    "no-dead-link": {
+      "ignore": [
+        "^https://localhost",
+        "^https://example.com",
+        "^https://developer.apple.com",
+        "^https://docs.swift.org"
+      ]
+    }
+  },
+
+  // ------------------------------------------------------------
+  // プラグイン設定
+  // ------------------------------------------------------------
+  "plugins": {
+    "xcode": {
+      "rules": {
+        "space-around-english": "./docs-linter/xcode/rules/space-around-english.js"
+      }
+    },
+    "@textlint/markdown": true
+  },
+
+  // ------------------------------------------------------------
+  // 対象ファイル
+  // ------------------------------------------------------------
+  "filters": {
+    "comments": true // コメントブロック内を無視
+  }
+}
