@@ -1,9 +1,9 @@
 # 📘 Docs Linter
 
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![textlint](https://img.shields.io/badge/textlint-15.2.3-green.svg)](https://textlint.github.io/)
+[![textlint](https://img.shields.io/badge/textlint-15.2.3-green.svg)](https://textlint.org/)
 [![WordPress](https://img.shields.io/badge/WordPress-6.3+-blue.svg)](https://wordpress.org/)
-[![Swift](https://img.shields.io/badge/Swift-5.9+-orange.svg)](https://swift.org/)
+[![Swift](https://img.shields.io/badge/Swift-5.9+-orange.svg)](https://www.swift.org/)
 [![Xcode](https://img.shields.io/badge/Xcode-15.0+-blue.svg)](https://developer.apple.com/xcode/)
 
 ## 📝 Description
@@ -88,7 +88,7 @@ git push
 
 ### 1. リポジトリの追加 (新規プロジェクト作成と同時に追加する場合)
 
-新規プロジェクトのリポジトリを作成します (例: `s2j-new-plugin`)。
+新規プロジェクトのリポジトリを作成します (例：`s2j-new-plugin`)。
 
 ```zsh
 mkdir s2j-new-plugin
@@ -172,7 +172,7 @@ git push -u origin main
 各例には、Textlint 設定と GitHub Actions 用の CI テンプレートの両方が含まれています。
 
 | 対象環境 | Textlint 設定ファイル | CI テンプレート | 概要 |
-|--------------------|----------------------|--------------|--------------|
+|---|---|---|---|
 | 一般的な技術ドキュメント | [`examples/.textlintrc.jsonc`](examples/.textlintrc.jsonc) | [`examples/lint-docs.yml`](examples/lint-docs.yml) | 一般的なドキュメント・プロジェクト向けの基本設定。 |
 | WordPress 開発 | [`examples/.textlintrc.wp.jsonc`](examples/.textlintrc.wp.jsonc) | [`examples/lint-docs.wp.yml`](examples/lint-docs.wp.yml) | WordPress プラグインまたはテーマのドキュメント用に調整されたルール (和訳スタイル)。 |
 | Swift / SwiftUI 開発 | [`examples/.textlintrc.swift.jsonc`](examples/.textlintrc.swift.jsonc) | [`examples/lint-docs.swift.yml`](examples/lint-docs.swift.yml) | Apple 開発者向けドキュメントおよび技術用語向けに最適化されたルール。 |
@@ -260,7 +260,7 @@ npm run lint:xcode
 
 ### VS Code / Cursor
 
-`.vscode/settings.json` に以下の設定を追加してください:
+`.vscode/settings.json` に以下の設定を追加してください。
 
 ```json
 {
@@ -272,7 +272,6 @@ npm run lint:xcode
 
 「プロジェクト」が、WordPress 開発の場合は、「textlint.configPath」を `./tools/docs-linter/wordpress/.textlintrc.wp.json` に変更してください。
 Swift 開発の場合は、「textlint.configPath」を `./tools/docs-linter/xcode/.textlintrc.xc.json` に変更してください。
-
 
 **拡張機能のインストール:**
 
@@ -307,7 +306,7 @@ Swift 開発の場合は、「configPath」を `./tools/docs-linter/xcode/.textl
 
 ### Xcode
 
-Xcode では直接 textlint を統合できませんが、以下の方法で利用できます:
+Xcode では直接 textlint を統合できませんが、以下の方法で利用できます。
 
 **1. ターミナルでの実行:**
 
@@ -320,7 +319,7 @@ npm run lint:xcode
 **2. Xcode ビルドスクリプトでの自動実行:**
 
 * `Build Phases` → `+` → `New Run Script Phase`
-* スクリプトに以下を追加:
+* スクリプトに以下を追加：
 
 ```bash
 if [ -f "docs-linter/package.json" ]; then
@@ -375,6 +374,34 @@ npm run lint:xcode
 ✅ SwiftUI でアプリを作成する
 ```
 
+### 利用側プロジェクトでの `.textlintrc` 例
+
+* 1センテンスを100文字から150文字に制限緩和
+* 全角文字と半角文字の間にスペースを挟む
+* 全角かっこではなく、半角かっこを使用する
+
+```
+{
+  "filters": {},
+  "rules": {
+    "preset-ja-technical-writing": {
+      "sentence-length": {
+        "max": 150
+      }
+    },
+    "preset-jtf-style": {
+      "3.1.1.全角文字と半角文字の間": false,
+      "4.3.1.丸かっこ（）": false
+    },
+    "no-dead-link": true,
+    "ja-space-around-code": {
+      "before": true,
+      "after": true
+    }
+  }
+}
+```
+
 ## 📚 Glossary of Terms
 
 共通用語集 (Swift/Xcode 用語など) について。
@@ -419,7 +446,7 @@ Swift 開発でよく使われる用語の統一ルールを定義していま�
 
 **Q: textlint が動作しない**
 
-A: 以下の点を確認してください:
+A: 以下の点を確認してください。
 
 * `npm install` が完了しているか
 * 設定ファイルのパスが正しいか
