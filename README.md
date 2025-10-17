@@ -44,6 +44,7 @@ npm init -y
 
 # textlint 他を devDependencies に追加
 npm install --save-dev textlint
+npm install --save-dev textlint-rule-preset-ja-technical-writing textlint-rule-preset-jtf-style textlint-rule-no-dead-link
 npm install --save-dev github:jawordpressorg/textlint-rule-preset-wp-docs-ja
 ```
 
@@ -118,6 +119,9 @@ npm init -y
 
 # textlint を devDependencies に追加
 npm install --save-dev textlint
+npm install --save-dev textlint
+npm install --save-dev textlint-rule-preset-ja-technical-writing textlint-rule-preset-jtf-style textlint-rule-no-dead-link
+npm install --save-dev github:jawordpressorg/textlint-rule-preset-wp-docs-ja
 
 # スクリプトとして登録
 npm pkg set scripts.lint:docs="textlint --config ./tools/docs-linter/base/.textlintrc.base.json ./README.md ./docs/**/*.md"
@@ -185,8 +189,8 @@ git push -u origin main
 
 * `preset-ja-technical-writing`: 技術文書の基本的なルール
 * `preset-jtf-style`: JTF 日本語標準スタイルガイド
+* `prh`: 用語統一ルール (空のルールパス)
 * `no-dead-link`: リンク切れチェック
-* `no-long-kanji`: 7文字以上の漢字連続を禁止 (カスタムルール)
 
 **使用例:**
 
@@ -202,9 +206,8 @@ WordPress プラグイン・テーマ開発に特化した設定です。
 
 **含まれるルール:**
 
-* 基本設定を継承
+* 基本設定を継承 (`extends: "../base/.textlintrc.base.json"`)
 * `preset-wp-docs-ja`: WordPress 日本語ドキュメント用ルール
-* `prh`: WordPress 用用語統一ルール
 
 **使用例:**
 
@@ -226,11 +229,12 @@ Swift/SwiftUI アプリ開発に特化した設定です。
 
 **含まれるルール:**
 
-* 基本設定を継承
-* `prh`: Swift 用語統一ルール (`swift-terms.yml`)
-* `terminology`: Swift 関連用語の統一
+* 基本設定を継承 (`extends: "../base/.textlintrc.base.json"`)
+* `prh`: Swift 用語統一ルール (`./dictionary/swift-terms.yml`)
+* `terminology`: Swift 関連用語の統一 (SwiftUI、UIKit、Xcode、Auto Layout など)
 * `no-hankaku-kana`: 半角カナ禁止
-* `no-mix-dearu-desumasu`: 文体統一 (ヘッダーは「ですます」、本文は「である」)
+  * `no-mix-dearu-desumasu`: 文体統一 (見出しは「ですます調」、本文は「である調」を推奨。各セクション内での混在を禁止)
+    - 見出しを「体言やめ」、本文を「ですます調」にする場合は、見出し内で「ですます調」と「である調」が混在しないよう注意
 * `ja-space-arround-code`: コードブロック周りのスペース
 * `ja-no-mixed-period`: 句読点統一
 * `sentence-length`: 文の長さ制限 (120文字)
