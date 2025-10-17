@@ -1,11 +1,8 @@
 {
-  "extends": "../base/.textlintrc.base.json",
+  "extends": ["../base/.textlintrc.base.json"],
+  "plugins": {},
+  "filters": {},
   "rules": {
-    "preset-wp-docs-ja": true,
-    "prh": {
-      "rulePaths": [
-        "./node_modules/textlint-rule-preset-wp-docs-ja/prh-rules/wordpress.yml"
-      ]
-    }
+    "preset-wp-docs-ja": true
   }
 }
