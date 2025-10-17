@@ -21,12 +21,145 @@ WordPress プラグイン／テーマ開発、Xcode (Swift/SwiftUI) アプリ開
 
 ## 利用方法
 
-### 1. リポジトリの追加
+### 1. リポジトリの追加 (既存プロジェクトに追加する場合)
+
+既存プロジェクトの「tools」に追加すると仮定します。
+
+```
+other-project/
+├┬─ tools/
+│└─ docs-linter/  # 共通 lint モジュール
+└── README.md
+```
+
+コマンドラインで下記のように実行します。
 
 ```zsh
-git submodule add https://github.com/stein2nd/docs-linter.git docs-linter
-cd docs-linter
-npm install
+# 既存プロジェクトの root に移動
+cd /path/to/other-project
+
+# docs-linter をサブモジュールとして追加
+git submodule add https://github.com/stein2nd/docs-linter.git tools/docs-linter
+
+# サブモジュールを初期化して取得
+git submodule update --init --recursive
+
+# npm を初期化してない場合は、このタイミングで実施
+npm init -y
+
+# textlint を devDependencies に追加
+npm install --save-dev textlint
+```
+
+続いて、VS Code / Cursor 設定を追加します。
+`.vscode/settings.json` に以下を追記します。
+「既存プロジェクト」が、WordPress 開発の場合は、「textlint.configPath」を `./tools/docs-linter/wordpress/.textlintrc.wp.json` に変更してください。
+
+```json
+{
+  "textlint.configPath": "./tools/docs-linter/base/.textlintrc.base.json",
+  "textlint.nodePath": "./node_modules",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.textlint": true
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "taichi.vscode-textlint"
+  }
+}
+```
+
+「既存プロジェクト」の package.json に、スクリプトとして登録します (例は、「既存プロジェクト」が、WordPress 開発の場合)。以降は、`npm run lint:docs` で lint 可能になります。
+
+```json
+{
+  "scripts": {
+    "lint:docs": "textlint --config ./tools/docs-linter/wordpress/.textlintrc.wp.json ./README.md ./docs/**/*.md"
+  }
+}
+```
+
+「既存プロジェクト」のリポジトリにコミットします。
+
+```zsh
+# ローカル・リポジトリに追加
+git add .gitmodules tools/docs-linter .vscode/settings.json package.json
+git commit -m "Add docs-linter as submodule for Markdown linting"
+
+# リモート・リポジトリに反映
+git push
+```
+
+### 1. リポジトリの追加 (新規プロジェクト作成と同時に追加する場合)
+
+新規プロジェクトのリポジトリを作成します (例: `s2j-new-plugin`)。
+
+```zsh
+mkdir s2j-new-plugin
+cd s2j-new-plugin
+git init
+```
+
+新規プロジェクトの「tools」に追加すると仮定します。
+
+```
+s2j-new-plugin/
+├┬─ tools/
+│└─ docs-linter/  # 共通 lint モジュール
+└── README.md
+```
+
+新規プロジェクトの root に移動し、コマンドラインで下記のように実行します。
+
+```zsh
+# docs-linter をサブモジュールとして追加
+git submodule add https://github.com/stein2nd/docs-linter.git tools/docs-linter
+
+# サブモジュールを初期化して取得
+git submodule update --init --recursive
+
+# npm を初期化
+npm init -y
+
+# textlint を devDependencies に追加
+npm install --save-dev textlint
+
+# スクリプトとして登録
+npm pkg set scripts.lint:docs="textlint --config ./tools/docs-linter/base/.textlintrc.base.json ./README.md ./docs/**/*.md"
+```
+
+「新規プロジェクト」が、WordPress 開発の場合は、上記の「base/.textlintrc.base.json」を `wordpress/.textlintrc.wp.json` に変更してください。
+
+続いて、VS Code / Cursor 設定を追加します。
+「新規プロジェクト」が、WordPress 開発の場合は、「textlint.configPath」を `./tools/docs-linter/wordpress/.textlintrc.wp.json` に変更してください。
+
+```zsh
+mkdir -p .vscode
+cat <<'JSON' > .vscode/settings.json
+{
+  "textlint.configPath": "./tools/docs-linter/base/.textlintrc.base.json",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.textlint": true
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "taichi.vscode-textlint"
+  }
+}
+JSON
+```
+
+「新規プロジェクト」のリポジトリにコミットします。
+
+```zsh
+# ローカル・リポジトリの main ブランチに追加
+git add .
+git commit -m "Initialize project with docs-linter submodule"
+git branch -M main
+
+# リモート・リポジトリを追加
+git remote add origin https://github.com/stein2nd/s2j-new-plugin.git
+
+# リモート・リポジトリの main ブランチに反映
+git push -u origin main
 ```
 
 ### 2. 設定ファイルの選択
@@ -50,7 +183,7 @@ npm install
 
 ```json
 {
-  "textlint.configPath": "./docs-linter/base/.textlintrc.base.json"
+  "textlint.configPath": "./tools/docs-linter/base/.textlintrc.base.json"
 }
 ```
 
@@ -68,7 +201,7 @@ WordPress プラグイン・テーマ開発に特化した設定です。
 
 ```json
 {
-  "textlint.configPath": "./docs-linter/wordpress/.textlintrc.wp.json"
+  "textlint.configPath": "./tools/docs-linter/wordpress/.textlintrc.wp.json"
 }
 ```
 
@@ -98,7 +231,7 @@ Swift/SwiftUI アプリ開発に特化した設定です。
 
 ```json
 {
-  "textlint.configPath": "./docs-linter/xcode/.textlintrc.xc.json"
+  "textlint.configPath": "./tools/docs-linter/xcode/.textlintrc.xc.json"
 }
 ```
 
@@ -116,11 +249,15 @@ npm run lint:xcode
 
 ```json
 {
-  "textlint.configPath": "./docs-linter/base/.textlintrc.base.json",
+  "textlint.configPath": "./tools/docs-linter/base/.textlintrc.base.json",
   "textlint.enable": true,
   "textlint.autoFixOnSave": true
 }
 ```
+
+「プロジェクト」が、WordPress 開発の場合は、「textlint.configPath」を `./tools/docs-linter/wordpress/.textlintrc.wp.json` に変更してください。
+Swift 開発の場合は、「textlint.configPath」を `./tools/docs-linter/xcode/.textlintrc.xc.json` に変更してください。
+
 
 **拡張機能のインストール:**
 
@@ -135,17 +272,23 @@ npm run lint:xcode
 **2. 設定ファイルの指定:**
 
 * `File` → `Settings` → `Languages & Frameworks` → `textlint`
-* `Configuration file` に `./docs-linter/base/.textlintrc.base.json` を指定
+* `Configuration file` に `./tools/docs-linter/base/.textlintrc.base.json` を指定
+
+「プロジェクト」が、WordPress 開発の場合は、「Configuration file」を `./tools/docs-linter/wordpress/.textlintrc.wp.json` に変更してください。
+Swift 開発の場合は、「Configuration file」を `./tools/docs-linter/xcode/.textlintrc.xc.json` に変更してください。
 
 **3. プロジェクト設定:**
 
 ```json
 // .idea/textlint.xml
 <component name="TextlintConfiguration">
-  <option name="configPath" value="./docs-linter/base/.textlintrc.base.json" />
+  <option name="configPath" value="./tools/docs-linter/base/.textlintrc.base.json" />
   <option name="autoFix" value="true" />
 </component>
 ```
+
+「プロジェクト」が、WordPress 開発の場合は、「configPath」を `./tools/docs-linter/wordpress/.textlintrc.wp.json` に変更してください。
+Swift 開発の場合は、「configPath」を `./tools/docs-linter/xcode/.textlintrc.xc.json` に変更してください。
 
 ### Xcode
 
