@@ -1,0 +1,237 @@
+# ============================================================
+# Sample CI for Docs Linter (WordPress Projects)
+# ------------------------------------------------------------
+# このワークフローは、WordPress プラグイン/テーマ開発プロジェクトで
+# docs-linter を使用して Markdown ドキュメントの自動 lint を実行するサンプルです。
+#
+# 利用方法:
+#  1. このファイルをコピーして、利用側リポジトリの
+#     `.github/workflows/lint-docs.yml` に配置します。
+#  2. 対象パスなどを各プロジェクトに合わせて調整します。
+#  3. .textlintrc.wp.jsonc 設定ファイルを配置します。
+#
+# 必須要件:
+#  - Node.js v20+
+#  - textlint と docs-linter が package.json に登録済みであること
+#  - .textlintrc.wp.jsonc 設定ファイル
+# ============================================================
+
+name: Lint Docs (WordPress)
+
+on:
+  push:
+    paths:
+      - "docs/**/*.md"
+      - "**/*.md"
+      - ".textlintrc*"
+      - "package.json"
+      - "readme.txt"
+      - "*.php"
+  pull_request:
+    paths:
+      - "docs/**/*.md"
+      - "**/*.md"
+      - ".textlintrc*"
+      - "package.json"
+      - "readme.txt"
+      - "*.php"
+
+jobs:
+  lint-docs:
+    name: Run Docs Linter (WordPress)
+    runs-on: ubuntu-latest
+
+    steps:
+      # --------------------------------------------------------
+      # 1. チェックアウト
+      # submodules: true により docs-linter を取得
+      # --------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      # --------------------------------------------------------
+      # 2. Node.js セットアップ
+      # --------------------------------------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: 'npm'
+
+      # --------------------------------------------------------
+      # 3. 依存関係のインストール
+      # docs-linter が submodule の場合は個別に npm ci を実行
+      # --------------------------------------------------------
+      - name: Install dependencies
+        run: |
+          if [ -d "./docs-linter" ]; then
+            echo "Installing docs-linter dependencies..."
+            cd docs-linter
+            npm ci
+            cd ..
+            npm install --no-save ./docs-linter
+          else
+            echo "docs-linter not found as submodule. Installing via npm..."
+            npm install --save-dev @stein2nd/docs-linter || true
+          fi
+
+      # --------------------------------------------------------
+      # 4. WordPress 設定ファイルの確認
+      # --------------------------------------------------------
+      - name: Check WordPress textlint configuration
+        run: |
+          if [ -f ".textlintrc.wp.jsonc" ]; then
+            echo "Using .textlintrc.wp.jsonc (WordPress configuration)"
+          elif [ -f ".textlintrc.jsonc" ]; then
+            echo "Using .textlintrc.jsonc (fallback to general configuration)"
+          elif [ -f ".textlintrc" ]; then
+            echo "Using .textlintrc (fallback to general configuration)"
+          else
+            echo "::warning::No WordPress-specific textlint configuration found. Using default settings."
+          fi
+
+      # --------------------------------------------------------
+      # 5. WordPress プラグイン/テーマ情報の確認
+      # --------------------------------------------------------
+      - name: Check WordPress project structure
+        run: |
+          if [ -f "readme.txt" ]; then
+            echo "WordPress plugin/theme detected (readme.txt found)"
+            # プラグイン/テーマ名を抽出
+            PLUGIN_NAME=$(grep -E "^Plugin Name:" readme.txt | cut -d: -f2 | xargs || echo "Unknown")
+            echo "Plugin/Theme Name: $PLUGIN_NAME"
+          else
+            echo "::warning::readme.txt not found. This may not be a WordPress plugin/theme."
+          fi
+
+      # --------------------------------------------------------
+      # 6. Lint 実行（WordPress 設定）
+      # --------------------------------------------------------
+      - name: Run textlint (WordPress)
+        if: "!contains(github.event.head_commit.message, '[skip-lint]')"
+        run: |
+          # WordPress 設定ファイルを使用
+          if [ -f ".textlintrc.wp.jsonc" ]; then
+            CONFIG_FILE=".textlintrc.wp.jsonc"
+          elif [ -f ".textlintrc.jsonc" ]; then
+            CONFIG_FILE=".textlintrc.jsonc"
+          else
+            CONFIG_FILE=".textlintrc"
+          fi
+          
+          echo "Using configuration file: $CONFIG_FILE"
+          
+          # 対象ファイルの確認
+          if [ -d "docs" ]; then
+            echo "Linting docs directory with WordPress rules..."
+            npx textlint --config "$CONFIG_FILE" "docs/**/*.md" || {
+              echo "::error::Textlint found issues in docs directory."
+              exit 1
+            }
+          fi
+          
+          # README ファイルの確認
+          if [ -f "README.md" ]; then
+            echo "Linting README.md with WordPress rules..."
+            npx textlint --config "$CONFIG_FILE" "README.md" || {
+              echo "::error::Textlint found issues in README.md."
+              exit 1
+            }
+          fi
+          
+          # readme.txt の確認（WordPress プラグイン/テーマの場合）
+          if [ -f "readme.txt" ]; then
+            echo "Linting readme.txt with WordPress rules..."
+            npx textlint --config "$CONFIG_FILE" "readme.txt" || {
+              echo "::error::Textlint found issues in readme.txt."
+              exit 1
+            }
+          fi
+
+      # --------------------------------------------------------
+      # 7. WordPress 特有のチェック
+      # --------------------------------------------------------
+      - name: WordPress-specific checks
+        run: |
+          echo "Running WordPress-specific documentation checks..."
+          
+          # readme.txt の必須項目チェック
+          if [ -f "readme.txt" ]; then
+            echo "Checking readme.txt structure..."
+            
+            # 必須項目の確認
+            REQUIRED_FIELDS=("Plugin Name:" "Description:" "Version:" "Author:" "License:")
+            for field in "${REQUIRED_FIELDS[@]}"; do
+              if ! grep -q "^$field" readme.txt; then
+                echo "::warning::Missing required field in readme.txt: $field"
+              fi
+            done
+            
+            # バージョン形式の確認
+            if grep -q "^Version:" readme.txt; then
+              VERSION=$(grep "^Version:" readme.txt | cut -d: -f2 | xargs)
+              if [[ ! $VERSION =~ ^[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]; then
+                echo "::warning::Version format in readme.txt may be incorrect: $VERSION"
+              fi
+            fi
+          fi
+
+      # --------------------------------------------------------
+      # 8. レポート出力（失敗時）
+      # --------------------------------------------------------
+      - name: Save lint report
+        if: failure()
+        run: |
+          mkdir -p reports
+          npx textlint "docs/**/*.md" "README.md" "readme.txt" -f json > reports/textlint-report.json 2>/dev/null || true
+        continue-on-error: true
+
+      # --------------------------------------------------------
+      # 9. アーティファクトとしてアップロード
+      # --------------------------------------------------------
+      - name: Upload lint report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: textlint-report-wp-${{ github.run_number }}
+          path: reports/textlint-report.json
+          if-no-files-found: ignore
+
+      # --------------------------------------------------------
+      # 10. コメント投稿（PR の場合）
+      # --------------------------------------------------------
+      - name: Comment PR
+        if: failure() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let report = '';
+            try {
+              report = fs.readFileSync('reports/textlint-report.json', 'utf8');
+            } catch (e) {
+              report = 'Lint report not available.';
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## 📝 WordPress Documentation Lint Results
+              
+              Textlint found issues in the WordPress documentation. Please review and fix the following:
+              
+              \`\`\`json
+              ${report}
+              \`\`\`
+              
+              **WordPress-specific notes:**
+              - Make sure your \`readme.txt\` follows WordPress plugin/theme standards
+              - Check that technical terms are properly translated
+              - Verify that the documentation follows WordPress Japanese translation guidelines
+              
+              For more information, see the [Actions tab](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}).
+              `
+            });

@@ -1,0 +1,64 @@
+{
+  // ============================================================
+  // Example textlint configuration for WordPress projects
+  // ------------------------------------------------------------
+  // この設定は docs-linter の共通ルールを継承し、
+  // WordPress プラグイン/テーマ開発用に最適化しています。
+  // ============================================================
+
+  "extends": [
+    "./docs-linter/base/.textlintrc.base.json"
+  ],
+
+  "rules": {
+    // ------------------------------------------------------------
+    // WordPress ドキュメント向け和訳ルール
+    // ------------------------------------------------------------
+    "preset-wp-docs-ja": true,
+
+    // ------------------------------------------------------------
+    // 共通ルール調整
+    // ------------------------------------------------------------
+    "@textlint-rule/no-exclamation-question-mark": true, // ！や？の連続使用を防止
+    "textlint-rule-ja-no-weak-phrase": true, // 弱い言い回しを検出
+    "textlint-rule-ja-no-redundant-expression": true, // 冗長な表現を指摘
+    "textlint-rule-no-mix-dearu-desumasu": {
+      "preferInHeader": "である",
+      "preferInBody": "ですます",
+      "strict": false
+    },
+    "textlint-rule-max-kanji-continuous-len": {
+      "max": 7 // 漢字の連続7文字以上を警告
+    },
+    "textlint-rule-prh": {
+      "rulePaths": [
+        "./docs-linter/node_modules/textlint-rule-preset-wp-docs-ja/prh-rules/wordpress.yml"
+      ]
+    },
+
+    // ------------------------------------------------------------
+    // Markdown ドキュメント固有ルール
+    // ------------------------------------------------------------
+    "no-todo": true,                // TODO の放置防止
+    "no-empty-section": true,       // 空のセクション防止
+    "no-dead-link": {
+      "ignore": [
+        "^https://localhost",
+        "^https://example.com",
+        "^https://developer.wordpress.org",
+        "^https://codex.wordpress.org"
+      ]
+    }
+  },
+
+  // ------------------------------------------------------------
+  // 対象ファイル
+  // ------------------------------------------------------------
+  "filters": {
+    "comments": true // コメントブロック内を無視
+  },
+
+  "plugins": {
+    "@textlint/markdown": true
+  }
+}
