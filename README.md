@@ -6,20 +6,20 @@
 [![Swift](https://img.shields.io/badge/Swift-5.9+-orange.svg)](https://swift.org/)
 [![Xcode](https://img.shields.io/badge/Xcode-15.0+-blue.svg)](https://developer.apple.com/xcode/)
 
-## Description
+## 📝 Description
 
 WordPress プラグイン／テーマ開発、Xcode (Swift/SwiftUI) アプリ開発の両方で利用可能です。
 また、それらに関連するドキュメント制作での表記統一にも利用可能です。
 
-## License
+## 📄 License
 
 このプロジェクトは GPL v2以降の下でライセンスされています - 詳細は [LICENSE](LICENSE) ファイルを参照してください。
 
-## Support and Contact
+## 💬 Support and Contact
 
 サポート、機能リクエスト、またはバグ報告については、[GitHub Issues](https://github.com/stein2nd/docs-linter/issues) ページをご覧ください。
 
-## 利用方法
+## ⚙️ Installation
 
 ### 1. リポジトリの追加 (既存プロジェクトに追加する場合)
 
@@ -166,7 +166,7 @@ git push -u origin main
 
 プロジェクトの種類に応じて、適切な設定ファイルを選択してください。
 
-## 設定ファイル一覧
+## 📋 List of Configuration Files
 
 ### `base/.textlintrc.base.json` - 基本設定
 
@@ -241,7 +241,7 @@ Swift/SwiftUI アプリ開発に特化した設定です。
 npm run lint:xcode
 ```
 
-## エディター別設定
+## 🔧 Editor-Specific Settings
 
 ### VS Code / Cursor
 
@@ -319,7 +319,7 @@ fi
 * VS Code や JetBrains 製エディターで Markdown ファイルを編集
 * リアルタイムで textlint チェックを実行
 
-## カスタムルール
+## 🛠️ Custom Rules
 
 ### `base/rules/no-long-kanji.js`
 
@@ -343,7 +343,7 @@ fi
 ✅ SwiftUI でアプリを作成する
 ```
 
-## 用語辞書
+## 📚 Glossary of Terms
 
 ### `xcode/dictionary/swift-terms.yml`
 
@@ -357,7 +357,7 @@ Swift 開発でよく使われる用語の統一ルールを定義していま�
 * `Auto Layout` (AutoLayout, Auto-Layout を統一)
 * その他 Swift 関連用語
 
-## コマンドライン実行
+## 💻 Command-line execution
 
 ```zsh
 # 基本設定で実行
@@ -370,7 +370,25 @@ npm run lint:wp
 npm run lint:xcode
 ```
 
-## FAQ
+## 🧭 Key Points for Updates and Operations
+
+| 操作 | コマンド |
+| --- | --- |
+| **サブモジュールを最新化** | `git submodule update --remote --merge` |
+| **新しい環境で clone 後に初期化** | `git clone --recurse-submodules` |
+| **すでに clone 済みの場合** | `git submodule update --init --recursive` |
+
+💡 `docs-linter` 側のルール変更をすぐ反映したいときは、各プロジェクトで上記「update --remote --merge」を実行します。
+
+## 🎯 Practical Points
+
+* **WordPress 開発者**は `.textlintrc.wp.json` を指定
+* **Xcode/Swift 開発者**は `.textlintrc.xcode.json` を指定
+* **Cursor/VS Code** は `.vscode/settings.json` の設定を自動で読み込み
+* **全プロジェクト**で共通ルールを継承可能
+* **Git submodule によりルール更新が一括反映**
+
+## ❓ FAQ
 
 **Q: textlint が動作しない**
 
