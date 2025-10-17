@@ -21,7 +21,7 @@ module.exports = function(context) {
         // スペース不足の場合に警告
         report(
           node,
-          new RuleError(`「${word}」の前後に半角スペースを入れてください。`, {
+          new RuleError(`「${before}${word}${after}」の前後に半角スペースを入れてください。`, {
             index
           })
         );
