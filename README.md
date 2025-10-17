@@ -11,14 +11,6 @@
 WordPress プラグイン／テーマ開発、Xcode (Swift/SwiftUI) アプリ開発の両方で利用可能です。
 また、それらに関連するドキュメント制作での表記統一にも利用可能です。
 
-## 📄 License
-
-このプロジェクトは GPL v2以降の下でライセンスされています - 詳細は [LICENSE](LICENSE) ファイルを参照してください。
-
-## 💬 Support and Contact
-
-サポート、機能リクエスト、またはバグ報告については、[GitHub Issues](https://github.com/stein2nd/docs-linter/issues) ページをご覧ください。
-
 ## ⚙️ Installation
 
 ### 1. リポジトリの追加 (既存プロジェクトに追加する場合)
@@ -319,6 +311,19 @@ fi
 * VS Code や JetBrains 製エディターで Markdown ファイルを編集
 * リアルタイムで textlint チェックを実行
 
+## 💻 Command-line execution
+
+```zsh
+# 基本設定で実行
+npm run lint
+
+# WordPress 用設定で実行
+npm run lint:wp
+
+# Xcode 用設定で実行
+npm run lint:xcode
+```
+
 ## 🛠️ Custom Rules
 
 ### `base/rules/no-long-kanji.js`
@@ -357,20 +362,7 @@ Swift 開発でよく使われる用語の統一ルールを定義していま�
 * `Auto Layout` (AutoLayout, Auto-Layout を統一)
 * その他 Swift 関連用語
 
-## 💻 Command-line execution
-
-```zsh
-# 基本設定で実行
-npm run lint
-
-# WordPress 用設定で実行
-npm run lint:wp
-
-# Xcode 用設定で実行
-npm run lint:xcode
-```
-
-## 🧭 Key Points for Updates and Operations
+## 🧭 Updates and Operations
 
 | 操作 | コマンド |
 | --- | --- |
@@ -405,3 +397,11 @@ A: 設定ファイル内でカスタムルールのパスが正しく指定さ�
 **Q: 用語辞書が適用されない**
 
 A: `prh` ルールの `rulePaths` に辞書ファイルのパスが正しく指定されているか確認してください。
+
+## 💬 Support and Contact
+
+サポート、機能リクエスト、またはバグ報告については、[GitHub Issues](https://github.com/stein2nd/docs-linter/issues) ページをご覧ください。
+
+## 📄 License
+
+このプロジェクトは GPL v2以降の下でライセンスされています - 詳細は [LICENSE](LICENSE) ファイルを参照してください。
