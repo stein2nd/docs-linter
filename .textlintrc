@@ -1,0 +1,19 @@
+{
+  "filters": {},
+  "rules": {
+    "preset-ja-technical-writing": {
+      "sentence-length": {
+        "max": 150
+      }
+    },
+    "preset-jtf-style": {
+      "3.1.1.全角文字と半角文字の間": false,
+      "4.3.1.丸かっこ（）": false
+    },
+    "no-dead-link": true,
+    "ja-space-around-code": {
+      "before": true,
+      "after": true
+    }
+  }
+}
