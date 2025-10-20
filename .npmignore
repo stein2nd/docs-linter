@@ -1,0 +1,8 @@
+node_modules/
+/src/
+
+.vscode/
+
+dist/*.map
+
+.DS_Store
