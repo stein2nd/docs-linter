@@ -5,6 +5,7 @@
 [![WordPress](https://img.shields.io/badge/WordPress-6.3+-blue.svg)](https://wordpress.org/)
 [![Swift](https://img.shields.io/badge/Swift-5.9+-orange.svg)](https://www.swift.org/)
 [![Xcode](https://img.shields.io/badge/Xcode-15.0+-blue.svg)](https://developer.apple.com/xcode/)
+[![Vite](https://img.shields.io/badge/vite-7.1-blue.svg)](https://vite.dev)
 
 ## 📝 Description
 
@@ -14,9 +15,9 @@ WordPress プラグイン/テーマ開発、Xcode (Swift/SwiftUI) アプリ開�
 
 ## ⚙️ Installation
 
-Git サブモジュールとして利用します。
+### 方法1.「Git サブモジュール」として利用する
 
-### 1. リポジトリの追加 (既存プロジェクトに追加する場合)
+### 1.1. リポジトリの追加 (既存プロジェクトに追加する場合)
 
 既存プロジェクトの「tools」に追加すると仮定します。
 
@@ -41,11 +42,6 @@ git submodule update --init --recursive
 
 # npm を初期化してない場合は、このタイミングで実施
 npm init -y
-
-# textlint 他を devDependencies に追加
-npm install --save-dev textlint
-npm install --save-dev textlint-rule-preset-ja-technical-writing textlint-rule-preset-jtf-style textlint-rule-no-dead-link
-npm install --save-dev github:jawordpressorg/textlint-rule-preset-wp-docs-ja
 ```
 
 続いて、VS Code / Cursor 設定を追加します。
@@ -56,6 +52,8 @@ npm install --save-dev github:jawordpressorg/textlint-rule-preset-wp-docs-ja
 {
   "textlint.configPath": "./tools/docs-linter/base/.textlintrc.base.json",
   "textlint.nodePath": "./node_modules",
+  "textlint.enable": true,
+  "textlint.autoFixOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.textlint": "always"
   },
@@ -70,9 +68,17 @@ npm install --save-dev github:jawordpressorg/textlint-rule-preset-wp-docs-ja
 ```json
 {
   "scripts": {
+    "postinstall": "cd tools/docs-linter && npm install",
     "lint:docs": "textlint --config ./tools/docs-linter/wordpress/.textlintrc.wp.json ./README.md ./docs/**/*.md"
   }
 }
+```
+
+サブモジュール内の依存 npm モジュールの導入などの準備を行います。
+
+```zsh
+# サブモジュール内の依存 npm モジュールの導入、トランスパイル実行
+postinstall
 ```
 
 「既存プロジェクト」のリポジトリにコミットします。
@@ -86,7 +92,7 @@ git commit -m "Add docs-linter as submodule for Markdown linting"
 git push
 ```
 
-### 1. リポジトリの追加 (新規プロジェクト作成と同時に追加する場合)
+### 1.1. リポジトリの追加 (新規プロジェクト作成と同時に追加する場合)
 
 新規プロジェクトのリポジトリを作成します (例：`s2j-new-plugin`)。
 
@@ -117,13 +123,8 @@ git submodule update --init --recursive
 # npm を初期化
 npm init -y
 
-# textlint を devDependencies に追加
-npm install --save-dev textlint
-npm install --save-dev textlint
-npm install --save-dev textlint-rule-preset-ja-technical-writing textlint-rule-preset-jtf-style textlint-rule-no-dead-link
-npm install --save-dev github:jawordpressorg/textlint-rule-preset-wp-docs-ja
-
 # スクリプトとして登録
+npm pkg set scripts.postinstall="cd tools/docs-linter && npm install"
 npm pkg set scripts.lint:docs="textlint --config ./tools/docs-linter/base/.textlintrc.base.json ./README.md ./docs/**/*.md"
 ```
 
@@ -137,6 +138,9 @@ mkdir -p .vscode
 cat <<'JSON' > .vscode/settings.json
 {
   "textlint.configPath": "./tools/docs-linter/base/.textlintrc.base.json",
+  "textlint.nodePath": "./node_modules",
+  "textlint.enable": true,
+  "textlint.autoFixOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.textlint": "always"
   },
@@ -145,6 +149,13 @@ cat <<'JSON' > .vscode/settings.json
   }
 }
 JSON
+```
+
+サブモジュール内の依存 npm モジュールの導入などの準備を行います。
+
+```zsh
+# サブモジュール内の依存 npm モジュールの導入、トランスパイル実行
+postinstall
 ```
 
 「新規プロジェクト」のリポジトリにコミットします。
@@ -162,9 +173,12 @@ git remote add origin https://github.com/stein2nd/s2j-new-plugin.git
 git push -u origin main
 ```
 
-### 2. 設定ファイルの選択
+### 方法2「npm パッケージ」として利用する
 
-プロジェクトの種類に応じて、適切な設定ファイルを選択してください。
+```zsh
+# docs-linter をグローバルインストール
+npm install -g @stein2nd/docs-linter
+```
 
 ## 💡 Examples (Usage Samples)
 
@@ -254,6 +268,19 @@ Swift/SwiftUI アプリ開発に特化した設定です。
 npm run lint:xcode
 ```
 
+### 設定ファイルの自動検出
+
+`docs-linter` は以下の順序で、設定ファイルを検出します：
+
+1. `./.textlintrc`
+2. `./.textlintrc.json`
+3. `./.textlintrc.jsonc`
+4. `./.textlintrc.wp.json`
+5. `./.textlintrc.swift.json`
+6. `./tools/docs-linter/.textlintrc.local.json`
+7. `./tools/docs-linter/wordpress/.textlintrc.wp.json` 或いは `./tools/docs-linter/xcode/.textlintrc.xc.json`
+8. `./tools/docs-linter/base/.textlintrc.base.json` (フォールバック)
+
 ## 🔧 Editor-Specific Settings
 
 代表的なエディターでの設定例を紹介します。
@@ -265,8 +292,15 @@ npm run lint:xcode
 ```json
 {
   "textlint.configPath": "./tools/docs-linter/base/.textlintrc.base.json",
+  "textlint.nodePath": "./node_modules",
   "textlint.enable": true,
-  "textlint.autoFixOnSave": true
+  "textlint.autoFixOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.textlint": "always"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "3w36zj6.textlint"
+  }
 }
 ```
 
@@ -422,6 +456,8 @@ Swift 開発でよく使われる用語の統一ルールを定義していま�
 
 ## 🧭 Updates and Operations
 
+### Git サブモジュールの場合
+
 サブモジュール更新、ルール拡張、メンテナンス手順です。
 
 | 操作 | コマンド |
@@ -431,6 +467,13 @@ Swift 開発でよく使われる用語の統一ルールを定義していま�
 | **すでに clone 済みの場合** | `git submodule update --init --recursive` |
 
 💡 `docs-linter` 側のルール変更をすぐ反映したいときは、各プロジェクトで上記「update --remote --merge」を実行します。
+
+### npm パッケージの場合
+
+```zsh
+# パッケージを最新化
+npm update @stein2nd/docs-linter
+```
 
 ## ⚡ Practical Points
 
@@ -459,6 +502,14 @@ A: 設定ファイル内でカスタムルールのパスが正しく指定さ�
 **Q: 用語辞書が適用されない**
 
 A: `prh` ルールの `rulePaths` に辞書ファイルのパスが正しく指定されているか確認してください。
+
+**Q: `docs-linter` コマンドが動作しない**
+
+A: 以下の点を確認してください。
+
+* `npm install -g @stein2nd/docs-linter` でグローバルインストールされているか
+* プロジェクトルートで実行しているか
+* `node_modules` に必要な依存関係がインストールされているか
 
 ## 💬 Support and Contact
 
