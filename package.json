@@ -1,6 +1,6 @@
 {
   "name": "docs-linter",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Shared textlint configuration for Markdown files across WordPress and Xcode projects.",
   "type": "module",
   "author": "Koutarou ISHIKAWA",
@@ -13,18 +13,28 @@
     "xcode",
     "swift"
   ],
+  "main": "dist/run-textlint.js",
+  "bin": {
+    "docs-lint": "dist/run-textlint.js"
+  },
   "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
     "lint": "textlint '**/*.md'",
     "lint:wp": "textlint --config ./wordpress/.textlintrc.wp.json '**/*.md'",
-    "lint:xcode": "textlint --config ./xcode/.textlintrc.xc.json '**/*.md'"
+    "lint:xcode": "textlint --config ./xcode/.textlintrc.xc.json '**/*.md'",
+    "prepare": "npm run build"
   },
   "overrides": {},
   "devDependencies": {
+    "@types/node": "^24.8.1",
     "textlint": "^15.2.3",
     "textlint-rule-no-dead-link": "^6.0.1",
     "textlint-rule-preset-ja-technical-writing": "^12.0.2",
     "textlint-rule-preset-jtf-style": "^3.0.3",
     "textlint-rule-preset-wp-docs-ja": "github:jawordpressorg/textlint-rule-preset-wp-docs-ja",
-    "textlint-rule-prh": "^6.1.0"
+    "textlint-rule-prh": "^6.1.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.10"
   }
 }
