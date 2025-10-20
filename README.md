@@ -69,12 +69,12 @@ npm init -y
 {
   "scripts": {
     "postinstall": "cd tools/docs-linter && npm install",
-    "lint:docs": "textlint --config ./tools/docs-linter/wordpress/.textlintrc.wp.json ./README.md ./docs/**/*.md"
+    "lint:docs": "NODE_PATH=./tools/docs-linter/node_modules textlint --config ./tools/docs-linter/wordpress/.textlintrc.wp.json ./README.md ./docs/**/*.md"
   }
 }
 ```
 
-サブモジュール内の依存 npm モジュールの導入などの準備を行います。
+サブモジュール内の依存 npm モジュールの導入などを行います。
 
 ```zsh
 # サブモジュール内の依存 npm モジュールの導入、トランスパイル実行
@@ -125,7 +125,7 @@ npm init -y
 
 # スクリプトとして登録
 npm pkg set scripts.postinstall="cd tools/docs-linter && npm install"
-npm pkg set scripts.lint:docs="textlint --config ./tools/docs-linter/base/.textlintrc.base.json ./README.md ./docs/**/*.md"
+npm pkg set scripts.lint:docs="NODE_PATH=./tools/docs-linter/node_modules textlint --config ./tools/docs-linter/base/.textlintrc.base.json ./README.md ./docs/**/*.md"
 ```
 
 「新規プロジェクト」が、WordPress 開発の場合は、上記の「base/.textlintrc.base.json」を `wordpress/.textlintrc.wp.json` に変更してください。
@@ -151,7 +151,7 @@ cat <<'JSON' > .vscode/settings.json
 JSON
 ```
 
-サブモジュール内の依存 npm モジュールの導入などの準備を行います。
+サブモジュール内の依存 npm モジュールの導入などを行います。
 
 ```zsh
 # サブモジュール内の依存 npm モジュールの導入、トランスパイル実行
@@ -270,7 +270,7 @@ npm run lint:xcode
 
 ### 設定ファイルの自動検出
 
-`docs-linter` は以下の順序で、設定ファイルを検出します：
+`docs-linter` は以下の順序で、設定ファイルを検出します。
 
 1. `./.textlintrc`
 2. `./.textlintrc.json`
