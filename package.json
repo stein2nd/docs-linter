@@ -25,6 +25,12 @@
     "lint:xcode": "textlint --config ./xcode/.textlintrc.xc.json '**/*.md'",
     "prepare": "npm run build"
   },
+  "files": [
+    "dist/",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
   "overrides": {},
   "devDependencies": {
     "@types/node": "^24.8.1",
