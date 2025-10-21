@@ -18,12 +18,14 @@
     "docs-lint": "dist/bin/run-textlint.js"
   },
   "scripts": {
-    "build": "vite build",
+    "clean": "rm -rf dist && mkdir dist",
+    "build": "npm run clean && vite build",
     "dev": "vite build --watch",
     "lint": "textlint '**/*.md'",
     "lint:wp": "textlint --config ./wordpress/.textlintrc.wp.json '**/*.md'",
     "lint:xcode": "textlint --config ./xcode/.textlintrc.xc.json '**/*.md'",
-    "prepare": "npm run build && node ./dist/scripts/setup-npmignore.js"
+    "prepare": "npm run build && node ./dist/scripts/setup-npmignore.js",
+    "postinstall": "node ./dist/scripts/setup-npmignore.js || true"
   },
   "files": [
     "dist/",
