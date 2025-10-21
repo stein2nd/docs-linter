@@ -70,7 +70,7 @@ npm init -y
 {
   "scripts": {
     "postinstall": "cd tools/docs-linter && npm install",
-    "prelint:docs": "git submodule update --remote --merge && cd tools/docs-linter && npm ci && npm run build",
+    "prelint:docs": "git submodule update --remote --merge && cd tools/docs-linter && (npm ci || npm install) && npm run build",
     "lint:docs": "NODE_PATH=./tools/docs-linter/node_modules textlint --config ./tools/docs-linter/wordpress/.textlintrc.wp.json ./README.md ./docs/**/*.md"
   }
 }
@@ -129,7 +129,7 @@ npm init -y
 
 # スクリプトとして登録
 npm pkg set scripts.postinstall="cd tools/docs-linter && npm install"
-npm pkg set scripts.prelint:docs="git submodule update --remote --merge && cd tools/docs-linter && npm ci && npm run build"
+npm pkg set scripts.prelint:docs="git submodule update --remote --merge && cd tools/docs-linter && (npm ci || npm install) && npm run build"
 npm pkg set scripts.lint:docs="NODE_PATH=./tools/docs-linter/node_modules textlint --config ./tools/docs-linter/base/.textlintrc.base.json ./README.md ./docs/**/*.md"
 ```
 
@@ -292,15 +292,6 @@ cp node_modules/@stein2nd/docs-linter/xcode/.textlintrc.xc.json .textlintrc.xc.j
   }
 }
 ```
-
-
-
-
-
-
-
-
-
 
 ## 💡 Examples (Usage Samples)
 
