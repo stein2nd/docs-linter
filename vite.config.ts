@@ -7,14 +7,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   build: {
     target: "node20",
-    outDir: "dist",
-    emptyOutDir: true,
-    lib: {
-      entry: path.resolve(__dirname, "bin/run-textlint.ts"),
-      formats: ["es"],
-      fileName: () => "run-textlint.js"
-    },
+    emptyOutDir: false,
     minify: false,
+    sourcemap: true,
     rollupOptions: {
       external: [
         "textlint",
@@ -25,11 +20,21 @@ export default defineConfig({
         "node:process",
         "node:module"
       ],
-      output: {
-        format: "esm"
-      }
-    },
-    sourcemap: true
+      input: {
+        "run-textlint": path.resolve(__dirname, "src/bin/run-textlint.ts"),
+        "setup-npmignore": path.resolve(__dirname, "src/scripts/setup-npmignore.ts")
+      },
+      output: [
+        {
+          entryFileNames: "dist/[name].js",
+          format: "esm"
+        },
+        {
+          entryFileNames: "scripts/[name].js",
+          format: "esm"
+        }
+      ]
+    }
   },
   optimizeDeps: {
     noDiscovery: true

@@ -23,7 +23,7 @@
     "lint": "textlint '**/*.md'",
     "lint:wp": "textlint --config ./wordpress/.textlintrc.wp.json '**/*.md'",
     "lint:xcode": "textlint --config ./xcode/.textlintrc.xc.json '**/*.md'",
-    "prepare": "npm run build"
+    "prepare": "npm run build && node ./scripts/setup-npmignore.js"
   },
   "files": [
     "dist/",
