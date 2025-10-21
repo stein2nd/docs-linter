@@ -21,19 +21,16 @@ export default defineConfig({
         "node:module"
       ],
       input: {
-        "run-textlint": path.resolve(__dirname, "src/bin/run-textlint.ts"),
-        "setup-npmignore": path.resolve(__dirname, "src/scripts/setup-npmignore.ts")
+        "bin/run-textlint": path.resolve(__dirname, "src/bin/run-textlint.ts"),
+        "scripts/setup-npmignore": path.resolve(__dirname, "src/scripts/setup-npmignore.ts")
       },
-      output: [
-        {
-          entryFileNames: "dist/[name].js",
-          format: "esm"
-        },
-        {
-          entryFileNames: "scripts/[name].js",
-          format: "esm"
-        }
-      ]
+      output: {
+        dir: "dist",
+        format: "esm",
+        entryFileNames: "[name].js",
+        chunkFileNames: "[name].js",
+        assetFileNames: "[name][extname]"
+      }
     }
   },
   optimizeDeps: {
