@@ -83,4 +83,4 @@ commitlint.*
 `;
 
 fs.writeFileSync(targetPath, content);
-console.log("✅ .npmignore has been generated successfully.");
+console.log("✅ .npmignore generated and gitignore-fallback warning prevented.");
