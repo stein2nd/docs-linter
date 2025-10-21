@@ -15,7 +15,7 @@
   ],
   "main": "dist/run-textlint.js",
   "bin": {
-    "docs-lint": "dist/run-textlint.js"
+    "docs-lint": "dist/bin/run-textlint.js"
   },
   "scripts": {
     "build": "vite build",
