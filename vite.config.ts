@@ -13,6 +13,8 @@ export default defineConfig({
     rollupOptions: {
       external: [
         "textlint",
+        "textlint-rule-preset-swift-docs-ja",
+        "textlint-rule-preset-wp-docs-ja",
         "node:fs",
         "node:path",
         "node:url",

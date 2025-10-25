@@ -85,7 +85,7 @@ jobs:
       - name: Check Swift textlint configuration
         run: |
           if [ -f ".textlintrc.swift.jsonc" ]; then
-            echo "Using .textlintrc.swift.jsonc (Swift configuration)"
+            echo "Using .textlintrc.swift.jsonc (Swift configuration with textlint-rule-preset-swift-docs-ja)"
           elif [ -f ".textlintrc.jsonc" ]; then
             echo "Using .textlintrc.jsonc (fallback to general configuration)"
           elif [ -f ".textlintrc" ]; then
@@ -276,6 +276,7 @@ jobs:
               - Check that code examples are properly formatted
               - Verify that the documentation follows Swift API Design Guidelines
               - Ensure proper spacing around English terms and code blocks
+              - Using textlint-rule-preset-swift-docs-ja for Swift-specific linting rules
               
               For more information, see the [Actions tab](https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}).
               `

@@ -302,7 +302,7 @@ cp node_modules/@stein2nd/docs-linter/xcode/.textlintrc.xc.json .textlintrc.xc.j
 |---|---|---|---|
 | 一般的な技術ドキュメント | [`examples/.textlintrc.jsonc`](examples/.textlintrc.jsonc) | [`examples/lint-docs.yml`](examples/lint-docs.yml) | 一般的なドキュメント・プロジェクト向けの基本設定。 |
 | WordPress 開発 | [`examples/.textlintrc.wp.jsonc`](examples/.textlintrc.wp.jsonc) | [`examples/lint-docs.wp.yml`](examples/lint-docs.wp.yml) | WordPress プラグインまたはテーマのドキュメント用に調整されたルール (和訳スタイル)。 |
-| Swift / SwiftUI 開発 | [`examples/.textlintrc.swift.jsonc`](examples/.textlintrc.swift.jsonc) | [`examples/lint-docs.swift.yml`](examples/lint-docs.swift.yml) | Apple 開発者向けドキュメントおよび技術用語向けに最適化されたルール。 |
+| Swift / SwiftUI 開発 | [`examples/.textlintrc.swift.jsonc`](examples/.textlintrc.swift.jsonc) | [`examples/lint-docs.swift.yml`](examples/lint-docs.swift.yml) | Apple 開発者向けドキュメントおよび技術用語向けに最適化されたルール。**textlint-rule-preset-swift-docs-ja** を統合。 |
 
 ## 📋 List of Configuration Files
 
@@ -357,15 +357,16 @@ Swift/SwiftUI アプリ開発に特化した設定です。
 **含まれるルール:**
 
 * 基本設定を継承 (`extends: "../base/.textlintrc.base.json"`)
-* `prh`: Swift 用語統一ルール (`./dictionary/swift-terms.yml`)
-* `terminology`: Swift 関連用語の統一 (SwiftUI、UIKit、Xcode、Auto Layout など)
-* `no-hankaku-kana`: 半角カナ禁止
-  * `no-mix-dearu-desumasu`: 文体統一 (見出しは「ですます調」、本文は「である調」を推奨。各セクション内での混在を禁止)
-    - 見出しを「体言やめ」、本文を「ですます調」にする場合は、見出し内で「ですます調」と「である調」が混在しないよう注意
-* `ja-space-arround-code`: コードブロック周りのスペース
-* `ja-no-mixed-period`: 句読点統一
-* `sentence-length`: 文の長さ制限 (120文字)
+* **`textlint-rule-preset-swift-docs-ja`**: Swift 日本語ドキュメント向けの textlint ルールプリセット
 * `xcode/space-around-english`: 英単語前後のスペース (カスタムルール)
+
+**主な機能:**
+
+* Swift 関連用語の統一 (SwiftUI、UIKit、Xcode、Auto Layout など)
+* Apple の日本語翻訳ガイドラインに準拠した用語チェック
+* 半角カナ禁止、文体統一、句読点統一
+* コードブロック周りのスペース、文の長さ制限
+* 英単語前後のスペースチェック
 
 **使用例:**
 
@@ -390,9 +391,10 @@ npm run lint:xcode
 3. `./.textlintrc.jsonc`
 4. `./.textlintrc.wp.json`
 5. `./.textlintrc.swift.json`
-6. `./tools/docs-linter/.textlintrc.local.json`
-7. `./tools/docs-linter/wordpress/.textlintrc.wp.json` 或いは `./tools/docs-linter/xcode/.textlintrc.xc.json`
-8. `./tools/docs-linter/base/.textlintrc.base.json` (フォールバック)
+6. `./.textlintrc.xc.json`
+7. `./tools/docs-linter/.textlintrc.local.json`
+8. `./tools/docs-linter/wordpress/.textlintrc.wp.json` 或いは `./tools/docs-linter/xcode/.textlintrc.xc.json`
+9. `./tools/docs-linter/base/.textlintrc.base.json` (フォールバック)
 
 ## 🔧 Editor-Specific Settings
 
@@ -568,17 +570,28 @@ npm run lint:docs
 
 WordPress 用語集については、`node_modules/textlint-rule-preset-wp-docs-ja/prh-rules/wordpress.yml` を参照してください。
 
-### `xcode/dictionary/swift-terms.yml`
+### Swift 用語集の統合
 
-Swift 開発でよく使われる用語の統一ルールを定義しています。
+Swift 開発でよく使われる用語の統一ルールは、**`textlint-rule-preset-swift-docs-ja`** プリセットに統合されました。Swift 用語集については、`node_modules/textlint-rule-preset-swift-docs-ja/prh-rules/swift.yml` を参照してください。
 
 **主な用語:**
 
-* `SwiftUI` (Swift UI, swiftui を統一)
+* `SwiftUI` (Swift UI、swiftui を統一)
 * `UIKit` (UI Kit を統一)
-* `Xcode` (Xcode, Xcode を統一)
-* `Auto Layout` (AutoLayout, Auto-Layout を統一)
+* `Xcode` (Xcode、Xcode を統一)
+* `Auto Layout` (AutoLayout、Auto-Layout を統一)
 * その他 Swift 関連用語
+
+**カスタム用語の追加:**
+
+プロジェクト固有の用語を追加する場合は、`xcode/dictionary/swift-terms.yml` に追加してください。
+
+```yaml
+version: 1
+rules:
+  - expected: "カスタム用語"
+    patterns: ["カスタム用語の誤表記"]
+```
 
 ## 🧭 Updates and Operations
 
@@ -616,12 +629,13 @@ npm update @stein2nd/docs-linter
 実務での使い方ヒント (CI 連携、PR チェックなど) について。
 
 * **WordPress 開発者**は `.textlintrc.wp.json` を指定
-* **Xcode/Swift 開発者**は `.textlintrc.xcode.json` を指定
+* **Xcode/Swift 開発者**は `.textlintrc.xc.json` を指定
 * **Cursor/VS Code** は `.vscode/settings.json` の設定を自動で読み込み
-* **全プロジェクト**で共通ルールを継承可能
+* **全プロジェクト** で共通ルールを継承可能
 * **Git submodule によりルール更新が一括反映**
 * **`prelint:docs` によりサブモジュールの最新化が自動化**
 * **npm パッケージにより簡単なインストールとアップデート**
+* **Swift 開発では textlint-rule-preset-swift-docs-ja を活用**
 
 ## ❓ FAQ
 
@@ -685,6 +699,14 @@ A: 以下の手順で設定してください。
 2. 設定ファイルをプロジェクトルートにコピー
 3. `package.json` にスクリプトを追加
 4. `npm run lint:docs` で実行
+
+**Q: Swift 開発で textlint-rule-preset-swift-docs-ja が適用されない**
+
+A: 以下の点を確認してください。
+
+* `xcode/.textlintrc.xc.json` で `textlint-rule-preset-swift-docs-ja` が正しく継承されているか
+* 依存関係が正しくインストールされているか
+* 設定ファイルの構文が正しいか
 
 ## 💬 Support and Contact
 

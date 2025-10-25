@@ -1,41 +1,12 @@
 {
-  "extends": "../base/.textlintrc.base.json",
+  "extends": [
+    "../base/.textlintrc.base.json",
+    "textlint-rule-preset-swift-docs-ja"
+  ],
   "rules": {
-    "prh": {
-      "rulePaths": ["./dictionary/swift-terms.yml"]
-    },
-    "terminology": {
-      "defaultTerms": false,
-      "terms": [
-        "SwiftUI",
-        "UIKit",
-        "AppKit",
-        "Xcode",
-        "Storyboard",
-        "Auto Layout",
-        "Interface Builder",
-        "View",
-        "Modifier",
-        "SceneDelegate",
-        "AppDelegate",
-        "Target",
-        "Scheme",
-        "Simulator"
-      ]
+    "xcode/space-around-english": true
   },
-  "no-hankaku-kana": true,
-  "no-mix-dearu-desumasu": {
-    "preferInHeader": "ですます",
-    "preferInBody": "である"
-  },
-  "ja-space-arround-code": true,
-  "ja-no-mixed-period": true,
-  "sentence-length": {
-    "max": 120
-  },
-  "xcode/space-around-english": true
-},
-"plugins": {
+  "plugins": {
     "xcode": {
       "rules": {
         "space-around-english": "./rules/space-around-english.js"

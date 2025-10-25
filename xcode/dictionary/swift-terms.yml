@@ -1,30 +1,14 @@
+# ============================================================
+# Swift 用語辞書（textlint-rule-preset-swift-docs-ja 統合版）
+# ------------------------------------------------------------
+# このファイルは textlint-rule-preset-swift-docs-ja の
+# prh-rules/swift.yml を参照するように変更されました。
+# カスタム用語を追加する場合は、このファイルに追加してください。
+# ============================================================
+
 version: 1
 rules:
-  - expected: "SwiftUI"
-    patterns: ["Swift UI", "swiftui"]
-  - expected: "UIKit"
-    patterns: ["UI Kit"]
-  - expected: "AppKit"
-    patterns: ["App Kit"]
-  - expected: "Xcode"
-    patterns: ["xcode", "XCode"]
-  - expected: "Auto Layout"
-    patterns: ["AutoLayout", "Auto-Layout"]
-  - expected: "Storyboard"
-    patterns: ["Story Board"]
-  - expected: "Interface Builder"
-    patterns: ["InterfaceBuilder"]
-  - expected: "View"
-    patterns: ["view"]
-  - expected: "Modifier"
-    patterns: ["modifier"]
-  - expected: "SceneDelegate"
-    patterns: ["Scene Delegate"]
-  - expected: "AppDelegate"
-    patterns: ["App Delegate"]
-  - expected: "Target"
-    patterns: ["target"]
-  - expected: "Scheme"
-    patterns: ["scheme"]
-  - expected: "Simulator"
-    patterns: ["simulator"]
+  # カスタム用語をここに追加
+  # 例:
+  # - expected: "カスタム用語"
+  #   patterns: ["カスタム用語の誤表記"]
