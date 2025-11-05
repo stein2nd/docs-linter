@@ -35,7 +35,7 @@
   ],
   "overrides": {},
   "devDependencies": {
-    "@types/node": "^24.9.1",
+    "@types/node": "^24.10.0",
     "textlint": "^15.2.3",
     "textlint-rule-no-dead-link": "^6.0.1",
     "textlint-rule-preset-ja-technical-writing": "^12.0.2",
@@ -44,6 +44,6 @@
     "textlint-rule-preset-wp-docs-ja": "github:jawordpressorg/textlint-rule-preset-wp-docs-ja",
     "textlint-rule-prh": "^6.1.0",
     "typescript": "^5.9.3",
-    "vite": "^7.1.12"
+    "vite": "^7.2.0"
   }
 }
