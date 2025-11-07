@@ -5,13 +5,23 @@
 [![WordPress](https://img.shields.io/badge/WordPress-6.3+-blue.svg)](https://wordpress.org/)
 [![Swift](https://img.shields.io/badge/Swift-5.9+-orange.svg)](https://www.swift.org/)
 [![Xcode](https://img.shields.io/badge/Xcode-15.0+-blue.svg)](https://developer.apple.com/xcode/)
-[![Vite](https://img.shields.io/badge/vite-7.1-blue.svg)](https://vite.dev)
+[![Vite](https://img.shields.io/badge/vite-7.2-blue.svg)](https://vite.dev)
 
 ## 📝 Description
 
 Markdown ドキュメントを lint (構文・文体チェック) するためのルールセットです。
 WordPress プラグイン/テーマ開発、Xcode (Swift/SwiftUI) アプリ開発の両方で利用可能です。
 また、それらに関連するドキュメント制作での表記統一にも利用可能です。
+
+## 📄 License
+
+本プロジェクトは GPL v2以降の下でライセンスされています - 詳細は [LICENSE](LICENSE) ファイルを参照してください。
+
+## 💬 Support and Contact
+
+サポート、機能リクエスト、またはバグ報告については、[GitHub Issues](https://github.com/stein2nd/docs-linter/issues) ページをご覧ください。
+
+---
 
 ## ⚙️ Installation
 
@@ -740,10 +750,65 @@ A: 以下の手順を確認してください。
 2. 親リポジトリで `git submodule update --remote --merge` を実行しているか
 3. 親リポジトリでサブモジュールの変更をコミットしているか
 
-## 💬 Support and Contact
+## Contributing
 
-サポート、機能リクエスト、またはバグ報告については、[GitHub Issues](https://github.com/stein2nd/docs-linter/issues) ページをご覧ください。
+貢献をお待ちしています。以下の手順に従ってください。
 
-## 📄 License
+1. リポジトリをフォークしてください。
+2. 機能ブランチを作成してください (`git checkout -b feature/amazing-feature`)。
+3. 変更をコミットしてください (`git commit -m 'Add some amazing feature'`)。
+4. 機能ブランチにプッシュしてください (`git push origin feature/amazing-feature`)。
+5. Pull Request を開いてください。
 
-このプロジェクトは GPL v2以降の下でライセンスされています - 詳細は [LICENSE](LICENSE) ファイルを参照してください。
+### 開発ガイドライン
+
+本プロジェクトは **textlint 用ルールセット** を提供することを目的としています。開発にあたっては以下のガイドラインに従ってください。
+
+#### ルールの追加・修正
+
+* **新しいルールの追加**: 新しい textlint ルールを追加する際は、既存の設定ファイル構造を維持し、適切なディレクトリ (`base/`, `wordpress/`, `xcode/`) に配置してください。
+* **既存ルールの修正**: 既存のルールを修正する際は、後方互換性を考慮し、既存の利用者に影響を与えないよう注意してください。
+* **カスタムルールの開発**: プロジェクト固有のカスタムルールを追加する場合は、`base/rules/` または `xcode/rules/` ディレクトリに配置し、適切なテストを追加してください。
+* **参考資料**: textlint の公式ドキュメントや他のルールセット (例： [textlint-rule-preset-JTF-style](https://github.com/textlint-ja/textlint-rule-preset-JTF-style)、[textlint-rule-preset-ja-technical-writing](https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing)) を参考にしてください。
+
+#### 設定ファイルの管理
+
+* **設定ファイルの構造**: 設定ファイルは JSON 形式で、`extends` を使用して基本設定を継承する構造を維持してください。
+* **設定ファイルの命名**: 設定ファイルは `.textlintrc.*.json` の命名規則に従ってください。
+* **設定ファイルの配置**: 各環境向けの設定ファイルは、適切なディレクトリ (`base/`, `wordpress/`, `xcode/`) に配置してください。
+
+#### 用語辞書の管理
+
+* **用語辞書の追加**: 新しい用語を追加する場合は、適切な辞書ファイル (`xcode/dictionary/swift-terms.yml` など) に追加してください。
+* **用語辞書の形式**: 用語辞書は PRH (Proofreading Helper) 形式の YAML ファイルとして管理してください。
+* **用語の統一**: 既存の用語集と整合性を保ち、重複を避けてください。
+
+#### テストと検証
+
+* **テストの実施**: 変更を加えた際は、必ずテストを実施し、既存の機能に影響がないことを確認してください。
+* **lint の実行**: 変更後は `npm run lint`、`npm run lint:wp`、`npm run lint:xcode` を実行し、エラーがないことを確認してください。
+* **ビルドの確認**: `npm run build` を実行し、ビルドが正常に完了することを確認してください。
+
+#### コードスタイル
+
+* **コードの可読性**: コードの可読性を保つため、統一されたコードスタイルを遵守してください。
+* **コメントの追加**: 複雑なロジックには適切なコメントを追加してください。
+* **TypeScript の使用**: 可能な限り TypeScript を使用し、型安全性を確保してください。
+
+#### ドキュメントの更新
+
+* **README の更新**: 新機能や変更点がある場合は、README.md を適切に更新してください。
+* **設定例の追加**: 新しい設定オプションがある場合は、使用例を追加してください。
+* **FAQ の更新**: よくある質問がある場合は、FAQ セクションに追加してください。
+
+#### 依存関係の管理
+
+* **依存関係の追加**: 新しい依存関係を追加する際は、`package.json` に適切に追加し、`package-lock.json` を更新してください。
+* **依存関係の更新**: 定期的に依存関係を更新し、セキュリティパッチを適用してください。
+* **peer dependencies**: 必要に応じて peer dependencies を適切に設定してください。
+
+## Contributors & Developers
+
+**"Docs Linter"** はオープンソース・ソフトウェアです。以下の皆様がこのプロジェクトに貢献しています。
+
+* **開発者**: Koutarou ISHIKAWA
