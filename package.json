@@ -1,6 +1,6 @@
 {
   "name": "docs-linter",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Shared textlint configuration for Markdown files across WordPress and Xcode projects.",
   "type": "module",
   "author": "Koutarou ISHIKAWA",
@@ -44,6 +44,6 @@
     "textlint-rule-preset-wp-docs-ja": "github:jawordpressorg/textlint-rule-preset-wp-docs-ja",
     "textlint-rule-prh": "^6.1.0",
     "typescript": "^5.9.3",
-    "vite": "^7.2.1"
+    "vite": "^7.2.2"
   }
 }
