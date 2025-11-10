@@ -10,7 +10,7 @@
 ## 📝 Description
 
 Markdown ドキュメントを lint (構文・文体チェック) するためのルールセットです。
-WordPress プラグイン/テーマ開発、Xcode (Swift/SwiftUI) アプリ開発の両方で利用可能です。
+WordPress プラグイン/テーマ開発、Xcode (Swift/SwiftUI) アプリケーション開発の両方で利用可能です。
 また、それらに関連するドキュメント制作での表記統一にも利用可能です。
 
 ## 📄 License
@@ -362,7 +362,7 @@ npm run lint:wp
 
 ### `xcode/.textlintrc.xc.json` - Xcode 開発用
 
-Swift/SwiftUI アプリ開発に特化した設定です。
+Swift/SwiftUI アプリケーション開発に特化した設定です。
 
 **含まれるルール:**
 
