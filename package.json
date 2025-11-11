@@ -1,6 +1,6 @@
 {
   "name": "docs-linter",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Shared textlint configuration for Markdown files across WordPress and Xcode projects.",
   "type": "module",
   "author": "Koutarou ISHIKAWA",
