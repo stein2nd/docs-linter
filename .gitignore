@@ -23,7 +23,7 @@ logs/
 .env.local
 
 # Build / cache
-dist/
+! dist/
 .cache/
 coverage/
 

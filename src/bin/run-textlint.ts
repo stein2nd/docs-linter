@@ -24,7 +24,7 @@ const USER_CONFIG_CANDIDATES = [
 ];
 
 const userConfig = USER_CONFIG_CANDIDATES.find((p) => existsSync(p));
-const targetConfig = userConfig || DOCS_LINTER_WP || DOCS_LINTER_BASE;
+const targetConfig = userConfig || DOCS_LINTER_WP || DOCS_LINTER_SWIFT || DOCS_LINTER_BASE;
 
 console.log(`🧩 Using config: ${targetConfig}`);
 

@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "../base/.textlintrc.base.json"
+  ],
+  "plugins": {},
+  "filters": {
+    "comments": true,
+    "code": {
+      "allow": ["swift"]
+    }
+  },
+  "rules": {
+    "preset-swift-docs-ja": true
+  }
+}

@@ -108,7 +108,7 @@ git push
 
 ### 1.2. リポジトリの追加 (新規プロジェクト作成と同時に追加する場合)
 
-新規プロジェクトのリポジトリを作成します (例：`s2j-new-plugin`)。
+新規プロジェクトのリポジトリを作成します (例: `s2j-new-plugin`)。
 
 ```zsh
 mkdir s2j-new-plugin
@@ -286,7 +286,7 @@ cp node_modules/@stein2nd/docs-linter/xcode/.textlintrc.xc.json .textlintrc.xc.j
 ### 2.4. VS Code / Cursor 設定
 
 `.vscode/settings.json` に以下を追記します。
-「プロジェクト」が、WordPress 開発の場合は、「textlint.configPath」を `./.textlintrc.wp.json` に変更してください。Swift 開発の場合は、 `./.textlintrc.xc.json` に変更してください。
+「プロジェクト」が、WordPress 開発の場合は、「textlint.configPath」を `./.textlintrc.wp.json` に変更してください。Swift 開発の場合は、`./.textlintrc.xc.json` に変更してください。
 
 ```json
 {
@@ -403,7 +403,7 @@ npm run lint:xcode
 5. `./.textlintrc.swift.json`
 6. `./.textlintrc.xc.json`
 7. `./tools/docs-linter/.textlintrc.local.json`
-8. `./tools/docs-linter/wordpress/.textlintrc.wp.json` 或いは `./tools/docs-linter/xcode/.textlintrc.xc.json`
+8. `./tools/docs-linter/wordpress/.textlintrc.wp.json` あるいは `./tools/docs-linter/xcode/.textlintrc.xc.json`
 9. `./tools/docs-linter/base/.textlintrc.base.json` (フォールバック)
 
 ## 🔧 Editor-Specific Settings
@@ -478,7 +478,7 @@ npm run lint:xcode
 **2. Xcode ビルドスクリプトでの自動実行:**
 
 * `Build Phases` → `+` → `New Run Script Phase`
-* スクリプトに以下を追加：
+* スクリプトに以下を追加:
 
 ```bash
 if [ -f "docs-linter/package.json" ]; then
@@ -550,7 +550,7 @@ npm run lint:docs
 
 * 1センテンスを100文字から150文字に制限緩和
 * 全角文字と半角文字の間にスペースを挟む
-* 全角かっこではなく、半角かっこを使用する
+* 全角括弧ではなく、半角括弧を使用する
 
 ```
 {
@@ -616,7 +616,7 @@ rules:
 | **すでに clone 済みの場合** | `git submodule update --init --recursive` |
 | **lint 実行前にサブモジュールを最新化** | `npm run prelint:docs` |
 
-💡 `docs-linter` 側のルール変更をすぐ反映したいときは、各プロジェクトで上記「prelint:docs」を実行します。
+💡 `docs-linter` 側のルール変更をすぐ反映したいときは、各プロジェクトで上記 `prelint:docs` を実行します。
 
 #### サブモジュールに変動が発生した場合の操作
 
@@ -769,7 +769,7 @@ A: 以下の手順を確認してください。
 * **新しいルールの追加**: 新しい textlint ルールを追加する際は、既存の設定ファイル構造を維持し、適切なディレクトリ (`base/`, `wordpress/`, `xcode/`) に配置してください。
 * **既存ルールの修正**: 既存のルールを修正する際は、後方互換性を考慮し、既存の利用者に影響を与えないよう注意してください。
 * **カスタムルールの開発**: プロジェクト固有のカスタムルールを追加する場合は、`base/rules/` または `xcode/rules/` ディレクトリに配置し、適切なテストを追加してください。
-* **参考資料**: textlint の公式ドキュメントや他のルールセット (例： [textlint-rule-preset-JTF-style](https://github.com/textlint-ja/textlint-rule-preset-JTF-style)、[textlint-rule-preset-ja-technical-writing](https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing)) を参考にしてください。
+* **参考資料**: textlint の公式ドキュメントや他のルールセット (例: [textlint-rule-preset-JTF-style](https://github.com/textlint-ja/textlint-rule-preset-JTF-style)、[textlint-rule-preset-ja-technical-writing](https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing)) を参考にしてください。
 
 #### 設定ファイルの管理
 

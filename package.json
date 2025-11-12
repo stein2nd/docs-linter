@@ -21,9 +21,9 @@
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && vite build",
     "dev": "vite build --watch",
-    "lint": "textlint '**/*.md'",
-    "lint:wp": "textlint --config ./wordpress/.textlintrc.wp.json '**/*.md'",
-    "lint:xcode": "textlint --config ./xcode/.textlintrc.xc.json '**/*.md'",
+    "lint": "npx textlint '**/*.md'",
+    "lint:wp": "npx textlint --config ./wordpress/.textlintrc.wp.json '**/*.md'",
+    "lint:swift": "npx textlint --config ./swift/.textlintrc.swift.json '**/*.md'",
     "prepare": "npm run build && node ./dist/scripts/setup-npmignore.js",
     "postinstall": "node ./dist/scripts/setup-npmignore.js || true"
   },
@@ -33,9 +33,12 @@
     "README.md",
     "LICENSE"
   ],
-  "overrides": {},
+  "overrides": {
+    "rollup": "^4.53.2"
+  },
   "devDependencies": {
-    "@types/node": "^24.10.0",
+    "@types/node": "^24.10.1",
+    "rollup": "^4.53.2",
     "textlint": "^15.3.0",
     "textlint-rule-no-dead-link": "^6.0.1",
     "textlint-rule-preset-ja-technical-writing": "^12.0.2",

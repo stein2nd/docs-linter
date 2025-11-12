@@ -5,9 +5,8 @@
 // このルールは textlint-rule-preset-swift-docs-ja と併用されます。
 // 必要に応じて、プリセットのルールと重複する場合は削除を検討してください。
 // ============================================================
-"use strict";
 
-module.exports = function(context) {
+export default function(context) {
   const { Syntax, RuleError, report, getSource } = context;
 
   return {
@@ -34,4 +33,4 @@ module.exports = function(context) {
       }
     }
   };
-};
+}
