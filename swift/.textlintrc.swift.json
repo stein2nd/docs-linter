@@ -3,13 +3,14 @@
     "../base/.textlintrc.base.json"
   ],
   "plugins": {},
-  "filters": {
-    "comments": true,
-    "code": {
-      "allow": ["swift"]
-    }
-  },
   "rules": {
+    "preset-ja-technical-writing": false,
+    "preset-jtf-style": {
+      "3.1.1.全角文字と半角文字の間": false,
+      "4.3.1.丸かっこ（）": false,
+      "4.2.7.コロン(：)": false,
+      "4.2.8.セミコロン(；)": false
+    },
     "preset-swift-docs-ja": true
   }
 }

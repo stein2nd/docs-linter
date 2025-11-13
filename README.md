@@ -209,7 +209,7 @@ docs-lint
 docs-lint --config ./base/.textlintrc.base.json ./README.md ./docs/**/*.md
 ```
 
-設定ファイルの選択肢は、他に WordPress 開発用 `/wordpress/.textlintrc.wp.json`、Xcode 開発用 `/xcode/.textlintrc.xc.json` があります。
+設定ファイルの選択肢は、他に WordPress 開発用 `/wordpress/.textlintrc.wp.json`、Xcode 開発用 `/swift/.textlintrc.swift.json` があります。
 
 ### 2.2. npm パッケージの追加 (プロジェクト依存としてインストールする場合)
 
@@ -248,12 +248,12 @@ npm install --save-dev @stein2nd/docs-linter
 }
 ```
 
-**Xcode 開発用設定** を利用する場合は、下記になります。
+**Swift 開発用設定** を利用する場合は、下記になります。
 
 ```json
 {
   "scripts": {
-    "lint:docs": "docs-lint --config ./xcode/.textlintrc.xc.json ./README.md ./docs/**/*.md"
+    "lint:docs": "docs-lint --config ./swift/.textlintrc.swift.json ./README.md ./docs/**/*.md"
   }
 }
 ```
@@ -276,17 +276,17 @@ cp node_modules/@stein2nd/docs-linter/base/.textlintrc.base.json .textlintrc.jso
 cp node_modules/@stein2nd/docs-linter/wordpress/.textlintrc.wp.json .textlintrc.wp.json
 ```
 
-**Xcode 開発用設定を使用する場合:**
+**Swift 開発用設定を使用する場合:**
 
 ```zsh
 # プロジェクトルートに設定ファイルをコピー
-cp node_modules/@stein2nd/docs-linter/xcode/.textlintrc.xc.json .textlintrc.xc.json
+cp node_modules/@stein2nd/docs-linter/swift/.textlintrc.swift.json .textlintrc.swift.json
 ```
 
 ### 2.4. VS Code / Cursor 設定
 
 `.vscode/settings.json` に以下を追記します。
-「プロジェクト」が、WordPress 開発の場合は、「textlint.configPath」を `./.textlintrc.wp.json` に変更してください。Swift 開発の場合は、`./.textlintrc.xc.json` に変更してください。
+「プロジェクト」が、WordPress 開発の場合は、「textlint.configPath」を `./.textlintrc.wp.json` に変更してください。Swift 開発の場合は、`./.textlintrc.swift.json` に変更してください。
 
 ```json
 {
@@ -326,6 +326,7 @@ cp node_modules/@stein2nd/docs-linter/xcode/.textlintrc.xc.json .textlintrc.xc.j
 
 * `preset-ja-technical-writing`: 技術文書の基本的なルール
 * `preset-jtf-style`: JTF 日本語標準スタイルガイド
+  * 但し、「3.1.1.全角文字と半角文字の間」「4.3.1.丸かっこ（）」「4.2.7.コロン(：)」「4.2.8.セミコロン(；)」は、除外
 * `prh`: 用語統一ルール (空のルールパス)
 * `no-dead-link`: リンク切れチェック
 
@@ -360,7 +361,7 @@ WordPress プラグイン・テーマ開発に特化した設定です。
 npm run lint:wp
 ```
 
-### `xcode/.textlintrc.xc.json` - Xcode 開発用
+### `swift/.textlintrc.swift.json` - Xcode 開発用
 
 Swift/SwiftUI アプリケーション開発に特化した設定です。
 
@@ -368,7 +369,9 @@ Swift/SwiftUI アプリケーション開発に特化した設定です。
 
 * 基本設定を継承 (`extends: "../base/.textlintrc.base.json"`)
 * **`textlint-rule-preset-swift-docs-ja`**: Swift 日本語ドキュメント向けの textlint ルールプリセット
-* `xcode/space-around-english`: 英単語前後のスペース (カスタムルール)
+  * ~~`preset-ja-technical-writing`: 技術文書の基本的なルール~~
+  * `preset-jtf-style`: JTF 日本語標準スタイルガイド
+    * 但し、「3.1.1.全角文字と半角文字の間」「4.3.1.丸かっこ（）」「4.2.7.コロン(：)」「4.2.8.セミコロン(；)」は、除外
 
 **主な機能:**
 
@@ -382,14 +385,14 @@ Swift/SwiftUI アプリケーション開発に特化した設定です。
 
 ```json
 {
-  "textlint.configPath": "./tools/docs-linter/xcode/.textlintrc.xc.json"
+  "textlint.configPath": "./tools/docs-linter/swift/.textlintrc.swift.json"
 }
 ```
 
 **コマンドライン実行:**
 
 ```zsh
-npm run lint:xcode
+npm run lint:swift
 ```
 
 ### 設定ファイルの自動検出
@@ -401,9 +404,8 @@ npm run lint:xcode
 3. `./.textlintrc.jsonc`
 4. `./.textlintrc.wp.json`
 5. `./.textlintrc.swift.json`
-6. `./.textlintrc.xc.json`
 7. `./tools/docs-linter/.textlintrc.local.json`
-8. `./tools/docs-linter/wordpress/.textlintrc.wp.json` あるいは `./tools/docs-linter/xcode/.textlintrc.xc.json`
+8. `./tools/docs-linter/wordpress/.textlintrc.wp.json` あるいは `./tools/docs-linter/swift/.textlintrc.swift.json`
 9. `./tools/docs-linter/base/.textlintrc.base.json` (フォールバック)
 
 ## 🔧 Editor-Specific Settings
@@ -430,7 +432,7 @@ npm run lint:xcode
 ```
 
 「プロジェクト」が、WordPress 開発の場合は、「textlint.configPath」を `./tools/docs-linter/wordpress/.textlintrc.wp.json` に変更してください。
-Swift 開発の場合は、「textlint.configPath」を `./tools/docs-linter/xcode/.textlintrc.xc.json` に変更してください。
+Swift 開発の場合は、「textlint.configPath」を `./tools/docs-linter/swift/.textlintrc.swift.json` に変更してください。
 
 **拡張機能のインストール:**
 
@@ -448,7 +450,7 @@ Swift 開発の場合は、「textlint.configPath」を `./tools/docs-linter/xco
 * `Configuration file` に `./tools/docs-linter/base/.textlintrc.base.json` を指定
 
 「プロジェクト」が、WordPress 開発の場合は、「Configuration file」を `./tools/docs-linter/wordpress/.textlintrc.wp.json` に変更してください。
-Swift 開発の場合は、「Configuration file」を `./tools/docs-linter/xcode/.textlintrc.xc.json` に変更してください。
+Swift 開発の場合は、「Configuration file」を `./tools/docs-linter/swift/.textlintrc.swift.json` に変更してください。
 
 **3. プロジェクト設定:**
 
@@ -461,7 +463,7 @@ Swift 開発の場合は、「Configuration file」を `./tools/docs-linter/xcod
 ```
 
 「プロジェクト」が、WordPress 開発の場合は、「configPath」を `./tools/docs-linter/wordpress/.textlintrc.wp.json` に変更してください。
-Swift 開発の場合は、「configPath」を `./tools/docs-linter/xcode/.textlintrc.xc.json` に変更してください。
+Swift 開発の場合は、「configPath」を `./tools/docs-linter/swift/.textlintrc.swift.json` に変更してください。
 
 ### Xcode
 
@@ -472,7 +474,7 @@ Xcode では直接 textlint を統合できませんが、以下の方法で利�
 ```zsh
 # プロジェクトルートで実行
 cd /path/to/your/project
-npm run lint:xcode
+npm run lint:swift
 ```
 
 **2. Xcode ビルドスクリプトでの自動実行:**
@@ -483,7 +485,7 @@ npm run lint:xcode
 ```bash
 if [ -f "docs-linter/package.json" ]; then
     cd docs-linter
-    npm run lint:xcode
+    npm run lint:swift
 fi
 ```
 
@@ -512,7 +514,7 @@ npm run lint:docs
 docs-lint --config ./base/.textlintrc.base.json ./README.md ./docs/**/*.md
 ```
 
-設定ファイルの選択肢は、他に WordPress 開発用 `/wordpress/.textlintrc.wp.json`、Xcode 開発用 `/xcode/.textlintrc.xc.json` があります。
+設定ファイルの選択肢は、他に WordPress 開発用 `/wordpress/.textlintrc.wp.json`、Xcode 開発用 `/swift/.textlintrc.swift.json` があります。
 
 **プロジェクト依存の場合**
 
@@ -535,7 +537,7 @@ npm run lint:docs
 ✅ 日本語の技術文書
 ```
 
-### `xcode/rules/space-around-english.js`
+### `swift/rules/space-around-english.js`
 
 英単語の前後に適切なスペースが入っているかをチェックするルールです。
 
@@ -663,7 +665,7 @@ npm update @stein2nd/docs-linter
 実務での使い方ヒント (CI 連携、PR チェックなど) について。
 
 * **WordPress 開発者**は `.textlintrc.wp.json` を指定
-* **Xcode/Swift 開発者**は `.textlintrc.xc.json` を指定
+* **Swift 開発者**は `.textlintrc.swift.json` を指定
 * **Cursor/VS Code** は `.vscode/settings.json` の設定を自動で読み込み
 * **全プロジェクト** で共通ルールを継承可能
 * **Git submodule によりルール更新が一括反映**
@@ -738,7 +740,7 @@ A: 以下の手順で設定してください。
 
 A: 以下の点を確認してください。
 
-* `xcode/.textlintrc.xc.json` で `textlint-rule-preset-swift-docs-ja` が正しく継承されているか
+* `swift/.textlintrc.swift.json` で `textlint-rule-preset-swift-docs-ja` が正しく継承されているか
 * 依存関係が正しくインストールされているか
 * 設定ファイルの構文が正しいか
 
@@ -766,27 +768,27 @@ A: 以下の手順を確認してください。
 
 #### ルールの追加・修正
 
-* **新しいルールの追加**: 新しい textlint ルールを追加する際は、既存の設定ファイル構造を維持し、適切なディレクトリ (`base/`, `wordpress/`, `xcode/`) に配置してください。
+* **新しいルールの追加**: 新しい textlint ルールを追加する際は、既存の設定ファイル構造を維持し、適切なディレクトリ (`base/`、`wordpress/`、`swift/`) に配置してください。
 * **既存ルールの修正**: 既存のルールを修正する際は、後方互換性を考慮し、既存の利用者に影響を与えないよう注意してください。
-* **カスタムルールの開発**: プロジェクト固有のカスタムルールを追加する場合は、`base/rules/` または `xcode/rules/` ディレクトリに配置し、適切なテストを追加してください。
+* **カスタムルールの開発**: プロジェクト固有のカスタムルールを追加する場合は、`base/rules/` または `swift/rules/` ディレクトリに配置し、適切なテストを追加してください。
 * **参考資料**: textlint の公式ドキュメントや他のルールセット (例: [textlint-rule-preset-JTF-style](https://github.com/textlint-ja/textlint-rule-preset-JTF-style)、[textlint-rule-preset-ja-technical-writing](https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing)) を参考にしてください。
 
 #### 設定ファイルの管理
 
 * **設定ファイルの構造**: 設定ファイルは JSON 形式で、`extends` を使用して基本設定を継承する構造を維持してください。
 * **設定ファイルの命名**: 設定ファイルは `.textlintrc.*.json` の命名規則に従ってください。
-* **設定ファイルの配置**: 各環境向けの設定ファイルは、適切なディレクトリ (`base/`, `wordpress/`, `xcode/`) に配置してください。
+* **設定ファイルの配置**: 各環境向けの設定ファイルは、適切なディレクトリ (`base/`, `wordpress/`, `swift/`) に配置してください。
 
 #### 用語辞書の管理
 
-* **用語辞書の追加**: 新しい用語を追加する場合は、適切な辞書ファイル (`xcode/dictionary/swift-terms.yml` など) に追加してください。
+* **用語辞書の追加**: 新しい用語を追加する場合は、適切な辞書ファイル (`swift/dictionary/swift-terms.yml` など) に追加してください。
 * **用語辞書の形式**: 用語辞書は PRH (Proofreading Helper) 形式の YAML ファイルとして管理してください。
 * **用語の統一**: 既存の用語集と整合性を保ち、重複を避けてください。
 
 #### テストと検証
 
 * **テストの実施**: 変更を加えた際は、必ずテストを実施し、既存の機能に影響がないことを確認してください。
-* **lint の実行**: 変更後は `npm run lint`、`npm run lint:wp`、`npm run lint:xcode` を実行し、エラーがないことを確認してください。
+* **lint の実行**: 変更後は `npm run lint`、`npm run lint:wp`、`npm run lint:swift` を実行し、エラーがないことを確認してください。
 * **ビルドの確認**: `npm run build` を実行し、ビルドが正常に完了することを確認してください。
 
 #### コードスタイル
