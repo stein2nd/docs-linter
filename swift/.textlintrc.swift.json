@@ -1,7 +1,6 @@
 {
   "extends": [
-    "../base/.textlintrc.base.json",
-    "textlint-rule-preset-swift-docs-ja"
+    "../base/.textlintrc.base.json"
   ],
   "plugins": {},
   "rules": {
