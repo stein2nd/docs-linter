@@ -108,7 +108,7 @@ git push
 
 ### 1.2. リポジトリの追加 (新規プロジェクト作成と同時に追加する場合)
 
-新規プロジェクトのリポジトリを作成します (例: `s2j-new-plugin`)。
+新規プロジェクトのリポジトリを作成します (例： `s2j-new-plugin`)。
 
 ```zsh
 mkdir s2j-new-plugin
@@ -326,7 +326,7 @@ cp node_modules/@stein2nd/docs-linter/swift/.textlintrc.swift.json .textlintrc.s
 
 * `preset-ja-technical-writing`: 技術文書の基本的なルール
 * `preset-jtf-style`: JTF 日本語標準スタイルガイド
-  * 但し、「3.1.1.全角文字と半角文字の間」「4.3.1.丸かっこ（）」「4.2.7.コロン(：)」「4.2.8.セミコロン(；)」は、除外
+  * 但し、`3.1.1.全角文字と半角文字の間`、`4.3.1.丸かっこ（）`、`4.2.7.コロン(：)`、`4.2.8.セミコロン(；)` は、除外
 * `prh`: 用語統一ルール (空のルールパス)
 * `no-dead-link`: リンク切れチェック
 
@@ -369,6 +369,7 @@ Swift/SwiftUI アプリケーション開発に特化した設定です。
 
 * 基本設定を継承 (`extends: "../base/.textlintrc.base.json"`)
 * **`textlint-rule-preset-swift-docs-ja`**: Swift 日本語ドキュメント向けの textlint ルールプリセット
+  * `prh` ルールで Swift 用語辞書 (`../node_modules/textlint-rule-preset-swift-docs-ja/prh-rules/swift.yml`) を明示的に指定
   * ~~`preset-ja-technical-writing`: 技術文書の基本的なルール~~
   * `preset-jtf-style`: JTF 日本語標準スタイルガイド
     * 但し、`3.1.1.全角文字と半角文字の間`、`4.3.1.丸かっこ（）`、`4.2.7.コロン(：)`、`4.2.8.セミコロン(；)` は、除外。
@@ -589,10 +590,10 @@ Swift 開発でよく使われる用語の統一ルールは、**`textlint-rule-
 
 **主な用語:**
 
-* `SwiftUI` (Swift UI、swiftui を統一)
-* `UIKit` (UI Kit を統一)
-* `Xcode` (Xcode、Xcode を統一)
-* `Auto Layout` (AutoLayout、Auto-Layout を統一)
+* `SwiftUI` (<!-- textlint-disable -->Swift UI、swiftui<!-- textlint-enable --> を統一)
+* `UIKit` (<!-- textlint-disable -->UI Kit<!-- textlint-enable --> を統一)
+* `Xcode` (<!-- textlint-disable -->Xcode、Xcode<!-- textlint-enable --> を統一)
+* `Auto Layout` (<!-- textlint-disable -->AutoLayout、Auto-Layout<!-- textlint-enable --> を統一)
 * その他 Swift 関連用語
 
 **カスタム用語の追加:**
@@ -772,7 +773,7 @@ A: 以下の手順を確認してください。
 * **新しいルールの追加**: 新しい textlint ルールを追加する際は、既存の設定ファイル構造を維持し、適切なディレクトリ (`base/`、`wordpress/`、`swift/`) に配置してください。
 * **既存ルールの修正**: 既存のルールを修正する際は、後方互換性を考慮し、既存の利用者に影響を与えないよう注意してください。
 * **カスタムルールの開発**: プロジェクト固有のカスタムルールを追加する場合は、`base/rules/` または `swift/rules/` ディレクトリに配置し、適切なテストを追加してください。
-* **参考資料**: textlint の公式ドキュメントや他のルールセット (例: [textlint-rule-preset-JTF-style](https://github.com/textlint-ja/textlint-rule-preset-JTF-style)、[textlint-rule-preset-ja-technical-writing](https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing)) を参考にしてください。
+* **参考資料**: textlint の公式ドキュメントや他のルールセット (例： [textlint-rule-preset-JTF-style](https://github.com/textlint-ja/textlint-rule-preset-JTF-style)、[textlint-rule-preset-ja-technical-writing](https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing)) を参考にしてください。
 
 #### 設定ファイルの管理
 

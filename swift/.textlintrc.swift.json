@@ -20,9 +20,14 @@
         "severity": "warning"
       }
     },
-    "preset-swift-docs-ja": true,
-    "swift-docs-ja/prh": {
-      "severity": "warning"
+    "preset-swift-docs-ja": {
+      "prh": {
+        "rulePaths": [
+          "../node_modules/textlint-rule-preset-swift-docs-ja/prh-rules/swift.yml"
+        ],
+        "severity": "warning"
+      },
+      "swift-docs-ja/prh": false
     }
   }
 }
