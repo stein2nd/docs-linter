@@ -598,7 +598,7 @@ Swift 開発でよく使われる用語の統一ルールは、**`textlint-rule-
 
 **カスタム用語の追加:**
 
-プロジェクト固有の用語を追加する場合は、`xcode/dictionary/swift-terms.yml` に追加してください。
+プロジェクト固有の用語を追加する場合は、`swift/dictionary/swift-terms.yml` に追加してください。
 
 ```yaml
 version: 1
