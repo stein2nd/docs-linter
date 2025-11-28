@@ -28,7 +28,7 @@
         "severity": "warning"
       },
       "swift-docs-ja/prh": false,
-      "swift-docs-ja/no-doubled-joshi": {
+      "no-doubled-joshi": {
         "severity": "warning"
       }
     }
