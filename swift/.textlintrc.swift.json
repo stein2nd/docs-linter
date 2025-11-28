@@ -20,6 +20,9 @@
         "severity": "warning"
       }
     },
-    "preset-swift-docs-ja": true
+    "preset-swift-docs-ja": true,
+    "swift-docs-ja/prh": {
+      "severity": "warning"
+    }
   }
 }
