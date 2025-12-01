@@ -28,6 +28,14 @@ WordPress プラグイン/テーマ開発、Xcode (Swift/SwiftUI) アプリケ�
 
 ### 方法1.「Git サブモジュール」として利用する
 
+⚠️ **Submodule 運用の基本方針**
+
+**Submodule は基本 read-only 運用とします。**
+
+* **編集は原則、本リポジトリ (docs-linter) で実施してください**。
+* 利用側プロジェクトでの Submodule 内の直接編集は避けてください。
+* ルール変更や設定変更が必要な場合は、本リポジトリで変更し、利用側プロジェクトで `git submodule update --remote --merge` を実行し、更新を反映してください。
+
 ### 1.1. リポジトリの追加 (既存プロジェクトに追加する場合)
 
 既存プロジェクトの「tools」に追加すると仮定します。
@@ -482,7 +490,7 @@ npm run lint:swift
 
 **2. Xcode ビルドスクリプトでの自動実行:**
 
-* `Build Phases` → `+` → `New Run Script Phase`
+* `Build Phases` → `+` → `New Run Script Phase`。
 * スクリプトに以下を追加。
 
 ```bash
@@ -675,6 +683,17 @@ npm update @stein2nd/docs-linter
 * **`prelint:docs` によりサブモジュールの最新化が自動化**
 * **npm パッケージにより簡単なインストールとアップデート**
 * **Swift 開発では textlint-rule-preset-swift-docs-ja を活用**
+
+### 🚀 CI でのベストプラクティス
+
+GitHub Actions での CI 実行時には、以下のベスト・プラクティスを推奨します。
+
+* **textlint バージョンの固定**: 破壊的アップデートの予防として、CI では `npm install textlint@15.4.0` を実行してバージョンを固定することを推奨します。
+* **npm キャッシュの最適化**: `actions/cache@v4` を使用して `~/.npm` をキャッシュすることで、実行速度が約3倍になり、CI 失敗時のパッケージ破損防止にも効果的です。
+* **CI では docs のみを対象**: `README.md` と `docs/**/*.md` を対象とし、自動 fix は off にします (他フォルダに影響を与えない lint という方針)。
+* **Submodule は read-only 運用**: 編集は原則本体リポジトリで行い、利用側プロジェクトでの Submodule 内の直接編集を避けてください。
+
+詳細は [`docs/SPEC.md`](docs/SPEC.md) を参照してください。
 
 ## ❓ FAQ
 

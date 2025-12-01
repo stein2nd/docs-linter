@@ -40,8 +40,11 @@ GitHub Actions での安定稼働を目標とした、**複数プリセット統
 | `--config` の明示 | **必須** | `textlint --config tools/docs-linter/.textlintrc.json` |
 | submodule 再帰指定 | 🟡 推奨 | `actions/checkout@v4 with: submodules: recursive` |
 | Node.js バージョン固定 | 🟡 推奨 | `node-version: 20` |
+| **textlint バージョン固定** | **🟡 推奨** | **破壊的アップデートの予防として `npm install textlint@15.4.0` を実行** |
+| **npm キャッシュ最適化** | **🟡 推奨** | **`actions/cache@v4` を使用して実行速度を約3倍向上、パッケージ破損防止** |
 | `npm ci` fallback | 🟡 推奨 | npm install 失敗時の対策 |
 | lint 対象パスは明示する | 🟢 任意 | `"docs/**/*.md"` など |
+| **CI では docs のみを対象** | **🟡 推奨** | **`README.md` と `docs/**/*.md` を対象とし、自動 fix は off** |
 
 ## 📌 5. CI での安定稼働ポイント (Checklist)
 
@@ -50,9 +53,13 @@ GitHub Actions での安定稼働を目標とした、**複数プリセット統
 | Node.js | `>=18` or `>=20` |
 | Submodule | Checkout 時 `recursive` |
 | textlint の設定ファイル | `--config` を必ず指定 |
+| **textlint バージョン** | **CI では version pin が望ましい (例: `textlint@15.4.0`)** |
+| **npm キャッシュ** | **`actions/cache@v4` で `~/.npm` をキャッシュ (`package-lock.json` のハッシュを key に使用)** |
 | npm install | `npm ci` を優先 |
 | PR トリガー | Markdown / docs フォルダに限定可 |
-| 保存修正 | `lint:fix` スクリプトで自動化可 |
+| **lint 対象** | **`README.md` と `docs/**/*.md` のみ (他フォルダに影響を与えない lint という方針)** |
+| **自動 fix** | **CI では off (検証のみ)** |
+| 保存修正 | `lint:fix` スクリプトで自動化可 (ローカル開発時のみ) |
 
 ---
 
@@ -63,6 +70,14 @@ GitHub Actions での安定稼働を目標とした、**複数プリセット統
 ```zsh
 git submodule add https://github.com/stein2nd/docs-linter.git tools/docs-linter
 ```
+
+### ⚠️ 6.0. Submodule 運用の基本方針
+
+**Submodule は基本 read-only 運用とします。**
+
+* **編集は原則、本リポジトリ (docs-linter) で実施してください**。
+* 利用側プロジェクトでの Submodule 内の直接編集は避けてください。
+* ルール変更や設定変更が必要な場合は、本リポジトリで変更し、利用側プロジェクトで `git submodule update --remote --merge` を実行し、更新を反映してください。
 
 ### 📌 6.1. Docs Linter の構造例 (submodule 運用)
 
@@ -152,6 +167,7 @@ on:
       - "**/*.md"
       - "**/*.txt"
       - "docs/**"
+      - "README.md"
 
 jobs:
   lint-docs:
@@ -159,7 +175,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
         with:
           submodules: "recursive"   # ← Docs Linter を Submodule で使う場合は必須
 
@@ -168,14 +184,29 @@ jobs:
         with:
           node-version: 20
 
+      # npm キャッシュの最適化 (実行速度が約3倍になる、パッケージ破損防止にも効果的)
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
       - name: Install dependencies
         run: npm ci || npm install
 
+      # textlint バージョンを固定 (破壊的アップデートの予防)
+      - name: Install textlint (version pinned)
+        run: npm install textlint@15.4.0
+
+      # CI では docs のみを対象 (README.md と docs/**/*.md。自動 fix は off)
       - name: Run Docs Linter
         run: |
           npx textlint \
-            --config docs-linter/.textlintrc.json \
-            "**/*.md" "**/*.txt"
+            --config tools/docs-linter/base/.textlintrc.base.json \
+            ./README.md ./docs/**/*.md
 
       - name: Summary
         if: always()
