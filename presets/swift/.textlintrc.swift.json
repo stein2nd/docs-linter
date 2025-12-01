@@ -23,7 +23,7 @@
     "preset-swift-docs-ja": {
       "prh": {
         "rulePaths": [
-          "../node_modules/textlint-rule-preset-swift-docs-ja/prh-rules/swift.yml"
+          "../../node_modules/textlint-rule-preset-swift-docs-ja/prh-rules/swift.yml"
         ],
         "severity": "warning"
       },

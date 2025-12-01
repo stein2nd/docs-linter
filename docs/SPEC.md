@@ -107,7 +107,7 @@ project-root/
 👉 textlint は自動検出に依存すべきではなく、**CI では常に `--config` を明記して、実行することが推奨されます**。
 
 ```bash
-npx textlint --config tools/docs-linter/.textlintrc.swift.json ./docs/**/*.md
+npx textlint --config tools/docs-linter/presets/swift/.textlintrc.swift.json ./docs/**/*.md
 ```
 
 ### 📌 6.3. プリセットの統合方法: `.textlintrc.json` (統合版例)
@@ -205,7 +205,7 @@ jobs:
       - name: Run Docs Linter
         run: |
           npx textlint \
-            --config tools/docs-linter/base/.textlintrc.base.json \
+            --config tools/docs-linter/presets/base/.textlintrc.base.json \
             ./README.md ./docs/**/*.md
 
       - name: Summary

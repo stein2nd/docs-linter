@@ -10,9 +10,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 /**
  * 1. Config ファイル探索
  */
-const DOCS_LINTER_BASE = resolve(__dirname, "../base/.textlintrc.base.json");
-const DOCS_LINTER_WP = resolve(__dirname, "../wordpress/.textlintrc.wp.json");
-const DOCS_LINTER_SWIFT = resolve(__dirname, "../swift/.textlintrc.swift.json");
+const DOCS_LINTER_BASE = resolve(__dirname, "../presets/base/.textlintrc.base.json");
+const DOCS_LINTER_WP = resolve(__dirname, "../presets/wordpress/.textlintrc.wp.json");
+const DOCS_LINTER_SWIFT = resolve(__dirname, "../presets/swift/.textlintrc.swift.json");
 
 const USER_CONFIG_CANDIDATES = [
   "./.textlintrc",
