@@ -5,12 +5,15 @@
   "type": "module",
   "author": "Koutarou ISHIKAWA",
   "license": "GPL-2.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stein2nd/docs-linter.git"
+  },
   "keywords": [
     "textlint",
     "textlint-rule",
     "markdown",
     "wordpress",
-    "xcode",
     "swift"
   ],
   "main": "dist/run-textlint.js",

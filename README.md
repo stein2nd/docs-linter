@@ -1,4 +1,4 @@
-# 📘 Docs Linter
+# 📘 Docs Linter — *Multiple Preset Textlint Integration*
 
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
 [![textlint](https://img.shields.io/badge/textlint-15.4-blue.svg)](https://textlint.org/)
@@ -12,6 +12,7 @@
 Markdown ドキュメントを lint (構文・文体チェック) するためのルールセットです。
 WordPress プラグイン/テーマ開発、Xcode (Swift/SwiftUI) アプリケーション開発の両方で利用可能です。
 また、それらに関連するドキュメント制作での表記統一にも利用可能です。
+更に、GitHub Actions に対応した lint 体制を構築できます。
 
 ## 📄 License
 
