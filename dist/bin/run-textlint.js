@@ -5,9 +5,9 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 var define_process_env_default = {};
 const __dirname$1 = dirname(fileURLToPath(import.meta.url));
-const DOCS_LINTER_BASE = resolve(__dirname$1, "../base/.textlintrc.base.json");
-const DOCS_LINTER_WP = resolve(__dirname$1, "../wordpress/.textlintrc.wp.json");
-const DOCS_LINTER_SWIFT = resolve(__dirname$1, "../swift/.textlintrc.swift.json");
+const DOCS_LINTER_BASE = resolve(__dirname$1, "../presets/base/.textlintrc.base.json");
+const DOCS_LINTER_WP = resolve(__dirname$1, "../presets/wordpress/.textlintrc.wp.json");
+const DOCS_LINTER_SWIFT = resolve(__dirname$1, "../presets/swift/.textlintrc.swift.json");
 const USER_CONFIG_CANDIDATES = [
   "./.textlintrc",
   "./.textlintrc.json",
