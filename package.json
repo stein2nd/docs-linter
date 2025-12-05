@@ -29,8 +29,8 @@
     "build": "npm run clean && vite build",
     "dev": "vite build --watch",
     "lint": "npx textlint '**/*.md'",
-    "lint:wp": "npx textlint --config ./presets/wordpress/.textlintrc.wp.json '**/*.md'",
-    "lint:swift": "NODE_PATH=./node_modules npx textlint --config ./presets/swift/.textlintrc.swift.json '**/*.md'",
+    "lint:wp": "npx textlint --config ./presets/wordpress/.textlintrc.wp.json './README.md' '**/*.md'",
+    "lint:swift": "NODE_PATH=./node_modules npx textlint --config ./presets/swift/.textlintrc.swift.json './README.md' '**/*.md'",
     "prepare": "npm run build && node ./dist/scripts/setup-npmignore.js",
     "postinstall": "node ./dist/scripts/setup-npmignore.js || true"
   },
