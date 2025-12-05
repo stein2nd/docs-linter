@@ -28,6 +28,9 @@
         "severity": "warning"
       },
       "swift-docs-ja/prh": false,
+      "max-kanji-continuous-len": {
+        "severity": "warning"
+      },
       "no-doubled-joshi": {
         "severity": "warning"
       }
