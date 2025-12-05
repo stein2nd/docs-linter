@@ -52,20 +52,52 @@ project-root/
 ├── .github/workflows/textlint.yml
 └┬─ tools/
 　└┬─ docs-linter/  # Submodule (本リポジトリ)
-　　├── .textlintrc.json  # 総合プリセット設定
 　　└┬─ presets/
-　　　├─ base/
-　　　├─ swift/
-　　　└─ wordpress/
+　　　├┬── base/
+　　　│├── .textlintrc.base.json
+　　　│└┬─ rules/
+　　　│　└─ no-long-kanji.js
+　　　├┬── swift/
+　　　│├── .textlintrc.swift.json
+　　　│├┬─ dictionary/
+　　　││└─ swift-terms.yml
+　　　│└┬─ rules/
+　　　│　└─ space-around-english.js
+　　　└┬── wordpress/
+　　　　└── .textlintrc.wp.json
 ```
 
 ### 3.4. `package.json` でのスクリプト例
 
+**基本設定を使用する場合:**
+
 ```json
 {
   "scripts": {
-    "lint:docs": "textlint --config tools/docs-linter/.textlintrc.json docs/**/*.md",
-    "lint:fix":  "textlint --config tools/docs-linter/.textlintrc.json --fix docs/**/*.md"
+    "lint:docs": "textlint --config tools/docs-linter/presets/base/.textlintrc.base.json docs/**/*.md",
+    "lint:fix":  "textlint --config tools/docs-linter/presets/base/.textlintrc.base.json --fix docs/**/*.md"
+  }
+}
+```
+
+**WordPress 開発用設定を使用する場合:**
+
+```json
+{
+  "scripts": {
+    "lint:docs": "textlint --config tools/docs-linter/presets/wordpress/.textlintrc.wp.json docs/**/*.md",
+    "lint:fix":  "textlint --config tools/docs-linter/presets/wordpress/.textlintrc.wp.json --fix docs/**/*.md"
+  }
+}
+```
+
+**Swift 開発用設定を使用する場合:**
+
+```json
+{
+  "scripts": {
+    "lint:docs": "NODE_PATH=./tools/docs-linter/node_modules textlint --config tools/docs-linter/presets/swift/.textlintrc.swift.json docs/**/*.md",
+    "lint:fix":  "NODE_PATH=./tools/docs-linter/node_modules textlint --config tools/docs-linter/presets/swift/.textlintrc.swift.json --fix docs/**/*.md"
   }
 }
 ```
@@ -74,14 +106,30 @@ project-root/
 
 `.vscode/settings.json`
 
+**基本設定を使用する場合:**
+
 ```json
 {
-  "textlint.configFile": "tools/docs-linter/.textlintrc.json",
+  "textlint.configPath": "./tools/docs-linter/presets/base/.textlintrc.base.json",
+  "textlint.nodePath": "./node_modules",
+  "textlint.enable": true,
+  "textlint.autoFixOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.textlint": true
+    "source.fixAll.textlint": "always"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "3w36zj6.textlint"
   }
 }
 ```
+
+**WordPress 開発用設定を使用する場合:**
+
+`textlint.configPath` を `./tools/docs-linter/presets/wordpress/.textlintrc.wp.json` に変更してください。
+
+**Swift 開発用設定を使用する場合:**
+
+`textlint.configPath` を `./tools/docs-linter/presets/swift/.textlintrc.swift.json` に変更してください。
 
 ## 🔧 4. 設定・カスタマイズ
 
@@ -101,27 +149,42 @@ project-root/
 npx textlint --config tools/docs-linter/presets/swift/.textlintrc.swift.json ./docs/**/*.md
 ```
 
-### 4.2. プリセットの統合方法: `.textlintrc.json` (統合版例)
+### 4.2. プリセットの実際の構成
 
-```jsonc
-{
-  "plugins": ["markdown"],
-  "filters": {},
-  "rules": {
-    // Swift Docs 用プリセット
-    "preset-swift-docs-ja": true,
+#### 4.2.1. `presets/base/.textlintrc.base.json` - 基本設定
 
-    // WordPress Docs 用プリセット
-    "preset-wp-docs-ja": true,
+すべてのプロジェクトで共通して使用する基本設定です。
 
-    // 共通
-    "no-todo": true,
-    "max-ten": {
-      "max": 3
-    }
-  }
-}
-```
+**含まれるルール:**
+
+* `preset-ja-technical-writing`: 技術文書の基本的なルール
+* `preset-jtf-style`: JTF 日本語標準スタイルガイド
+  * 但し、`3.1.1.全角文字と半角文字の間`、`4.3.1.丸かっこ（）`、`4.2.7.コロン(：)`、`4.2.8.セミコロン(；)` は、除外
+* `prh`: 用語統一ルール (空のルールパス)
+* `no-dead-link`: リンク切れチェック
+
+#### 4.2.2. `presets/wordpress/.textlintrc.wp.json` - WordPress 開発用
+
+WordPress プラグイン・テーマ開発に特化した設定です。
+
+**含まれるルール:**
+
+* 基本設定を継承 (`extends: ["../base/.textlintrc.base.json"]`)
+* `preset-wp-docs-ja`: WordPress 日本語ドキュメント用ルール
+
+#### 4.2.3. `presets/swift/.textlintrc.swift.json` - Xcode 開発用
+
+Swift/SwiftUI アプリケーション開発に特化した設定です。
+
+**含まれるルール:**
+
+* 基本設定を継承 (`extends: ["../base/.textlintrc.base.json"]`)
+* `preset-ja-technical-writing`: `false` (無効化)
+* `preset-jtf-style`: JTF 日本語標準スタイルガイド
+  * 但し、`3.1.1.全角文字と半角文字の間`、`4.3.1.丸かっこ（）`、`4.2.7.コロン(：)`、`4.2.8.セミコロン(；)` は、除外
+  * `1.1.3.箇条書き`、`3.3.かっこ類と隣接する文字の間のスペースの有無`、`4.3.7.山かっこ<>` は、警告
+* `preset-swift-docs-ja`: Swift 日本語ドキュメント向けの textlint ルールプリセット
+  * `prh` ルールで Swift 用語辞書 (`../../node_modules/textlint-rule-preset-swift-docs-ja/prh-rules/swift.yml`) を明示的に指定
 
 ## ⚙️ 5. CI/CD 統合
 
@@ -129,7 +192,7 @@ npx textlint --config tools/docs-linter/presets/swift/.textlintrc.swift.json ./d
 
 | 設定項目 | 必須 / 任意 | 内容 |
 |---|---|---|
-| `--config` の明示 | **必須** | `textlint --config tools/docs-linter/.textlintrc.json` |
+| `--config` の明示 | **必須** | `textlint --config tools/docs-linter/presets/base/.textlintrc.base.json` (基本設定の場合) |
 | submodule 再帰指定 | 🟡 推奨 | `actions/checkout@v4 with: submodules: recursive` |
 | Node.js バージョン固定 | 🟡 推奨 | `node-version: 20` |
 | **textlint バージョン固定** | **🟡 推奨** | **破壊的アップデートの予防として `npm install textlint@15.4.0` を実行** |
@@ -139,6 +202,14 @@ npx textlint --config tools/docs-linter/presets/swift/.textlintrc.swift.json ./d
 | **CI では docs のみを対象** | **🟡 推奨** | **`README.md` と `docs/**/*.md` を対象とし、自動 fix は off** |
 
 ### 5.2. CI 用 `.github/workflows/textlint.yml` (GitHub Actions 専用版)
+
+実際の CI テンプレートは `examples/` ディレクトリに用意されています：
+
+* `examples/lint-docs.yml` - 一般的なドキュメント・プロジェクト向けの基本設定
+* `examples/lint-docs.wp.yml` - WordPress プラグインまたはテーマのドキュメント用
+* `examples/lint-docs.swift.yml` - Swift / SwiftUI 開発向け
+
+以下は、Swift 開発用の CI テンプレート例です。
 
 ```yaml
 name: Docs Linter
@@ -370,14 +441,66 @@ jobs:
 
 ## 🎉 8. 付録 (Appendix)
 
-### 8.1. Recommended npm Install
+### 8.1. npm パッケージとしての利用
 
-```bash
-npm install --save-dev \
-  textlint \
-  textlint-plugin-markdown \
-  textlint-rule-preset-swift-docs-ja \
-  textlint-rule-preset-wp-docs-ja \
-  @textlint/textlint-plugin-text \
-  @textlint/ast-node-types
+本プロジェクトは npm パッケージ `@stein2nd/docs-linter` としても配布を検討しています。
+
+**インストール:**
+
+```zsh
+# グローバル・インストール
+npm install -g @stein2nd/docs-linter
+
+# プロジェクト依存としてインストール
+npm install --save-dev @stein2nd/docs-linter
 ```
+
+**使用方法:**
+
+```zsh
+# グローバル・インストールの場合
+docs-lint --config ./presets/base/.textlintrc.base.json ./README.md ./docs/**/*.md
+
+# プロジェクト依存の場合
+npm run lint:docs
+```
+
+**設定ファイルの配置:**
+
+npm パッケージとして利用する場合、プロジェクト内に設定ファイルを配置する必要があります。
+
+```zsh
+# 基本設定を使用する場合
+cp node_modules/@stein2nd/docs-linter/presets/base/.textlintrc.base.json .textlintrc.json
+
+# WordPress 開発用設定を使用する場合
+cp node_modules/@stein2nd/docs-linter/presets/wordpress/.textlintrc.wp.json .textlintrc.wp.json
+
+# Swift 開発用設定を使用する場合
+cp node_modules/@stein2nd/docs-linter/presets/swift/.textlintrc.swift.json .textlintrc.swift.json
+```
+
+### 8.2. カスタムルール
+
+プロジェクト固有のカスタムルールを追加できます。
+
+**利用可能なカスタムルール:**
+
+* `presets/base/rules/no-long-kanji.js` - 7文字以上の漢字が連続する場合に警告を出すルール
+* `presets/swift/rules/space-around-english.js` - 英単語の前後に適切なスペースが入っているかをチェックするルール
+
+**カスタムルールの追加方法:**
+
+プロジェクト固有のカスタムルールを追加する場合は、`presets/base/rules/` または `presets/swift/rules/` ディレクトリに配置してください。
+
+### 8.3. 用語辞書
+
+**Swift 用語辞書:**
+
+Swift 開発でよく使われる用語の統一ルールは、`textlint-rule-preset-swift-docs-ja` プリセットに統合されています。Swift 用語集については、`node_modules/textlint-rule-preset-swift-docs-ja/prh-rules/swift.yml` を参照してください。
+
+プロジェクト固有の用語を追加する場合は、`presets/swift/dictionary/swift-terms.yml` に追加してください。
+
+**WordPress 用語辞書:**
+
+WordPress 用語集については、`node_modules/textlint-rule-preset-wp-docs-ja/prh-rules/wordpress.yml` を参照してください。
