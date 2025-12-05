@@ -14,15 +14,13 @@ WordPress プラグイン/テーマ開発、Xcode (Swift/SwiftUI) アプリケ�
 また、それらに関連するドキュメント制作での表記統一にも利用可能です。
 更に、GitHub Actions に対応した lint 体制を構築できます。
 
-## 📄 License
+## ✨ Features
 
-本プロジェクトは GPL v2以降の下でライセンスされています - 詳細は [LICENSE](LICENSE) ファイルを参照してください。
-
-## 💬 Support and Contact
-
-サポート、機能リクエスト、またはバグ報告については、[GitHub Issues](https://github.com/stein2nd/docs-linter/issues) ページをご覧ください。
-
----
+* **複数プリセット統合**: Swift Docs / WordPress Docs など、複数のプリセットを統合して利用可能
+* **柔軟な導入方法**: Git Submodule / npm パッケージのどちらでも利用可能
+* **CI/CD 対応**: GitHub Actions による自動 lint 検証を安定稼働
+* **エディター統合**: VS Code / Cursor / JetBrains 製エディターに対応
+* **カスタマイズ可能**: プロジェクト固有のルールを追加可能
 
 ## ⚙️ Installation
 
@@ -36,7 +34,7 @@ WordPress プラグイン/テーマ開発、Xcode (Swift/SwiftUI) アプリケ�
 * 利用側プロジェクトでの Submodule 内の直接編集は避けてください。
 * ルール変更や設定変更が必要な場合は、本リポジトリで変更し、利用側プロジェクトで `git submodule update --remote --merge` を実行し、更新を反映してください。
 
-### 1.1. リポジトリの追加 (既存プロジェクトに追加する場合)
+#### 1.1. リポジトリの追加 (既存プロジェクトに追加する場合)
 
 既存プロジェクトの「tools」に追加すると仮定します。
 
@@ -115,7 +113,7 @@ git commit -m "Add docs-linter as submodule for Markdown linting"
 git push
 ```
 
-### 1.2. リポジトリの追加 (新規プロジェクト作成と同時に追加する場合)
+#### 1.2. リポジトリの追加 (新規プロジェクト作成と同時に追加する場合)
 
 新規プロジェクトのリポジトリを作成します (例： `s2j-new-plugin`)。
 
@@ -201,7 +199,7 @@ git push -u origin main
 
 ### 方法2「npm パッケージ」として利用する
 
-### 2.1. npm パッケージの追加 (グローバル・インストールする場合)
+#### 2.1. npm パッケージの追加 (グローバル・インストールする場合)
 
 ```zsh
 # docs-linter をグローバル・インストール
@@ -220,7 +218,7 @@ docs-lint --config ./presets/base/.textlintrc.base.json ./README.md ./docs/**/*.
 
 設定ファイルの選択肢は、他に WordPress 開発用 `/presets/wordpress/.textlintrc.wp.json`、Xcode 開発用 `/presets/swift/.textlintrc.swift.json` があります。
 
-### 2.2. npm パッケージの追加 (プロジェクト依存としてインストールする場合)
+#### 2.2. npm パッケージの追加 (プロジェクト依存としてインストールする場合)
 
 特定プロジェクト内でのみ使用する場合は、プロジェクト依存としてインストールします。
 
@@ -267,7 +265,7 @@ npm install --save-dev @stein2nd/docs-linter
 }
 ```
 
-### 2.3. 設定ファイルの配置
+#### 2.3. 設定ファイルの配置
 
 npm パッケージとして利用する場合、プロジェクト内に設定ファイルを配置する必要があります。
 
@@ -292,7 +290,7 @@ cp node_modules/@stein2nd/docs-linter/presets/wordpress/.textlintrc.wp.json .tex
 cp node_modules/@stein2nd/docs-linter/presets/swift/.textlintrc.swift.json .textlintrc.swift.json
 ```
 
-### 2.4. VS Code / Cursor 設定
+#### 2.4. VS Code / Cursor 設定
 
 `.vscode/settings.json` に以下を追記します。
 「プロジェクト」が、WordPress 開発の場合は、「textlint.configPath」を `./.textlintrc.wp.json` に変更してください。Swift 開発の場合は、`./.textlintrc.swift.json` に変更してください。
@@ -312,18 +310,7 @@ cp node_modules/@stein2nd/docs-linter/presets/swift/.textlintrc.swift.json .text
 }
 ```
 
-## 💡 Examples (Usage Samples)
-
-このリポジトリは、さまざまな開発環境向けの設定例を提供します。
-各例には、Textlint 設定と GitHub Actions 用の CI テンプレートの両方が含まれています。
-
-| 対象環境 | Textlint 設定ファイル | CI テンプレート | 概要 |
-|---|---|---|---|
-| 一般的な技術ドキュメント | [`examples/.textlintrc.jsonc`](examples/.textlintrc.jsonc) | [`examples/lint-docs.yml`](examples/lint-docs.yml) | 一般的なドキュメント・プロジェクト向けの基本設定。 |
-| WordPress 開発 | [`examples/.textlintrc.wp.jsonc`](examples/.textlintrc.wp.jsonc) | [`examples/lint-docs.wp.yml`](examples/lint-docs.wp.yml) | WordPress プラグインまたはテーマのドキュメント用に調整されたルール (和訳スタイル)。 |
-| Swift / SwiftUI 開発 | [`examples/.textlintrc.swift.jsonc`](examples/.textlintrc.swift.jsonc) | [`examples/lint-docs.swift.yml`](examples/lint-docs.swift.yml) | Apple 開発者向けドキュメントおよび技術用語向けに最適化されたルール。**textlint-rule-preset-swift-docs-ja** を統合。 |
-
-## 📋 List of Configuration Files
+## 📋 Configuration Files
 
 設定ファイルを、3つ用意してます。
 
@@ -561,9 +548,9 @@ npm run lint:docs
 
 ### 利用側プロジェクトでの `.textlintrc` 例
 
-* 1センテンスを100文字から150文字に制限緩和
-* 全角文字と半角文字の間にスペースを挟む
-* 全角括弧ではなく、半角括弧を使用する
+* 1センテンスを100文字から150文字に制限緩和します
+* 全角文字と半角文字の間にスペースを挟みます
+* 全角括弧ではなく、半角括弧を使用します
 
 ```
 {
@@ -586,6 +573,17 @@ npm run lint:docs
   }
 }
 ```
+
+## 💡 Examples (Usage Samples)
+
+このリポジトリは、さまざまな開発環境向けの設定例を提供します。
+各例には、Textlint 設定と GitHub Actions 用の CI テンプレートの両方が含まれています。
+
+| 対象環境 | Textlint 設定ファイル | CI テンプレート | 概要 |
+|---|---|---|---|
+| 一般的な技術ドキュメント | [`examples/.textlintrc.jsonc`](examples/.textlintrc.jsonc) | [`examples/lint-docs.yml`](examples/lint-docs.yml) | 一般的なドキュメント・プロジェクト向けの基本設定。 |
+| WordPress 開発 | [`examples/.textlintrc.wp.jsonc`](examples/.textlintrc.wp.jsonc) | [`examples/lint-docs.wp.yml`](examples/lint-docs.wp.yml) | WordPress プラグインまたはテーマのドキュメント用に調整されたルール (和訳スタイル)。 |
+| Swift / SwiftUI 開発 | [`examples/.textlintrc.swift.jsonc`](examples/.textlintrc.swift.jsonc) | [`examples/lint-docs.swift.yml`](examples/lint-docs.swift.yml) | Apple 開発者向けドキュメントおよび技術用語向けに最適化されたルール。**textlint-rule-preset-swift-docs-ja** を統合。 |
 
 ## 📚 Glossary of Terms
 
@@ -616,6 +614,19 @@ rules:
     patterns: ["カスタム用語の誤表記"]
 ```
 
+## ⚡ CI/CD Integration
+
+### 🚀 CI でのベストプラクティス
+
+GitHub Actions での CI 実行時には、以下のベスト・プラクティスを推奨します。
+
+* **textlint バージョンの固定**: 破壊的アップデートの予防として、CI では `npm install textlint@15.4.0` を実行してバージョンを固定することを推奨します。
+* **npm キャッシュの最適化**: `actions/cache@v4` を使用して `~/.npm` をキャッシュすることで、実行速度が約3倍になり、CI 失敗時のパッケージ破損防止にも効果的です。
+* **CI では docs のみを対象**: `README.md` と `docs/**/*.md` を対象とし、自動 fix は off にします (他フォルダへの影響を避ける lint という方針)。
+* **Submodule は read-only 運用**: 編集は原則として本体リポジトリで行い、利用側プロジェクトでの Submodule 内の直接編集を避けてください。
+
+詳細は [`docs/SPEC.md`](docs/SPEC.md) を参照してください。
+
 ## 🧭 Updates and Operations
 
 ### Git サブモジュールの場合
@@ -645,15 +656,15 @@ cd .. && git add tools/docs-linter && git commit -m "Update submodule" && git pu
 
 **注意事項:**
 
-* サブモジュール内の変更は **必ず先に** コミットする必要がある。
-* 自リポジトリでサブモジュールの変更をコミットする前に、サブモジュール内の作業を完了させること。
-* コミットメッセージは、実際の変更内容に合わせて適切に変更すること。
+* サブモジュール内の変更は **必ず先に** コミットする必要があります。
+* 自リポジトリでサブモジュールの変更をコミットする前に、サブモジュール内の作業を完了させてください。
+* コミットメッセージは、実際の変更内容に合わせて適切に変更してください。
 
 **トラブルシューティング:**
 
-* サブモジュール内で未コミットの変更がある場合、自リポジトリでのサブモジュール更新が失敗する。
-* サブモジュールの状態を確認するには `git submodule status` を使用すること。
-* サブモジュールを特定のコミットに固定したい場合は `git submodule update --remote --merge` の代わりに `git submodule update` を使用すること。
+* サブモジュール内で未コミットの変更がある場合、自リポジトリでのサブモジュール更新が失敗します。
+* サブモジュールの状態を確認するには `git submodule status` を使用してください。
+* サブモジュールを特定のコミットに固定したい場合は `git submodule update --remote --merge` の代わりに `git submodule update` を使用してください。
 
 ### npm パッケージの場合
 
@@ -683,17 +694,6 @@ npm update @stein2nd/docs-linter
 * **`prelint:docs` によりサブモジュールの最新化が自動化**
 * **npm パッケージにより簡単なインストールとアップデート**
 * **Swift 開発では textlint-rule-preset-swift-docs-ja を活用**
-
-### 🚀 CI でのベストプラクティス
-
-GitHub Actions での CI 実行時には、以下のベスト・プラクティスを推奨します。
-
-* **textlint バージョンの固定**: 破壊的アップデートの予防として、CI では `npm install textlint@15.4.0` を実行してバージョンを固定することを推奨します。
-* **npm キャッシュの最適化**: `actions/cache@v4` を使用して `~/.npm` をキャッシュすることで、実行速度が約3倍になり、CI 失敗時のパッケージ破損防止にも効果的です。
-* **CI では docs のみを対象**: `README.md` と `docs/**/*.md` を対象とし、自動 fix は off にします (他フォルダに影響を与えない lint という方針)。
-* **Submodule は read-only 運用**: 編集は原則本体リポジトリで行い、利用側プロジェクトでの Submodule 内の直接編集を避けてください。
-
-詳細は [`docs/SPEC.md`](docs/SPEC.md) を参照してください。
 
 ## ❓ FAQ
 
@@ -836,3 +836,11 @@ A: 以下の手順を確認してください。
 **"Docs Linter"** はオープンソース・ソフトウェアです。以下の皆様がこのプロジェクトに貢献しています。
 
 * **開発者**: Koutarou ISHIKAWA
+
+## 📄 License
+
+本プロジェクトは GPL v2以降の下でライセンスされています - 詳細は [LICENSE](LICENSE) ファイルを参照してください。
+
+## 💬 Support and Contact
+
+サポート、機能リクエスト、またはバグ報告については、[GitHub Issues](https://github.com/stein2nd/docs-linter/issues) ページをご覧ください。
