@@ -9,6 +9,10 @@
     "type": "git",
     "url": "git+https://github.com/stein2nd/docs-linter.git"
   },
+  "homepage": "https://github.com/stein2nd/docs-linter#readme",
+  "bugs": {
+    "url": "https://github.com/stein2nd/docs-linter/issues"
+  },
   "keywords": [
     "textlint",
     "textlint-rule",
