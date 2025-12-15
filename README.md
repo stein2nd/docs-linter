@@ -1,11 +1,11 @@
 # 📘 Docs Linter — *Multiple Preset Textlint Integration*
 
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
-[![textlint](https://img.shields.io/badge/textlint-15.4-blue.svg)](https://textlint.org/)
+[![textlint](https://img.shields.io/badge/textlint-15.5-blue.svg)](https://textlint.org/)
 [![WordPress](https://img.shields.io/badge/WordPress-6.3+-blue.svg)](https://wordpress.org/)
 [![Swift](https://img.shields.io/badge/Swift-5.9+-blue.svg)](https://www.swift.org/)
 [![Xcode](https://img.shields.io/badge/Xcode-15.0+-blue.svg)](https://developer.apple.com/xcode/)
-[![Vite](https://img.shields.io/badge/vite-7.2-blue.svg)](https://vite.dev)
+[![Vite](https://img.shields.io/badge/vite-7.3-blue.svg)](https://vite.dev)
 
 ## 📝 Description
 
