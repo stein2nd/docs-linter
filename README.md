@@ -5,7 +5,7 @@
 [![WordPress](https://img.shields.io/badge/WordPress-6.3+-blue.svg)](https://wordpress.org/)
 [![Swift](https://img.shields.io/badge/Swift-5.9+-blue.svg)](https://www.swift.org/)
 [![Xcode](https://img.shields.io/badge/Xcode-15.0+-blue.svg)](https://developer.apple.com/xcode/)
-[![Vite](https://img.shields.io/badge/vite-7.3-blue.svg)](https://vite.dev)
+[![Vite](https://img.shields.io/badge/vite-8.0-blue.svg)](https://vite.dev)
 
 ## 📝 Description
 
