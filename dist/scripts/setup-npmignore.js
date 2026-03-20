@@ -1,7 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
-const targetPath = path.resolve("./.npmignore");
-const content = `# =====================================================================
+//#region src/scripts/setup-npmignore.ts
+var targetPath = path.resolve("./.npmignore");
+fs.writeFileSync(targetPath, `# =====================================================================
 # npm package ignore rules for docs-linter
 # Optimized for: Node + Vite + TypeScript + textlint
 # ---------------------------------------------------------------------
@@ -78,7 +79,8 @@ commitlint.*
 !package.json
 !README.md
 !LICENSE*
-`;
-fs.writeFileSync(targetPath, content);
+`);
 console.log("✅ .npmignore generated and gitignore-fallback warning prevented.");
+//#endregion
+
 //# sourceMappingURL=setup-npmignore.js.map
