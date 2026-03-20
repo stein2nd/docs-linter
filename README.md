@@ -788,6 +788,31 @@ A: 以下の手順を確認してください。
 
 本プロジェクトは **textlint 用ルールセット** を提供することを目的としています。開発にあたっては以下のガイドラインに従ってください。
 
+#### 依存更新時チェックリスト (daily routine / ncu 運用)
+
+※ ここで、**ncu** とは [npm-check-updates](https://github.com/raineorshine/npm-check-updates) の略記です。
+
+依存関係の定期更新を行うときは、次の手順で進めると差分管理しやすくなります。
+
+1. **作業ツリーを確認する**  
+   - 先に未コミット変更を整理し、依存更新の差分と混ざらない状態にします。
+2. **依存関係を更新する**  
+   `ncu` で更新候補を確認し、`ncu -u` で `package.json` を更新します。
+3. **lockfile を再生成する**  
+   通常は `npm install` で `package-lock.json` を最新化します。  
+   **ただし** 本リポジトリは `github:...` 形式の git 依存を含みます。npm **11.12.0** 付近では、git 依存の準備時に `--prefer-offline` / `--prefer-online` の扱いの不整合により `npm install` が失敗することがあります (例: `git dep preparation failed` / `--prefer-online cannot be provided when using --prefer-offline`)。その場合は **グローバルの npm を下げずに**、次のスクリプトでインストールしてください。  
+   ```zsh
+   npm run install:compat
+   ```  
+   `install:compat` は一時的に **npm 11.11.0** で `install` だけを実行します。npm 側で修正が入ったら (例: [npm/cli#9133](https://github.com/npm/cli/issues/9133)、[npm/pacote#472](https://github.com/npm/pacote/issues/472))、通常の `npm install` に戻し、`package.json` の `install:compat` のバージョン指定や本説明を見直してください。  
+   peer 依存の都合で通常の `npm install` が失敗する場合は、`npm install --legacy-peer-deps` を検討します (上記の git 依存エラーとは別問題です)。
+4. **ビルド成果物を更新する**  
+   `npm run build` を実行し、`dist/` 配下を更新します。
+5. **差分を確認してコミットする**  
+   `package.json` / `package-lock.json` / ビルド成果物の差分が意図どおりか確認してからコミットします。
+
+公開時 (`npm pack` / `npm publish`) は `prepare` でビルドと `.npmignore` 生成が走るため、公開物の取りこぼしに注意してください。
+
 #### ルールの追加・修正
 
 * **新しいルールの追加**: 新しい textlint ルールを追加する際は、既存の設定ファイル構造を維持し、適切なディレクトリ (`presets/base/`、`presets/wordpress/`、`presets/swift/`) に配置してください。
@@ -828,7 +853,8 @@ A: 以下の手順を確認してください。
 #### 依存関係の管理
 
 * **依存関係の追加**: 新しい依存関係を追加する際は、`package.json` に適切に追加し、`package-lock.json` を更新してください。
-* **依存関係の更新**: 定期的に依存関係を更新し、セキュリティパッチを適用してください。
+* **依存関係の更新**: 定期的に依存関係を更新し、セキュリティパッチを適用してください。手順の詳細は上記「依存更新時チェックリスト (daily routine / ncu 運用)」を参照してください。
+* **`npm run install:compat`**: git 依存を含む状態で `npm install` が npm 11.12 系の不具合で失敗する場合の回避用です (上記チェックリストの手順 3)。今後同様の事象が続く場合は、`package.json` の `scripts.install:compat` 内の `npm@11.11.0` のバージョンだけ差し替えて凌ぐことができます。
 * **peer dependencies**: 必要に応じて peer dependencies を適切に設定してください。
 
 ## Contributors & Developers
