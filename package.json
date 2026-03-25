@@ -49,6 +49,7 @@
     "@types/node": "^25.5.0",
     "rollup": "^4.60.0",
     "textlint": "^15.5.2",
+    "textlint-filter-rule-allowlist": "^4.0.0",
     "textlint-filter-rule-comments": "^1.3.0",
     "textlint-rule-ja-space-around-code": "^2.4.2",
     "textlint-rule-ja-space-between-half-and-full-width": "^2.4.2",
