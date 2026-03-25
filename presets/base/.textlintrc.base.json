@@ -1,5 +1,11 @@
 {
-  "filters": {},
+  "filters": {
+    "allowlist": {
+      "allow": [
+        "/\\s>\\s/"
+      ]
+    }
+  },
   "rules": {
     "preset-ja-technical-writing": true,
     "preset-jtf-style": {

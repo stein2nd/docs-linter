@@ -4,7 +4,12 @@
   ],
   "plugins": {},
   "filters": {
-    "comments": true
+    "comments": true,
+    "allowlist": {
+      "allow": [
+        "/\\s>\\s/"
+      ]
+    }
   },
   "rules": {
     "preset-ja-technical-writing": false,

@@ -1,7 +1,13 @@
 {
   "extends": ["../base/.textlintrc.base.json"],
   "plugins": {},
-  "filters": {},
+  "filters": {
+    "allowlist": {
+      "allow": [
+        "/\\s>\\s/"
+      ]
+    }
+  },
   "rules": {
     "preset-wp-docs-ja": true
   }
