@@ -3,6 +3,9 @@
     "../base/.textlintrc.base.json"
   ],
   "plugins": {},
+  "filters": {
+    "comments": true
+  },
   "rules": {
     "preset-ja-technical-writing": false,
     "preset-jtf-style": {
@@ -20,20 +23,33 @@
         "severity": "warning"
       }
     },
-    "preset-swift-docs-ja": {
-      "prh": {
-        "rulePaths": [
-          "../../node_modules/textlint-rule-preset-swift-docs-ja/prh-rules/swift.yml"
-        ],
-        "severity": "warning"
-      },
-      "swift-docs-ja/prh": false,
-      "max-kanji-continuous-len": {
-        "severity": "warning"
-      },
-      "no-doubled-joshi": {
-        "severity": "warning"
-      }
+    "@textlint-ja/no-synonyms": true,
+    "ja-hiragana-keishikimeishi": true,
+    "ja-no-abusage": true,
+    "ja-no-redundant-expression": true,
+    "max-kanji-continuous-len": {
+      "max": 7,
+      "severity": "warning"
+    },
+    "no-dropping-the-ra": true,
+    "no-mixed-zenkaku-and-hankaku-alphabet": true,
+    "ja-space-around-code": {
+      "before": true,
+      "after": true
+    },
+    "no-doubled-joshi": {
+      "severity": "warning"
+    },
+    "ja-space-between-half-and-full-width": false,
+    "terminology": {
+      "defaultTerms": false,
+      "terms": "../../textlint-rule-preset-swift-docs-ja/dict/terminology.json"
+    },
+    "prh": {
+      "rulePaths": [
+        "../../node_modules/textlint-rule-preset-swift-docs-ja/prh-rules/swift.yml"
+      ],
+      "severity": "warning"
     }
   }
 }

@@ -12,15 +12,23 @@
 Markdown ドキュメントを lint (構文・文体チェック) するためのルールセットです。
 WordPress プラグイン/テーマ開発、Xcode (Swift/SwiftUI) アプリケーション開発の両方で利用可能です。
 また、それらに関連するドキュメント制作での表記統一にも利用可能です。
-更に、GitHub Actions に対応した lint 体制を構築できます。
+さらに、GitHub Actions に対応した lint 体制を構築できます。
 
 ## ✨ Features
 
-* **複数プリセット統合**: Swift Docs / WordPress Docs など、複数のプリセットを統合して利用可能
-* **柔軟な導入方法**: Git Submodule / npm パッケージのどちらでも利用可能
-* **CI/CD 対応**: GitHub Actions による自動 lint 検証を安定稼働
-* **エディター統合**: VS Code / Cursor / JetBrains 製エディターに対応
-* **カスタマイズ可能**: プロジェクト固有のルールを追加可能
+* **複数プリセット統合**:
+  * Swift Docs / WordPress Docs など、複数のプリセットを統合して利用可能。
+* **柔軟な導入方法**:
+  * Git Submodule / npm パッケージのどちらでも利用可能。
+* **CI/CD 対応**:
+  * GitHub Actions による自動 lint 検証が、安定稼働。
+* **エディター統合**:
+  * VS Code / Cursor / JetBrains 製エディターに対応。
+* **カスタマイズ可能**:
+  * プロジェクト固有のルールを追加可能。
+* **WordPress PRH**:
+  * `npm install` / `postinstall` のたびに [jawordpressorg の `wordpress.yml`](https://github.com/jawordpressorg/textlint-rule-preset-wp-docs-ja) に対し、コロン直後スペースと鉤括弧前スペース禁止の往復衝突を避けるパッチ (`scripts/patch-wp-prh-colon-quote.cjs`) を idempotent に適用。
+  上流が同一内容を取り込んだ場合は、自動でスキップ。
 
 ## ⚙️ Installation
 
@@ -115,7 +123,7 @@ git push
 
 #### 1.2. リポジトリの追加 (新規プロジェクト作成と同時に追加する場合)
 
-新規プロジェクトのリポジトリを作成します (例： `s2j-new-plugin`)。
+新規プロジェクトのリポジトリを作成します (たとえば `s2j-new-plugin`)。
 
 ```zsh
 mkdir s2j-new-plugin
@@ -322,7 +330,7 @@ cp node_modules/@stein2nd/docs-linter/presets/swift/.textlintrc.swift.json .text
 
 * `preset-ja-technical-writing`: 技術文書の基本的なルール
 * `preset-jtf-style`: JTF 日本語標準スタイルガイド
-  * 但し、`3.1.1.全角文字と半角文字の間`、`4.3.1.丸かっこ（）`、`4.2.7.コロン(：)`、`4.2.8.セミコロン(；)` は、除外
+  * ただし、`3.1.1.全角文字と半角文字の間`、`4.3.1.丸かっこ（）`、`4.2.7.コロン(：)`、`4.2.8.セミコロン(；)` は、除外
 * `prh`: 用語統一ルール (空のルールパス)
 * `no-dead-link`: リンク切れチェック
 
@@ -368,7 +376,7 @@ Swift/SwiftUI アプリケーション開発に特化した設定です。
   * `prh` ルールで Swift 用語辞書 (`../../node_modules/textlint-rule-preset-swift-docs-ja/prh-rules/swift.yml`) を明示的に指定
   * ~~`preset-ja-technical-writing`: 技術文書の基本的なルール~~
   * `preset-jtf-style`: JTF 日本語標準スタイルガイド
-    * 但し、`3.1.1.全角文字と半角文字の間`、`4.3.1.丸かっこ（）`、`4.2.7.コロン(：)`、`4.2.8.セミコロン(；)` は、除外。
+    * ただし、`3.1.1.全角文字と半角文字の間`、`4.3.1.丸かっこ（）`、`4.2.7.コロン(：)`、`4.2.8.セミコロン(；)` は、除外。
     * `1.1.3.箇条書き`、`4.3.7.山かっこ<>` は、警告。
 
 **主な機能:**
@@ -432,7 +440,7 @@ npm run lint:swift
 「プロジェクト」が、WordPress 開発の場合は、「textlint.configPath」を `./tools/docs-linter/presets/wordpress/.textlintrc.wp.json` に変更してください。
 Swift 開発の場合は、「textlint.configPath」を `./tools/docs-linter/presets/swift/.textlintrc.swift.json` に変更してください。
 
-**拡張機能のインストール:**
+**エクステンション機能のインストール:**
 
 * [textlint](https://marketplace.visualstudio.com/items?itemName=taichi.vscode-textlint)
 
@@ -548,9 +556,9 @@ npm run lint:docs
 
 ### 利用側プロジェクトでの `.textlintrc` 例
 
-* 1センテンスを100文字から150文字に制限緩和します
-* 全角文字と半角文字の間にスペースを挟みます
-* 全角括弧ではなく、半角括弧を使用します
+* 1センテンスを100文字から150文字に制限緩和。
+* 全角文字と半角文字の間にスペースを挟む。
+* 全角括弧ではなく、半角括弧を使用。
 
 ```
 {
@@ -620,10 +628,14 @@ rules:
 
 GitHub Actions での CI 実行時には、以下のベスト・プラクティスを推奨します。
 
-* **textlint バージョンの固定**: 破壊的アップデートの予防として、CI では `npm install textlint@15.4.0` を実行してバージョンを固定することを推奨します。
-* **npm キャッシュの最適化**: `actions/cache@v4` を使用して `~/.npm` をキャッシュすることで、実行速度が約3倍になり、CI 失敗時のパッケージ破損防止にも効果的です。
-* **CI では docs のみを対象**: `README.md` と `docs/**/*.md` を対象とし、自動 fix は off にします (他フォルダへの影響を避ける lint という方針)。
-* **Submodule は read-only 運用**: 編集は原則として本体リポジトリで行い、利用側プロジェクトでの Submodule 内の直接編集を避けてください。
+* **textlint バージョンの固定**:
+  * 破壊的アップデートの予防として、CI では `npm install textlint@15.4.0` を実行してバージョンを固定することを推奨。
+* **npm キャッシュの最適化**:
+  * `actions/cache@v4` を使用して `~/.npm` をキャッシュすることで、実行速度が約3倍になり、CI 失敗時のパッケージ破損防止にも効果的。
+* **CI では docs のみを対象**:
+  * `README.md` と `docs/**/*.md` を対象とし、自動 fix は off にする (他フォルダーへの影響を避ける lint という方針)。
+* **Submodule は read-only 運用**:
+  * 編集は原則として本体リポジトリで行い、利用側プロジェクトでの Submodule 内の直接編集を避けること。
 
 詳細は [`docs/SPEC.md`](docs/SPEC.md) を参照してください。
 
@@ -656,15 +668,15 @@ cd .. && git add tools/docs-linter && git commit -m "Update submodule" && git pu
 
 **注意事項:**
 
-* サブモジュール内の変更は **必ず先に** コミットする必要があります。
-* 自リポジトリでサブモジュールの変更をコミットする前に、サブモジュール内の作業を完了させてください。
-* コミットメッセージは、実際の変更内容に合わせて適切に変更してください。
+* サブモジュール内の変更は **必ず先に** コミットする必要がある。
+* 自リポジトリでサブモジュールの変更をコミットする前に、サブモジュール内の作業を完了させるように。
+* コミットメッセージは、実際の変更内容に合わせて適切に変更するように。
 
 **トラブルシューティング:**
 
-* サブモジュール内で未コミットの変更がある場合、自リポジトリでのサブモジュール更新が失敗します。
-* サブモジュールの状態を確認するには `git submodule status` を使用してください。
-* サブモジュールを特定のコミットに固定したい場合は `git submodule update --remote --merge` の代わりに `git submodule update` を使用してください。
+* サブモジュール内で未コミットの変更がある場合、自リポジトリでのサブモジュール更新が失敗する。
+* サブモジュールの状態を確認するには `git submodule status` を使用するように。
+* サブモジュールを特定のコミットに固定したい場合は `git submodule update --remote --merge` の代わりに `git submodule update` を使用するように。
 
 ### npm パッケージの場合
 
@@ -686,8 +698,8 @@ npm update @stein2nd/docs-linter
 
 実務での使い方ヒント (CI 連携、PR チェックなど) について。
 
-* **WordPress 開発者**は `.textlintrc.wp.json` を指定
-* **Swift 開発者**は `.textlintrc.swift.json` を指定
+* **WordPress 開発者** は `.textlintrc.wp.json` を指定
+* **Swift 開発者** は `.textlintrc.swift.json` を指定
 * **Cursor/VS Code** は `.vscode/settings.json` の設定を自動で読み込み
 * **全プロジェクト** で共通ルールを継承可能
 * **Git submodule によりルール更新が一括反映**
@@ -703,7 +715,7 @@ A: 以下の点を確認してください。
 
 * `npm install` が完了しているか
 * 設定ファイルのパスが正しいか
-* エディターの textlint 拡張機能がインストールされているか
+* エディターの textlint エクステンション機能がインストールされているか
 
 **Q: カスタムルールが認識されない**
 
@@ -792,70 +804,101 @@ A: 以下の手順を確認してください。
 
 ※ ここで、**ncu** とは [npm-check-updates](https://github.com/raineorshine/npm-check-updates) の略記です。
 
-依存関係の定期更新を行うときは、次の手順で進めると差分管理しやすくなります。
+依存関係の定期更新時には、次の手順で進めると差分管理しやすくなります。
 
 1. **作業ツリーを確認する**  
-   - 先に未コミット変更を整理し、依存更新の差分と混ざらない状態にします。
+   * 先に未コミット変更を整理し、依存更新の差分と混ざらない状態にする。
+
 2. **依存関係を更新する**  
-   `ncu` で更新候補を確認し、`ncu -u` で `package.json` を更新します。
+   * `ncu` で更新候補を確認し、`ncu -u` で `package.json` を更新する。
+
 3. **lockfile を再生成する**  
-   通常は `npm install` で `package-lock.json` を最新化します。  
-   **ただし** 本リポジトリは `github:...` 形式の git 依存を含みます。npm **11.12.0** 付近では、git 依存の準備時に `--prefer-offline` / `--prefer-online` の扱いの不整合により `npm install` が失敗することがあります (例: `git dep preparation failed` / `--prefer-online cannot be provided when using --prefer-offline`)。その場合は **グローバルの npm を下げずに**、次のスクリプトでインストールしてください。  
-   ```zsh
-   npm run install:compat
-   ```  
-   `install:compat` は一時的に **npm 11.11.0** で `install` だけを実行します。npm 側で修正が入ったら (例: [npm/cli#9133](https://github.com/npm/cli/issues/9133)、[npm/pacote#472](https://github.com/npm/pacote/issues/472))、通常の `npm install` に戻し、`package.json` の `install:compat` のバージョン指定や本説明を見直してください。  
-   peer 依存の都合で通常の `npm install` が失敗する場合は、`npm install --legacy-peer-deps` を検討します (上記の git 依存エラーとは別問題です)。
+   * 通常は `npm install` で `package-lock.json` を最新化する。
+
+**ただし** 本リポジトリは `github:...` 形式の Git 依存を含む。npm **11.12.0** 付近では、Git 依存の準備時に `--prefer-offline` / `--prefer-online` の扱いの不整合により `npm install` が失敗することがある (たとえば `git dep preparation failed` / `--prefer-online cannot be provided when using --prefer-offline`)。その場合は **グローバルの npm を下げずに**、次のスクリプトでインストールすること。
+
+```zsh
+npm run install:compat
+```  
+
+`install:compat` は、一時的に **npm v11.11.1** で `install` だけを実行。
+**npm v11.12.0** 単体に起因する不具合は [npm/cli#9133](https://github.com/npm/cli/issues/9133) で追跡・クローズ済みで、**v11.12.1以降** では通常の `npm install` に戻せます (リリース後は `package.json` の `engines.npm` および `install:compat` / 本説明を見直してください)。
+peer 依存の都合で通常の `npm install` が失敗する場合は、`npm install --legacy-peer-deps` を検討 (上記の Git 依存エラーとは別問題)。
+
 4. **ビルド成果物を更新する**  
-   `npm run build` を実行し、`dist/` 配下を更新します。
+   * `npm run build` を実行し、`dist/` 配下を更新。
+
 5. **差分を確認してコミットする**  
-   `package.json` / `package-lock.json` / ビルド成果物の差分が意図どおりか確認してからコミットします。
+   * `package.json` / `package-lock.json` / ビルド成果物の差分が意図どおりか確認してからコミット。
 
 公開時 (`npm pack` / `npm publish`) は `prepare` でビルドと `.npmignore` 生成が走るため、公開物の取りこぼしに注意してください。
 
 #### ルールの追加・修正
 
-* **新しいルールの追加**: 新しい textlint ルールを追加する際は、既存の設定ファイル構造を維持し、適切なディレクトリ (`presets/base/`、`presets/wordpress/`、`presets/swift/`) に配置してください。
-* **既存ルールの修正**: 既存のルールを修正する際は、後方互換性を考慮し、既存の利用者に影響を与えないよう注意してください。
-* **カスタムルールの開発**: プロジェクト固有のカスタムルールを追加する場合は、`presets/base/rules/` または `presets/swift/rules/` ディレクトリに配置し、適切なテストを追加してください。
-* **参考資料**: textlint の公式ドキュメントや他のルールセット (例： [textlint-rule-preset-JTF-style](https://github.com/textlint-ja/textlint-rule-preset-JTF-style)、[textlint-rule-preset-ja-technical-writing](https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing)) を参考にしてください。
+* **新しいルールの追加**:
+  * 新しい textlint ルールを追加する際は、既存の設定ファイル構造を維持し、適切なディレクトリ (`presets/base/`、`presets/wordpress/`、`presets/swift/`) に配置してください。
+* **既存ルールの修正**:
+  * 既存のルールを修正する際は、後方互換性を考慮し、既存の利用者に影響を与えないよう注意してください。
+* **カスタムルールの開発**:
+  * プロジェクト固有のカスタムルールを追加する場合は、`presets/base/rules/` または `presets/swift/rules/` ディレクトリに配置し、適切なテストを追加してください。
+* **参考資料**:
+  * textlint の公式ドキュメントや他のルールセット (たとえば [textlint-rule-preset-JTF-style](https://github.com/textlint-ja/textlint-rule-preset-JTF-style)、[textlint-rule-preset-ja-technical-writing](https://github.com/textlint-ja/textlint-rule-preset-ja-technical-writing)) を参考にしてください。
 
 #### 設定ファイルの管理
 
-* **設定ファイルの構造**: 設定ファイルは JSON 形式で、`extends` を使用して基本設定を継承する構造を維持してください。
-* **設定ファイルの命名**: 設定ファイルは `.textlintrc.*.json` の命名規則に従ってください。
-* **設定ファイルの配置**: 各環境向けの設定ファイルは、適切なディレクトリ (`presets/base/`, `presets/wordpress/`, `presets/swift/`) に配置してください。
+* **設定ファイルの構造**:
+  * 設定ファイルは JSON 形式で、`extends` を使用して基本設定を継承する構造を維持してください。
+* **設定ファイルの命名**:
+  * 設定ファイルは `.textlintrc.*.json` の命名規則に従ってください。
+* **設定ファイルの配置**:
+  * 各環境向けの設定ファイルは、適切なディレクトリ (`presets/base/`, `presets/wordpress/`, `presets/swift/`) に配置してください。
 
 #### 用語辞書の管理
 
-* **用語辞書の追加**: 新しい用語を追加する場合は、適切な辞書ファイル (`presets/swift/dictionary/swift-terms.yml` など) に追加してください。
-* **用語辞書の形式**: 用語辞書は PRH (Proofreading Helper) 形式の YAML ファイルとして管理してください。
-* **用語の統一**: 既存の用語集と整合性を保ち、重複を避けてください。
+* **用語辞書の追加**:
+  * 新しい用語を追加する場合は、適切な辞書ファイル (`presets/swift/dictionary/swift-terms.yml` など) に追加してください。
+* **用語辞書の形式**:
+  * 用語辞書は PRH (Proofreading Helper) 形式の YAML ファイルとして管理してください。
+* **用語の統一**:
+  * 既存の用語集と整合性を保ち、重複を避けてください。
 
 #### テストと検証
 
-* **テストの実施**: 変更を加えた際は、必ずテストを実施し、既存の機能に影響がないことを確認してください。
-* **lint の実行**: 変更後は `npm run lint`、`npm run lint:wp`、`npm run lint:swift` を実行し、エラーがないことを確認してください。
-* **ビルドの確認**: `npm run build` を実行し、ビルドが正常に完了することを確認してください。
+* **テストの実施**:
+  * 変更を加えた際は、必ずテストを実施し、既存の機能に影響がないことを確認してください。
+* **lint の実行**:
+  * 変更後は `npm run lint`、`npm run lint:wp`、`npm run lint:swift` を実行し、エラーがないことを確認してください。
+* **ビルドの確認**:
+  * `npm run build` を実行し、ビルドが正常に完了することを確認してください。
 
 #### コードスタイル
 
-* **コードの可読性**: コードの可読性を保つため、統一されたコードスタイルを遵守してください。
-* **コメントの追加**: 複雑なロジックには適切なコメントを追加してください。
-* **TypeScript の使用**: 可能な限り TypeScript を使用し、型安全性を確保してください。
+* **コードの可読性**:
+  * コードの可読性を保つため、統一されたコードスタイルを遵守してください。
+* **コメントの追加**:
+  * 複雑なロジックには適切なコメントを追加してください。
+* **TypeScript の使用**:
+  * 可能な限り TypeScript を使用し、型安全性を確保してください。
 
 #### ドキュメントの更新
 
-* **README の更新**: 新機能や変更点がある場合は、README.md を適切に更新してください。
-* **設定例の追加**: 新しい設定オプションがある場合は、使用例を追加してください。
-* **FAQ の更新**: よくある質問がある場合は、FAQ セクションに追加してください。
+* **README の更新**:
+  * 新機能や変更点がある場合は、README.md を適切に更新してください。
+* **設定例の追加**:
+  * 新しい設定オプションがある場合は、使用例を追加してください。
+* **FAQ の更新**:
+  * よくある質問がある場合は、FAQ セクションに追加してください。
 
 #### 依存関係の管理
 
-* **依存関係の追加**: 新しい依存関係を追加する際は、`package.json` に適切に追加し、`package-lock.json` を更新してください。
-* **依存関係の更新**: 定期的に依存関係を更新し、セキュリティパッチを適用してください。手順の詳細は上記「依存更新時チェックリスト (daily routine / ncu 運用)」を参照してください。
-* **`npm run install:compat`**: git 依存を含む状態で `npm install` が npm 11.12 系の不具合で失敗する場合の回避用です (上記チェックリストの手順 3)。今後同様の事象が続く場合は、`package.json` の `scripts.install:compat` 内の `npm@11.11.0` のバージョンだけ差し替えて凌ぐことができます。
-* **peer dependencies**: 必要に応じて peer dependencies を適切に設定してください。
+* **依存関係の追加**:
+  * 新しい依存関係を追加する際は、`package.json` に適切に追加し、`package-lock.json` を更新してください。
+* **依存関係の更新**:
+  * 定期的に依存関係を更新し、セキュリティパッチを適用してください。手順の詳細は上記「依存更新時チェックリスト (daily routine / ncu 運用)」を参照してください。
+* **`npm run install:compat`**:
+  * Git 依存を含む状態で `npm install` が **npm v11.12.0** の不具合で失敗する場合の回避用です (上記チェックリストの手順3)。`package.json` の `engines.npm` が v11.12.0を弾くため、該当バージョンではインストール時に EBADENGINE 警告が出ます。凌ぎが必要なら `scripts.install:compat` 内の `npm@11.11.1` を別の安全な版へ差し替えてください。
+* **peer dependencies**:
+  * 必要に応じて peer dependencies を適切に設定してください。
 
 ## Contributors & Developers
 
