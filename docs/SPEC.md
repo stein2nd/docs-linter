@@ -2,7 +2,7 @@
 
 GitHub Actions での安定稼働を目標とした、**複数プリセット統合型 textlint 設計 / 運用ガイドライン** です。
 
-## 🧭 1. 概要・目的 (Overview)
+## 🧭1. 概要・目的 (Overview)
 
 | 項目 | 方針 |
 | --- | --- |
@@ -11,11 +11,11 @@ GitHub Actions での安定稼働を目標とした、**複数プリセット統
 | 主なユースケース | ドキュメント lint (Markdown / txt) をプロジェクト横断で統一 |
 | CI 対応 | GitHub Actions による自動 lint 検証を安定稼働させる |
 
-## 🏗️ 2. 設計方針・アーキテクチャ
+## 🏗️2. 設計方針・アーキテクチャー
 
 ### 2.1. 統合運用モデル
 
-| レイヤー | 役割 |
+| レイヤ | 役割 |
 | --- | --- |
 | 🎯 Project | lint 対象 (`docs/**`) |
 | 🧩 tools/docs-linter | 再利用モジュール |
@@ -23,9 +23,9 @@ GitHub Actions での安定稼働を目標とした、**複数プリセット統
 | 🧑‍💻 VSCode | 開発者体験 |
 | 🧪 npm scripts | CLI フロー |
 
-これにより、**Docs Linter は Git Submodule / npm package のどちらにも適応可能**となり、**CI・VSCode・CLI すべてで統一した lint 体制が構築できます。**
+これにより、**Docs Linter は Git Submodule / npm package のどちらにも適応可能**となり、**CI、VSCode、CLI すべてで統一した lint 体制が構築できます。**
 
-## 🚀 3. セットアップ・使用方法
+## 🚀3. セットアップ・使用方法
 
 ### 3.1. Submodule として導入
 
@@ -131,7 +131,7 @@ project-root/
 
 `textlint.configPath` を `./tools/docs-linter/presets/swift/.textlintrc.swift.json` に変更してください。
 
-## 🔧 4. 設定・カスタマイズ
+## 🔧4. 設定・カスタマイズ
 
 ### 4.1. 設定ファイル設計 (`.textlintrc`)
 
@@ -159,7 +159,7 @@ npx textlint --config tools/docs-linter/presets/swift/.textlintrc.swift.json ./d
 
 * `preset-ja-technical-writing`: 技術文書の基本的なルール
 * `preset-jtf-style`: JTF 日本語標準スタイルガイド
-  * 但し、`3.1.1.全角文字と半角文字の間`、`4.3.1.丸かっこ（）`、`4.2.7.コロン(：)`、`4.2.8.セミコロン(；)` は、除外
+  * ただし、`3.1.1.全角文字と半角文字の間`、`4.3.1.丸かっこ（）`、`4.2.7.コロン(：)`、`4.2.8.セミコロン(；)` は、除外
 * `prh`: 用語統一ルール (空のルールパス)
 * `no-dead-link`: リンク切れチェック
 
@@ -181,12 +181,12 @@ Swift/SwiftUI アプリケーション開発に特化した設定です。
 * 基本設定を継承 (`extends: ["../base/.textlintrc.base.json"]`)
 * `preset-ja-technical-writing`: `false` (無効化)
 * `preset-jtf-style`: JTF 日本語標準スタイルガイド
-  * 但し、`3.1.1.全角文字と半角文字の間`、`4.3.1.丸かっこ（）`、`4.2.7.コロン(：)`、`4.2.8.セミコロン(；)` は、除外
+  * ただし、`3.1.1.全角文字と半角文字の間`、`4.3.1.丸かっこ（）`、`4.2.7.コロン(：)`、`4.2.8.セミコロン(；)` は、除外
   * `1.1.3.箇条書き`、`3.3.かっこ類と隣接する文字の間のスペースの有無`、`4.3.7.山かっこ<>` は、警告
 * `preset-swift-docs-ja`: Swift 日本語ドキュメント向けの textlint ルールプリセット
   * `prh` ルールで Swift 用語辞書 (`../../node_modules/textlint-rule-preset-swift-docs-ja/prh-rules/swift.yml`) を明示的に指定
 
-## ⚙️ 5. CI/CD 統合
+## ⚙️5. CI/CD 統合
 
 ### 5.1. CI における重要ポイント
 
@@ -203,7 +203,7 @@ Swift/SwiftUI アプリケーション開発に特化した設定です。
 
 ### 5.2. CI 用 `.github/workflows/textlint.yml` (GitHub Actions 専用版)
 
-実際の CI テンプレートは `examples/` ディレクトリに用意されています：
+実際の CI テンプレートは `examples/` ディレクトリに用意されています。
 
 * `examples/lint-docs.yml` - 一般的なドキュメント・プロジェクト向けの基本設定
 * `examples/lint-docs.wp.yml` - WordPress プラグインまたはテーマのドキュメント用
@@ -398,7 +398,7 @@ jobs:
 
 ---
 
-## 📌 6. ベストプラクティス・チェックリスト
+## 📌6. ベストプラクティス・チェックリスト
 
 ### 6.1. 運用ベスト・プラクティス
 
@@ -420,14 +420,14 @@ jobs:
 | **textlint バージョン** | **CI では version pin が望ましい (例: `textlint@15.4.0`)** |
 | **npm キャッシュ** | **`actions/cache@v4` で `~/.npm` をキャッシュ (`package-lock.json` のハッシュを key に使用)** |
 | npm install | `npm ci` を優先 |
-| PR トリガー | Markdown / docs フォルダに限定可 |
-| **lint 対象** | **`README.md` と `docs/**/*.md` のみ (他フォルダに影響を与えない lint という方針)** |
+| PR トリガー | Markdown / docs フォルダーに限定可 |
+| **lint 対象** | **`README.md` と `docs/**/*.md` のみ (他フォルダーに影響を与えない lint という方針)** |
 | **自動 fix** | **CI では off (検証のみ)** |
 | 保存修正 | `lint:fix` スクリプトで自動化可 (ローカル開発時のみ) |
 
 ---
 
-## 📌 7. まとめ (Best Practice)
+## 📌7. まとめ (Best Practice)
 
 **Docs Linter の設計指針**
 
@@ -439,7 +439,7 @@ jobs:
 
 ---
 
-## 🎉 8. 付録 (Appendix)
+## 🎉8. 付録 (Appendix)
 
 ### 8.1. npm パッケージとしての利用
 
