@@ -73,6 +73,6 @@
     "textlint-rule-prh": "^6.1.0",
     "textlint-rule-terminology": "^5.2.16",
     "typescript": "^6.0.2",
-    "vite": "^8.0.2"
+    "vite": "^8.0.3"
   }
 }
