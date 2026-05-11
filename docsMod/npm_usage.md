@@ -4,7 +4,7 @@
 
 本ドキュメントでは、`@s2j/docs-linter` を npm モジュールとして利用する方法を定義します。
 
-## 1. インストール
+## インストール
 
 ### 設計意図 (ゴール)
 
@@ -27,7 +27,7 @@ npm install --save-dev @s2j/docs-linter
 
 パッケージのインストールを提供すること。
 
-## 2. CLI の使い方
+## CLI の使い方
 
 ### 設計方針 (規約)
 
@@ -37,9 +37,9 @@ npx s2j-docs-linter docs/**/*.md
 
 ### 設計原則
 
-ゼロコンフィグ・ファースト
+ゼロコンフィグ・ファーストであること。
 
-## 3. package.json 統合
+## `package.json` 統合
 
 ### 設計方針 (規約)
 
@@ -51,7 +51,7 @@ npx s2j-docs-linter docs/**/*.md
 }
 ```
 
-## 4. GitHub Actions
+## GitHub Actions
 
 ### 設計意図 (ゴール)
 
