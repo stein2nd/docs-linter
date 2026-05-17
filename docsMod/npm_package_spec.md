@@ -1014,9 +1014,7 @@ tag push で npm publish 可能にします。
 
 ### 設計原則
 
-#### Automation After Validation
-
-手動 publish 成功後に自動化すること。
+* 手動 publish 成功後に自動化すること。
 
 ### 設計方針 (規約)
 
