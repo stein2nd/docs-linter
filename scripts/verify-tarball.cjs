@@ -16,6 +16,9 @@ const REQUIRED_PATHS = [
   "package/presets/base/.textlintrc.base.json",
   "package/presets/swift/.textlintrc.swift.json",
   "package/presets/wordpress/.textlintrc.wp.json",
+  "package/base/.textlintrc.base.json",
+  "package/swift/.textlintrc.swift.json",
+  "package/wordpress/.textlintrc.wp.json",
   "package/scripts/patch-wp-prh-colon-quote.cjs"
 ];
 

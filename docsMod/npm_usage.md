@@ -39,7 +39,8 @@ npm install -g @s2j/docs-linter
 
 ### 設計方針 (規約)
 
-正式 CLI は `s2j-docs-linter` です。互換のため `docs-lint` も同梱されます (フェーズ1)。
+正式 CLI は、`s2j-docs-linter` です。
+後方互換性のため、`docs-lint` も同梱されます (フェーズ1)。
 
 ```bash
 npx s2j-docs-linter docs/**/*.md
@@ -64,7 +65,55 @@ npx s2j-docs-linter --version
 
 ### 設計原則
 
-ゼロコンフィグ・ファーストであること。プロジェクト直下の `.textlintrc*` があればそれを優先し、なければパッケージ同梱のプリセットを使います。
+ゼロコンフィグ・ファーストであること。
+プロジェクト直下の `.textlintrc*` があればそれを優先し、なければパッケージ同梱のプリセットを使用すること。
+
+## VSCode / プリセットパス (互換レイアウト)
+
+### 設計意図 (ゴール)
+
+Git Submodule から npm へ移行する際、VSCode の `textlint.configPath` の変更を最小限にします ([互換性に関する、移行戦略 - フェーズ1優先タスク](./npm_package_spec.md#互換性に関する移行戦略---フェーズ1優先タスク))。
+
+### 設計方針 (規約)
+
+パッケージ tarball には、従来の `presets/` 配下に加え、root 直下の `base/`、`swift/`、`wordpress/` も同梱します (`presets/*` と同一内容のミラー)。
+Submodule 配置と同様に、パッケージ root から見た相対パスだけ差し替えればよい移行が可能です。
+
+**Swift 向け** — `textlint.configPath` の場合は、下記のようになります。
+
+| 導入方法 | `textlint.configPath` |
+| --- | --- |
+| Git Submodule (変更前) | `./tools/docs-linter/swift/.textlintrc.swift.json` |
+| npm (変更後) | `./node_modules/@s2j/docs-linter/swift/.textlintrc.swift.json` |
+
+`textlint.nodePath` は `./node_modules` に変更します (Submodule 時代の `./tools/docs-linter/node_modules` は不要)。
+
+**`presets/` パスを使う場合** (README 方法1 と同じ構造) — こちらも引き続き利用できます。
+
+```json
+{
+  "textlint.configPath": "./node_modules/@s2j/docs-linter/presets/swift/.textlintrc.swift.json",
+  "textlint.nodePath": "./node_modules"
+}
+```
+
+### `.textlintrc.json` の `extends`
+
+プロジェクト直下の `.textlintrc.json` で base プリセットを継承する場合、下記のようになります。
+
+```json
+{
+  "extends": ["./node_modules/@s2j/docs-linter/presets/base/.textlintrc.base.json"]
+}
+```
+
+root 直下の互換パスを使う場合、下記のようになります。
+
+```json
+{
+  "extends": ["./node_modules/@s2j/docs-linter/base/.textlintrc.base.json"]
+}
+```
 
 ## `package.json` 統合
 

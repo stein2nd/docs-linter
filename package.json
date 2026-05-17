@@ -27,6 +27,9 @@
   "files": [
     "dist/",
     "presets/",
+    "base/",
+    "swift/",
+    "wordpress/",
     "scripts/patch-wp-prh-colon-quote.cjs",
     "package.json",
     "README.md",
@@ -39,7 +42,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "tsc -p tsconfig.build.json && node dist/scripts/setup-npmignore.js",
+    "build": "tsc -p tsconfig.build.json && node dist/scripts/setup-npmignore.js && node dist/scripts/link-preset-layout-compat.js",
     "prepare": "npm run build",
     "pack:check": "npm pack --dry-run",
     "publish:dry-run": "npm publish --dry-run --access public",
