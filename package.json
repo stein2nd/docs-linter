@@ -35,7 +35,7 @@
   "main": "dist/bin/run-textlint.js",
   "bin": {
     "s2j-docs-linter": "dist/bin/run-textlint.js",
-    "docs-linter": "dist/bin/run-textlint.js"
+    "docs-lint": "dist/bin/run-textlint.js"
   },
   "scripts": {
     "clean": "rm -rf dist",

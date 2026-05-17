@@ -207,7 +207,7 @@ git push -u origin main
 
 ### 方法2.「npm パッケージ」として利用する
 
-Git Submodule と併用可能です。npm レジストリからは **`@s2j/docs-linter`** をインストールし、CLI **`s2j-docs-linter`** で lint します (互換のため **`docs-lint`** も利用可能)。
+Git Submodule と併用可能です。npm レジストリからは **`@s2j/docs-linter`** をインストールし、CLI **`s2j-docs-linter`** で lint します (互換のため **`docs-lint`** も利用可能)。手順の詳細は [npm 使い方ガイド](docsMod/npm_usage.md) を参照してください。
 
 #### 2.1. npm パッケージの追加 (グローバル・インストールする場合)
 
@@ -506,11 +506,14 @@ npm run lint:docs
 **グローバル・インストールの場合**
 
 ```zsh
-# 設定ファイル、対象ファイルを指定して lint 実行
-docs-lint --config ./presets/base/.textlintrc.base.json ./README.md ./docs/**/*.md
+# プリセットを指定して lint 実行 (設定ファイルの自動解決)
+s2j-docs-linter --profile base ./README.md ./docs/**/*.md
+s2j-docs-linter --profile swift ./README.md ./docs/**/*.md
+# WordPress (デフォルト)
+s2j-docs-linter ./README.md ./docs/**/*.md
 ```
 
-設定ファイルの選択肢は、他に WordPress 開発用 `/presets/wordpress/.textlintrc.wp.json`、Xcode 開発用 `/presets/swift/.textlintrc.swift.json` があります。
+互換 CLI `docs-lint` でも同じ引数を指定できます。詳細は [npm 使い方ガイド](docsMod/npm_usage.md) を参照してください。
 
 **プロジェクト依存の場合**
 

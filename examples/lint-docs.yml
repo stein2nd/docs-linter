@@ -4,6 +4,12 @@
 # このワークフローは、docs-linter を submodule または npm パッケージとして
 # 利用するリポジトリで、Markdown ドキュメントの自動 lint を実行するサンプルです。
 #
+# npm のみで使う場合 (推奨):
+#  - package.json に devDependencies で @s2j/docs-linter を登録
+#  - npm install --save-dev @s2j/docs-linter
+#  - lint ステップ: npx s2j-docs-linter ...
+#  詳細: docsMod/npm_usage.md
+#
 # 利用方法:
 #  1. このファイルをコピーして、利用側リポジトリの
 #     `.github/workflows/lint-docs.yml` に配置します。
@@ -12,7 +18,8 @@
 #
 # 必須要件:
 #  - Node.js v20+
-#  - textlint と docs-linter が package.json に登録済みであること
+#  - Submodule 利用時: textlint と docs-linter が package.json に登録済みであること
+#  - npm 利用時: @s2j/docs-linter が devDependencies に登録済みであること
 #  - プロジェクトに応じた .textlintrc 設定ファイル
 # ============================================================
 
@@ -82,7 +89,7 @@ jobs:
             npm install --no-save ./docs-linter
           else
             echo "docs-linter not found as submodule. Installing via npm..."
-            npm install --save-dev @s2j/docs-linter || true
+            npm install --save-dev @s2j/docs-linter
           fi
 
       # --------------------------------------------------------

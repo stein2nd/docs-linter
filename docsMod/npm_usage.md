@@ -4,6 +4,8 @@
 
 本ドキュメントでは、`@s2j/docs-linter` を npm モジュールとして利用する方法を定義します。
 
+Git Submodule 導線は [README](../README.md) の「方法1」を参照してください。npm 専用の手順は README の「方法2」と本ガイドで揃えています。パッケージ全体の仕様は [npm パッケージ仕様](./npm_package_spec.md) を参照してください。
+
 ## インストール
 
 ### 設計意図 (ゴール)
@@ -12,10 +14,16 @@ Git サブモジュールなしで Docs Linter を導入可能にします。
 
 ### 設計方針 (規約)
 
-インストールは、下記とします。
+プロジェクト依存としてインストールする場合は、下記とします。
 
 ```bash
 npm install --save-dev @s2j/docs-linter
+```
+
+グローバルに CLI だけ使う場合は、下記とします。
+
+```bash
+npm install -g @s2j/docs-linter
 ```
 
 ### 非対象 (Out of Scope)
@@ -31,22 +39,73 @@ npm install --save-dev @s2j/docs-linter
 
 ### 設計方針 (規約)
 
+正式 CLI は `s2j-docs-linter` です。互換のため `docs-lint` も同梱されます (フェーズ1)。
+
 ```bash
 npx s2j-docs-linter docs/**/*.md
 ```
 
+プリセットを指定する場合は `--profile` を使います。
+
+```bash
+# WordPress (デフォルト): --profile 省略可
+npx s2j-docs-linter ./README.md ./docs/**/*.md
+
+npx s2j-docs-linter --profile swift ./README.md ./docs/**/*.md
+npx s2j-docs-linter --profile base ./README.md ./docs/**/*.md
+```
+
+ヘルプとバージョンを表示する場合は、下記の通りです。
+
+```bash
+npx s2j-docs-linter --help
+npx s2j-docs-linter --version
+```
+
 ### 設計原則
 
-ゼロコンフィグ・ファーストであること。
+ゼロコンフィグ・ファーストであること。プロジェクト直下の `.textlintrc*` があればそれを優先し、なければパッケージ同梱のプリセットを使います。
 
 ## `package.json` 統合
 
 ### 設計方針 (規約)
 
+**WordPress 開発** (デフォルトプリセット) の場合は、下記のようになります。
+
 ```json
 {
   "scripts": {
-    "lint:docs": "s2j-docs-linter docs/**/*.md"
+    "lint:docs": "s2j-docs-linter ./README.md ./docs/**/*.md"
+  }
+}
+```
+
+**Swift 開発** の場合は、下記のようになります。
+
+```json
+{
+  "scripts": {
+    "lint:docs": "s2j-docs-linter --profile swift ./README.md ./docs/**/*.md"
+  }
+}
+```
+
+**基本設定 (base)** の場合は、下記のようになります。
+
+```json
+{
+  "scripts": {
+    "lint:docs": "s2j-docs-linter --profile base ./README.md ./docs/**/*.md"
+  }
+}
+```
+
+`devDependencies` には `@s2j/docs-linter` を登録してください。
+
+```json
+{
+  "devDependencies": {
+    "@s2j/docs-linter": "^1.0.10"
   }
 }
 ```
@@ -59,7 +118,7 @@ CI により、決定論的な実行を実現します。
 
 ### 設計方針 (規約)
 
-ワークフローは、下記とします。
+`package.json` に `@s2j/docs-linter` を登録したうえで、ワークフローは下記とします。
 
 ```yaml
 name: Docs Linter
@@ -86,11 +145,19 @@ jobs:
       - run: npx s2j-docs-linter docs/**/*.md
 ```
 
+Swift 向けプリセットの場合は、下記のようになります。
+
+```yaml
+      - run: npx s2j-docs-linter --profile swift ./README.md ./docs/**/*.md
+```
+
+Submodule と npm を併用するサンプルは [examples/lint-docs.yml](../examples/lint-docs.yml) 系を参照してください。
+
 ### 設計原則
 
 #### 明示的か、それとも暗黙的か
 
-CI では、決定論的コマンドを使用すること。
+CI では、決定論的コマンド (`npx s2j-docs-linter`) を使用すること。
 
 ### 責務
 
