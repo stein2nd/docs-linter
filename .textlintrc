@@ -3,7 +3,7 @@
   "rules": {
     "preset-ja-technical-writing": {
       "sentence-length": {
-        "max": 150
+        "max": 200
       }
     },
     "preset-jtf-style": {
