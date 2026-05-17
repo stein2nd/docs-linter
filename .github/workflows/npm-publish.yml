@@ -1,0 +1,49 @@
+# ============================================================
+# Publish @s2j/docs-linter to npm (tag-triggered)
+# ------------------------------------------------------------
+# 仕様: docsMod/npm_package_spec.md
+#   - GitHub Actions Publish ワークフロー
+#   - フェーズ1: 設計・ファイル追加 (Automation After Validation)
+#   - フェーズ2: 初回手動 publish 成功後、NPM_TOKEN 設定して tag push で運用
+#
+# 必須:
+#   - リポジトリ Secrets に NPM_TOKEN (npmjs automation token)
+#   - package.json version と tag (例: v1.0.10) の一致
+#
+# トリガー:
+#   git tag v1.0.10 && git push origin v1.0.10
+# ============================================================
+
+name: Publish to npm
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify publish tarball
+        run: npm run verify:tarball
+
+      - name: Publish to npm
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
