@@ -8,6 +8,7 @@
 #  - package.json に devDependencies で @s2j/docs-linter を登録
 #  - npm install --save-dev @s2j/docs-linter
 #  - lint ステップ: npx s2j-docs-linter ...
+#  package.json の lint:docs 移行: docsMod/npm_usage.md (#packagejson-統合)
 #  詳細: docsMod/npm_usage.md
 #
 # 利用方法:

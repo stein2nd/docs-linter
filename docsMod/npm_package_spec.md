@@ -604,23 +604,17 @@ npx s2j-docs-linter --profile base ./docs/**/*.md
 * 廃止目標 (example 内) … Submodule 専用の `--config tools/docs-linter/...` 直指定。
 * 推奨 (example 内) … `run: npx s2j-docs-linter docs/**/*.md` または `--profile swift`。
 
-### 実装修正: フェーズ1の状態
+### 実装修正: フェーズ1 (実装済み)
 
-* **未実施** — `examples/lint-docs.yml` 等は、Submodule / 旧パッケージ名の記述が残る。
-* フェーズ1の本リポジトリ実装 (CLI、tarball) は完了しており、利用側は次のコマンドで lint 可能。
+* `examples/lint-docs.yml` / `lint-docs.swift.yml` / `lint-docs.wp.yml` — lint ステップを `npx s2j-docs-linter` に更新。Submodule 取得ステップは併存。
+* [npm_usage.md](./npm_usage.md) — `package.json` の `lint:docs` について Submodule → npm の before/after を追記 ([移行のワークフロー例 - フェーズ1優先タスク](#移行のワークフロー例---フェーズ1優先タスク))。
+
+利用側は次のコマンドで lint 可能です。
 
 ```bash
 npx s2j-docs-linter docs/**/*.md
 npx s2j-docs-linter --profile swift docs/**/*.md
 ```
-
-### 実装修正: フェーズ1残タスク
-
-| ファイル | 変更方針 |
-| --- | --- |
-| `examples/lint-docs.yml` | Submodule 取得と npm 併用のまま、lint ステップを `npx s2j-docs-linter` に寄せる案を追加 |
-| `examples/lint-docs.swift.yml` | `--profile swift` 利用例を追加 |
-| `examples/lint-docs.wp.yml` | デフォルト (WordPress) または明示的 WP 利用例を追加 |
 
 * **廃止する記述例** (Submodule 専用の config 直指定):
 
@@ -692,6 +686,11 @@ npx s2j-docs-linter --profile swift
 フェーズ1では対応しないこと。
 
 * automatic migration tooling
+
+### 実装修正: フェーズ1 (実装済み)
+
+* [npm_usage.md](./npm_usage.md) の「`package.json` 統合」に、WordPress / Swift 向け `lint:docs` の before/after 表を追記。
+* [examples/lint-docs.yml](../examples/lint-docs.yml) 系の CI サンプルで `npx s2j-docs-linter` を推奨コマンドとして記載。
 
 ## 互換性に関する、移行戦略
 
@@ -1151,12 +1150,12 @@ package.json:
 * `presets/` レイアウトの維持と tarball 同梱
 * 実行時 `dependencies` への移行
 * README への npm 手順の併記 (Submodule は引き続き主導線)
+* `examples/lint-docs*.yml` の `npx s2j-docs-linter` 化と [npm_usage.md](./npm_usage.md) の `lint:docs` 移行例
 
 ### フェーズ1の残タスク (本リポジトリ)
 
 * `.github/workflows/npm-publish.yml` と npmjs への初回 publish
-* `examples/lint-docs*.yml` の npm 併記
-* 本リポジトリ `lint` / `lint:wp` / `lint:swift` の `s2j-docs-linter` への統一 (任意)
+* 利用側プロジェクトでの受け入れ試験 (任意だがフェーズ1クローズに推奨)
 
 ## README 移行
 

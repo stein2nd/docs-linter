@@ -117,9 +117,40 @@ root 直下の互換パスを使う場合、下記のようになります。
 
 ## `package.json` 統合
 
+### 設計意図 (ゴール)
+
+Git Submodule から npm へ移行する際、利用側の `scripts > lint:docs` を段階的に差し替えられるようにします ([移行のワークフロー例 - フェーズ1優先タスク](./npm_package_spec.md#移行のワークフロー例---フェーズ1優先タスク))。
+
+### Submodule → npm: `lint:docs` の移行例
+
+段階移行を許容します。まず `textlint` 直実行のまま `NODE_PATH` と config パスだけ差し替え、続いて CLI (`s2j-docs-linter`) へ寄せることを推奨します。
+
+**WordPress 向けプロジェクト**
+
+| 段階 | `scripts.lint:docs` (抜粋) |
+| --- | --- |
+| 変更前 (Submodule) | `NODE_PATH=./tools/docs-linter/node_modules:./node_modules textlint --config ./.textlintrc.json ./README.md ./docs/**/*.md` |
+| 変更後 (段階1: textlint 継続) | `NODE_PATH=./node_modules textlint --config ./.textlintrc.json ./README.md ./docs/**/*.md` |
+| 変更後 (推奨: CLI) | `s2j-docs-linter ./README.md ./docs/**/*.md` |
+
+**Swift 向けプロジェクト**
+
+| 段階 | `scripts.lint:docs` (抜粋) |
+| --- | --- |
+| 変更前 (Submodule) | `textlint --config ./tools/docs-linter/swift/.textlintrc.swift.json ./README.md ./docs/**/*.md` |
+| 変更後 (推奨: CLI) | `s2j-docs-linter --profile swift ./README.md ./docs/**/*.md` |
+
+`npx` 経由で実行する場合は、次のとおりです。
+
+```bash
+npx s2j-docs-linter --profile swift ./README.md ./docs/**/*.md
+```
+
+Submodule 専用の config 直指定 (`--config tools/docs-linter/...`) は、新規プロジェクトでは使わないでください。CI の移行例は [examples/lint-docs.yml](../examples/lint-docs.yml) 系を参照してください。
+
 ### 設計方針 (規約)
 
-**WordPress 開発** (デフォルトプリセット) の場合は、下記のようになります。
+**WordPress 開発** (デフォルトプリセット) — npm 導入後の推奨設定は、下記の通りです。
 
 ```json
 {
@@ -129,7 +160,7 @@ root 直下の互換パスを使う場合、下記のようになります。
 }
 ```
 
-**Swift 開発** の場合は、下記のようになります。
+**Swift 開発** — npm 導入後の推奨設定は、下記の通りです。
 
 ```json
 {
@@ -139,7 +170,7 @@ root 直下の互換パスを使う場合、下記のようになります。
 }
 ```
 
-**基本設定 (base)** の場合は、下記のようになります。
+**基本設定 (base)** — npm 導入後の推奨設定は、下記の通りです。
 
 ```json
 {

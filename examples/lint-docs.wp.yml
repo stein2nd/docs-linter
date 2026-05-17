@@ -7,6 +7,7 @@
 # npm のみで使う場合 (推奨):
 #  - npm install --save-dev @s2j/docs-linter
 #  - lint: npx s2j-docs-linter ...
+#  package.json の lint:docs 移行: docsMod/npm_usage.md (#packagejson-統合)
 #  詳細: docsMod/npm_usage.md
 #
 # 利用方法:
