@@ -2,11 +2,40 @@
 
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
-import { resolve, dirname } from "node:path";
+import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(__dirname, "../..");
+
+const PACKAGE_VERSION =
+  (require(join(packageRoot, "package.json")) as { version?: string }).version ?? "unknown";
+
+const HELP_TEXT = `S2J Docs Linter — textlint wrapper for Swift, WordPress, and general docs.
+
+Usage:
+  s2j-docs-linter [options] [files...]
+
+Options:
+  --profile <name>   Use bundled preset: base | wordpress | wp | swift
+  -h, --help         Show this help
+  -V, --version      Show package version
+
+Config resolution (first match wins):
+  1. Project config: .textlintrc, .textlintrc.json, .textlintrc.jsonc,
+     .textlintrc.wp.json, .textlintrc.swift.json,
+     tools/docs-linter/.textlintrc.local.json
+  2. --profile bundled preset under presets/
+  3. Default: WordPress preset
+
+Examples:
+  s2j-docs-linter
+  s2j-docs-linter --profile swift ./README.md ./docs/**/*.md
+  s2j-docs-linter --profile base ./docs/**/*.md
+`;
 
 const PRESETS = {
   base: resolve(packageRoot, "presets/base/.textlintrc.base.json"),
@@ -28,12 +57,19 @@ const USER_CONFIG_CANDIDATES = [
 
 type ProfileName = keyof typeof PRESETS;
 
+function isHelpOrVersion(arg: string): boolean {
+  return arg === "--help" || arg === "-h" || arg === "--version" || arg === "-V";
+}
+
 function parseArgs(argv: string[]) {
   let profile: ProfileName | undefined;
   const lintTargets: string[] = [];
 
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
+    if (isHelpOrVersion(arg)) {
+      continue;
+    }
     if (arg === "--profile") {
       const value = argv[++i];
       if (!value) {
@@ -87,14 +123,39 @@ function buildNodePath(): string {
   return paths.join(":");
 }
 
-const { profile, lintTargets } = parseArgs(process.argv.slice(2));
+function resolveTextlintBin(): string {
+  const candidates = [
+    resolve(packageRoot, "node_modules/textlint/bin/textlint.js"),
+    resolve(process.cwd(), "node_modules/textlint/bin/textlint.js")
+  ];
+  const found = candidates.find((p) => existsSync(p));
+  if (!found) {
+    console.error("❌ textlint is not installed. Install @s2j/docs-linter (includes textlint as a dependency).");
+    process.exit(1);
+  }
+  return found;
+}
+
+const rawArgv = process.argv.slice(2);
+
+if (rawArgv.some((arg) => arg === "--help" || arg === "-h")) {
+  console.log(HELP_TEXT);
+  process.exit(0);
+}
+
+if (rawArgv.some((arg) => arg === "--version" || arg === "-V")) {
+  console.log(PACKAGE_VERSION);
+  process.exit(0);
+}
+
+const { profile, lintTargets } = parseArgs(rawArgv);
 const targetConfig = resolveTargetConfig(profile);
 
 console.log(`🧩 Using config: ${targetConfig}`);
 
-const result = spawnSync("npx", ["textlint", "--config", targetConfig, ...lintTargets], {
+const textlintBin = resolveTextlintBin();
+const result = spawnSync(process.execPath, [textlintBin, "--config", targetConfig, ...lintTargets], {
   stdio: "inherit",
-  shell: true,
   cwd: process.cwd(),
   env: {
     ...process.env,

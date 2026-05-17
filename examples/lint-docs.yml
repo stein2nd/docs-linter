@@ -82,7 +82,7 @@ jobs:
             npm install --no-save ./docs-linter
           else
             echo "docs-linter not found as submodule. Installing via npm..."
-            npm install --save-dev @stein2nd/docs-linter || true
+            npm install --save-dev @s2j/docs-linter || true
           fi
 
       # --------------------------------------------------------
@@ -106,55 +106,26 @@ jobs:
 
       # --------------------------------------------------------
       # 5. Lint 実行
+      # 推奨: npx s2j-docs-linter（プロジェクトの .textlintrc* を自動解決）
+      # Submodule / 旧手順: npx textlint --config <file> ...
       # CI では docs のみを対象（README.md と docs/**/*.md、自動 fix は off）
-      # 他フォルダに影響を与えない lint という方針
       # --------------------------------------------------------
-      - name: Run textlint
+      - name: Run Docs Linter
         if: "!contains(github.event.head_commit.message, '[skip-lint]')"
         run: |
-          # 設定ファイルの確認
-          if [ -f ".textlintrc.jsonc" ]; then
-            CONFIG_FILE=".textlintrc.jsonc"
-          elif [ -f ".textlintrc.json" ]; then
-            CONFIG_FILE=".textlintrc.json"
-          elif [ -f ".textlintrc" ]; then
-            CONFIG_FILE=".textlintrc"
-          else
-            echo "::warning::No textlint configuration found. Using default settings."
-            CONFIG_FILE=""
+          TARGETS=()
+          [ -f "README.md" ] && TARGETS+=("README.md")
+          [ -d "docs" ] && TARGETS+=("docs/**/*.md")
+
+          if [ "${#TARGETS[@]}" -eq 0 ]; then
+            echo "::warning::No README.md or docs/ directory to lint."
+            exit 0
           fi
 
-          # README ファイルの確認
-          if [ -f "README.md" ]; then
-            echo "Linting README.md..."
-            if [ -n "$CONFIG_FILE" ]; then
-              npx textlint --config "$CONFIG_FILE" "README.md" || {
-                echo "::error::Textlint found issues in README.md."
-                exit 1
-              }
-            else
-              npx textlint "README.md" || {
-                echo "::error::Textlint found issues in README.md."
-                exit 1
-              }
-            fi
-          fi
-
-          # docs ディレクトリの確認
-          if [ -d "docs" ]; then
-            echo "Linting docs directory..."
-            if [ -n "$CONFIG_FILE" ]; then
-              npx textlint --config "$CONFIG_FILE" "docs/**/*.md" || {
-                echo "::error::Textlint found issues in docs directory."
-                exit 1
-              }
-            else
-              npx textlint "docs/**/*.md" || {
-                echo "::error::Textlint found issues in docs directory."
-                exit 1
-              }
-            fi
-          fi
+          npx s2j-docs-linter "${TARGETS[@]}" || {
+            echo "::error::Docs Linter found issues."
+            exit 1
+          }
 
       # --------------------------------------------------------
       # 6. レポート出力（失敗時）

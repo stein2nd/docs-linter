@@ -86,7 +86,7 @@ jobs:
             npm install --no-save ./docs-linter
           else
             echo "docs-linter not found as submodule. Installing via npm..."
-            npm install --save-dev @stein2nd/docs-linter || true
+            npm install --save-dev @s2j/docs-linter || true
           fi
 
       # --------------------------------------------------------
@@ -125,41 +125,26 @@ jobs:
           fi
 
       # --------------------------------------------------------
-      # 6. Lint 実行（WordPress 設定）
-      # CI では docs のみを対象（README.md と docs/**/*.md、自動 fix は off）
-      # 他フォルダに影響を与えない lint という方針
+      # 6. Lint 実行（WordPress）
+      # 推奨: npx s2j-docs-linter（未設定時は WordPress プリセット）
+      # プロジェクトに .textlintrc.wp.jsonc 等がある場合は CLI が優先利用
       # --------------------------------------------------------
-      - name: Run textlint (WordPress)
+      - name: Run Docs Linter (WordPress)
         if: "!contains(github.event.head_commit.message, '[skip-lint]')"
         run: |
-          # WordPress 設定ファイルを使用
-          if [ -f ".textlintrc.wp.jsonc" ]; then
-            CONFIG_FILE=".textlintrc.wp.jsonc"
-          elif [ -f ".textlintrc.jsonc" ]; then
-            CONFIG_FILE=".textlintrc.jsonc"
-          else
-            CONFIG_FILE=".textlintrc"
+          TARGETS=()
+          [ -f "README.md" ] && TARGETS+=("README.md")
+          [ -d "docs" ] && TARGETS+=("docs/**/*.md")
+
+          if [ "${#TARGETS[@]}" -eq 0 ]; then
+            echo "::warning::No README.md or docs/ directory to lint."
+            exit 0
           fi
 
-          echo "Using configuration file: $CONFIG_FILE"
-
-          # README ファイルの確認
-          if [ -f "README.md" ]; then
-            echo "Linting README.md with WordPress rules..."
-            npx textlint --config "$CONFIG_FILE" "README.md" || {
-              echo "::error::Textlint found issues in README.md."
-              exit 1
-            }
-          fi
-
-          # docs ディレクトリの確認
-          if [ -d "docs" ]; then
-            echo "Linting docs directory with WordPress rules..."
-            npx textlint --config "$CONFIG_FILE" "docs/**/*.md" || {
-              echo "::error::Textlint found issues in docs directory."
-              exit 1
-            }
-          fi
+          npx s2j-docs-linter "${TARGETS[@]}" || {
+            echo "::error::Docs Linter (WordPress) found issues."
+            exit 1
+          }
 
       # --------------------------------------------------------
       # 7. WordPress 特有のチェック
