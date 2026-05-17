@@ -4,7 +4,7 @@
 
 **移行フェーズ**は [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) に従い、現時点は **フェーズ1** (Git Submodule と npm パッケージの併存) です。
 
-最終更新 …2026-05-17 (`@s2j/docs-linter@1.0.10`、Publishing フェーズ1優先タスク反映済み)
+最終更新 …2026-05-17 (`@s2j/docs-linter@1.0.10`、本リポジトリ `scripts` フェーズ1優先タスク・`tsc` ビルド反映済み)
 
 ### 仕様書 (参照元)
 
@@ -16,7 +16,7 @@
 
 ### フェーズ1: サマリー
 
-仕様書 [概要](./npm_package_spec.md#概要) および [Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク) と一致させています。
+仕様書 [概要](./npm_package_spec.md#概要)、[Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク)、[本リポジトリ `package.json` の `scripts` - フェーズ1優先タスク](./npm_package_spec.md#本リポジトリ-packagejson-の-scripts---フェーズ1優先タスク) と一致させています。
 
 | 項目 | 状態 |
 | --- | --- |
@@ -24,18 +24,19 @@
 | npm パッケージ名 | `@s2j/docs-linter` (`package.json` 反映済み) |
 | 正式 CLI | `s2j-docs-linter` (互換: `docs-linter`) |
 | プリセットレイアウト | `presets/{base,swift,wordpress}/` を維持 (互換要件どおり) |
+| ビルド entrypoint | **済** — `npm run build` (`tsc` + `setup-npmignore`)、`prepare` → `build` |
 | tarball (`npm pack`) | **済** — `verify:tarball` で必須パス・除外パスを検証 |
 | publish 準備 (`npm publish --dry-run`) | **済** — ローカル dry-run 成功 |
 | npm レジストリ公開 | **未実施** — 手動 `npm publish --access public` 待ち |
 
 | 区分 (仕様書) | フェーズ1の状態 |
 | --- | --- |
-| 実装済み | メタデータ、CLI (`--help` / `--version` 含む)、tarball 検証 scripts、`examples/` の `npx s2j-docs-linter` 化、`dependencies` 移行、README npm 手順 (併記)、仕様書フェーズ1優先タスク |
+| 実装済み | メタデータ、CLI (`--help` / `--version` 含む)、`scripts` 整理 (`clean` / `build` / `prepare` / publish 検証)、`tsc` ビルド、本リポジトリ `lint*` の CLI 経由化、tarball 検証、`examples/` の `npx s2j-docs-linter` 化、`dependencies` 移行、README npm 手順 (併記) |
 | 未実施 | npmjs への初回 publish、`.github/workflows/npm-publish.yml` (フェーズ2)、README の Submodule → レガシー化 (フェーズ2以降)、利用側受け入れ試験 |
 
 ### フェーズ1完了条件
 
-仕様 [Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク) のゴールコマンドと責務に対応します。
+仕様 [Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク) および [本リポジトリ `package.json` の `scripts` - フェーズ1優先タスク](./npm_package_spec.md#本リポジトリ-packagejson-の-scripts---フェーズ1優先タスク) のゴール・責務に対応します。
 
 | 完了条件 | 状態 | 検証方法 |
 | --- | --- | --- |
@@ -45,6 +46,9 @@
 | tarball 内容検証 | **済** | `npm run verify:tarball` (`scripts/verify-tarball.cjs`) |
 | `package.json` 必須フィールド (`name`, `version`, `files`, `bin`) | **済** | `package.json` |
 | `LICENSE` / `README.md` を publish 対象に含める | **済** | `files` および pack 出力 |
+| publish 用 `scripts` (`pack:check`, `publish:dry-run`, `lint:package`) | **済** | `package.json` `scripts` 節 |
+| ビルド entrypoint (`clean` / `build` / `prepare`) | **済** | `npm run build` (`tsc -p tsconfig.build.json` + `setup-npmignore`) |
+| `files` に runtime のみ同梱 (`scripts/patch-…` のみ) | **済** | `npm run verify:tarball` (14 entries) |
 | npmjs への初回 `npm publish` | **未** | 手動 (フェーズ1スコープ外: GHA 自動 publish) |
 | 利用側プロジェクトでの受け入れ試験 | **未** | 各利用プロジェクトの作業 |
 
@@ -59,9 +63,10 @@
 | `package.json` の修正 | 済 | 100 |
 | CLI コマンドの公開 | 済 (`s2j-docs-linter` / 互換 `docs-linter`、`--help` / `--version`) | 100 |
 | npm publish に対応する tarball 構成 | 済 + 自動検証 (`verify:tarball`) | 100 |
-| publish 用 `scripts` (`pack:check`, `publish:dry-run` 等) | 済 | 100 |
+| publish 用 `scripts` (`pack:check`, `publish:dry-run`, `verify:tarball` 等) | 済 | 100 |
+| 本リポジトリ `scripts` 整理 (`build` / `prepare` / `lint:package`) | 済 (`tsc` ビルド、CLI 経由 `lint*`) | 100 |
 | README の更新 | **一部** — Submodule 主導線のまま、npm を方法2として併記 | 100※ |
-| `examples/` の npm 版 | 済 — `npx s2j-docs-linter`、パッケージ名 `@s2j/docs-linter` | 95 |
+| `examples/` の npm 版 | 済 — `npx s2j-docs-linter`、パッケージ名 `@s2j/docs-linter` | 100 |
 | GitHub Actions publish ワークフロー | 未 (フェーズ2) | 0 |
 
 ※ README の「フェーズ1範囲」として100%。フェーズ2以降の全面 npm 化は未。
@@ -70,16 +75,16 @@
 
 | 機能名 (仕様セクション) | 実装済み/未実装 | 実装％ | 完了条件 (要約) | 備考 |
 | --- | --- | ---: | --- | --- |
-| [Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク) | 一部 | 90 | 上記「フェーズ1完了条件」表 | レジストリ初回 publish のみ未 |
+| [Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク) | 一部 | 90 | 上記「フェーズ1完了条件」表の Publishing 行 | レジストリ初回 publish のみ未 |
 | [npm パッケージ仕様](./npm_package_spec.md) (文書) | 実装済み | 100 | コードと仕様の同期 | フェーズ1優先タスク見出し追記済み |
 | [`package.json` メタデータ更新](./npm_package_spec.md#packagejson-メタデータ更新) | 実装済み | 100 | `@s2j/docs-linter`、semver、`LICENSE` 等 | `1.0.10` |
 | [CLI Entrypoint 公開](./npm_package_spec.md#cli-entrypoint-公開) | 実装済み | 100 | `bin` / `--profile` / 設定解決 / `--help` | textlint を `node` 直実行 |
-| [ファイルスコープの最適化 (Publish)](./npm_package_spec.md#ファイルスコープの最適化を-publish) | 実装済み | 100 | `files` + `verify:tarball` で除外確認 | `presets/` 維持 |
+| [ファイルスコープの最適化 (Publish)](./npm_package_spec.md#ファイルスコープの最適化を-publish) | 実装済み | 100 | `files` + `verify:tarball` で除外確認 | `presets/` 維持、`scripts/patch-…` のみ同梱 |
 | [CLI 互換レイヤ](./npm_package_spec.md#cli-互換レイヤ) / [互換性に関する要件](./npm_package_spec.md#互換性に関する要件) | 実装済み | 100 | パッケージ root 基準の preset 解決 | |
 | [依存関係レビュー](./npm_package_spec.md#依存関係レビュー) | 実装済み | 100 | 実行時 → `dependencies` | |
-| [Publishing](./npm_package_spec.md#publishing) (全体) | 一部 | 75 | 自動 tag publish はフェーズ2 | ローカル publish 準備は完了 |
-| [本リポジトリ `package.json` の `scripts` - フェーズ1優先](./npm_package_spec.md#本リポジトリ-packagejson-の-scripts---フェーズ1優先タスク) | 一部 | 75 | `pack:check` / `publish:dry-run` / `verify:tarball` 済 | `lint` 系は `npx textlint` のまま (任意) |
-| [移行のワークフロー例](./npm_package_spec.md#移行のワークフロー例) / [フェーズ1優先](./npm_package_spec.md#移行のワークフロー例---フェーズ1優先タスク) | 実装済み | 95 | `examples/lint-docs*.yml` で CLI 利用 | Submodule 取得ステップは併存 |
+| [Publishing](./npm_package_spec.md#publishing) (全体) | 一部 | 80 | 自動 tag publish はフェーズ2 | ローカル publish 準備・検証は完了 |
+| [本リポジトリ `package.json` の `scripts` - フェーズ1優先](./npm_package_spec.md#本リポジトリ-packagejson-の-scripts---フェーズ1優先タスク) | 実装済み | 100 | `clean` / `build` / `prepare` / `pack:check` / `publish:dry-run` / `lint:package` / `verify:tarball` | 本リポジトリ `lint*` は CLI 経由。`postinstall` はフェーズ1非対象のため現状維持 |
+| [移行のワークフロー例](./npm_package_spec.md#移行のワークフロー例) / [フェーズ1優先](./npm_package_spec.md#移行のワークフロー例---フェーズ1優先タスク) | 実装済み | 100 | `examples/lint-docs*.yml` で `npx s2j-docs-linter` | Submodule 取得ステップは併存 |
 | [互換性に関する、移行戦略](./npm_package_spec.md#互換性に関する移行戦略) (フェーズ1) | 実装済み | 90 | 本リポジトリ併存基盤 | 利用側 VSCode / CI は各プロジェクト |
 | [README 移行](./npm_package_spec.md#readme-移行) | フェーズ1済 | 100 | Submodule 主 + npm 併記 | フェーズ2でデフォルト npm 化 |
 | [GitHub Actions Publish ワークフロー](./npm_package_spec.md#github-actions-publish-ワークフロー) | 未実装 | 0 | `.github/workflows/npm-publish.yml` | フェーズ1は設計のみ (フェーズ2実装) |
@@ -91,7 +96,7 @@
 
 ### フェーズ1で完了した項目
 
-仕様 [非推奨化ポリシー - フェーズ1で完了した項目](./npm_package_spec.md#フェーズ1で完了した項目) および [Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク) の責務と一致します。
+仕様 [非推奨化ポリシー - フェーズ1で完了した項目](./npm_package_spec.md#フェーズ1で完了した項目)、[Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク)、[本リポジトリ `package.json` の `scripts` - フェーズ1優先タスク](./npm_package_spec.md#本リポジトリ-packagejson-の-scripts---フェーズ1優先タスク) の責務と一致します。
 
 * `@s2j/docs-linter` としての `package.json` メタデータ
 * CLI `s2j-docs-linter` (互換 `docs-linter`)、`-h` / `--help`、`-V` / `--version`
@@ -101,17 +106,21 @@
 * publish 検証 scripts: `pack:check`, `publish:dry-run`, `verify:tarball`, `lint:package`
 * tarball 自動検証 (`scripts/verify-tarball.cjs`)
 * `examples/lint-docs*.yml` の `npx s2j-docs-linter` 化と `@s2j/docs-linter` 表記
+* 本リポジトリ `scripts` 整理 … `clean` / `build` (`tsc`) / `prepare`、publish 用 dry-run 群
+* 本リポジトリ `lint` / `lint:wp` / `lint:swift` をビルド済み CLI (`node dist/bin/run-textlint.js`) 経由に統一
+* `files` を runtime 最小構成に整理 (`scripts/patch-wp-prh-colon-quote.cjs` のみ同梱)
 
 ### フェーズ1で完了した主な変更 (コード・文書)
 
 | 対象 | 内容 |
 | --- | --- |
 | `src/bin/run-textlint.ts` | preset 解決、`--profile`、`-h`/`--help`、`-V`/`--version`、textlint を `node` 直実行 |
-| `package.json` | publish 用 scripts (`pack:check`, `publish:dry-run`, `verify:tarball`, `lint:package`) |
+| `package.json` | publish 用 scripts、`tsc` ビルド、`prepare` → `build`、本リポジトリ `lint*` の CLI 化、`files` の `scripts/patch-…` 限定 |
+| `tsconfig.build.json` | 本番ビルド用 (`noEmit: false`、`dist/` 出力) |
 | `scripts/verify-tarball.cjs` | `npm pack` 後の必須パス・禁止パス検証 |
 | `examples/lint-docs*.yml` | lint ステップを `npx s2j-docs-linter` に更新、npm パッケージ名を `@s2j/docs-linter` に統一 |
 | `README.md` | 方法2 (npm) を `@s2j/docs-linter` / `s2j-docs-linter` に更新 (方法1「Submodule」は維持) |
-| `docsMod/npm_package_spec.md` | Publishing フェーズ1優先タスク等を追記 |
+| `docsMod/npm_package_spec.md` | Publishing / scripts フェーズ1優先タスク等を追記 |
 
 ### フェーズ1の残タスク (本リポジトリ)
 
@@ -122,17 +131,19 @@
 | 1 | npmjs への初回 `npm publish --access public` | **必須** (フェーズ1クローズ) | レジストリに `@s2j/docs-linter@1.0.10` が取得可能 |
 | 2 | 利用側プロジェクトでの受け入れ試験 | 推奨 | Submodule 併存のまま npm 導入が動作 |
 | 3 | `.github/workflows/npm-publish.yml` | フェーズ2 | tag `v*` で自動 publish |
-| 4 | 本リポジトリ `lint` / `lint:wp` / `lint:swift` を `s2j-docs-linter` に寄せる | 任意 | 本リポジトリ `npm run lint*` が CLI 経由 |
 
 ### 補足
 
 * **公開 API**: `presets/{base,swift,wordpress}/` 配下パス、CLI 名、`extends` 用相対パスは互換契約 ([現在の利用状況の分析](./npm_package_spec.md#現在の利用状況の分析))。
-* **ビルド**: `dist/bin/run-textlint.js` は `npm run build` (`prepare` 経由) で生成。
-* **postinstall**: `scripts/patch-wp-prh-colon-quote.cjs` は tarball の `scripts/` 経由で同梱。
-* **ローカル検証の一式**: 余白。
+* **ビルド**: `dist/bin/run-textlint.js` は `npm run build` (`tsc -p tsconfig.build.json` + `setup-npmignore`) で生成。`prepare` は `npm run build` を呼ぶ。`dev` は Vite watch (開発用のみ)。
+* **postinstall**: フェーズ1 scripts 仕様の非対象。現状は `setup-npmignore` と `scripts/patch-wp-prh-colon-quote.cjs` を実行。tarball には patch スクリプトのみ同梱。
+* **ローカル検証の一式**: (空白)。
 
 ```bash
+npm run build             # tsc + .npmignore 生成
 npm run verify:tarball    # pack + tarball 内容検証
 npm run publish:dry-run   # publish シミュレーション
+npm run pack:check        # pack dry-run (lint:package と同等)
 node dist/bin/run-textlint.js --help
+npm run lint              # 本リポジトリ README 等 (build 後)
 ```

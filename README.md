@@ -241,7 +241,7 @@ npm install --save-dev @s2j/docs-linter
 
 プロジェクトの `package.json` に、スクリプトとして登録します。
 
-**WordPress 開発** (デフォルトプリセット。`--profile` 省略可):
+**WordPress 開発** (デフォルトプリセット。`--profile` 省略可) の場合は、下記の通りです。
 
 ```json
 {
@@ -251,7 +251,7 @@ npm install --save-dev @s2j/docs-linter
 }
 ```
 
-**Swift 開発:**
+**Swift 開発** の場合は、下記の通りです。
 
 ```json
 {
@@ -261,7 +261,7 @@ npm install --save-dev @s2j/docs-linter
 }
 ```
 
-**基本設定 (base):**
+**基本設定 (base)** の場合は、下記の通りです。
 
 ```json
 {
