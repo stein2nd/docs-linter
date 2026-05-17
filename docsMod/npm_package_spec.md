@@ -646,29 +646,29 @@ run: npx s2j-docs-linter docs/**/*.md
 
 ### 設計方針 (規約)
 
-WordPress:
+まず、WordPress 向けプロジェクトの場合。
 
-変更前:
+変更前、利用側の `package.json` の `scripts > lint:docs` での、`node_modules`、textlint 設定ファイルそれぞれへのパス指定は、下記のようになっています。
 
 ```bash
 NODE_PATH=./tools/docs-linter/node_modules:./node_modules textlint --config ./.textlintrc.json
 ```
 
-変更後:
+変更後、利用側の `package.json` の `scripts > lint:docs` での、`node_modules`、textlint 設定ファイルそれぞれへのパス指定は、下記のようになります。
 
 ```bash
 NODE_PATH=./node_modules textlint --config ./.textlintrc.json
 ```
 
-Swift:
+続いて、Swift 向けプロジェクトの場合。
 
-変更前:
+変更前、利用側の `package.json` の `scripts > lint:docs` での、`node_modules`、textlint 設定ファイルそれぞれへのパス指定は、下記のようになっています。
 
 ```bash
 textlint --config ./tools/docs-linter/swift/.textlintrc.swift.json
 ```
 
-変更後:
+変更後、利用側の `package.json` の `scripts > lint:docs` での、`node_modules`、textlint 設定ファイルそれぞれへのパス指定は、下記のようになります。
 
 ```bash
 npx s2j-docs-linter --profile swift
@@ -761,15 +761,15 @@ swift/
 wordpress/
 ```
 
-プリセットパスの互換性:
+Swift 向けプロジェクトの場合。
 
-旧:
+変更前、利用側の既存 `.vscode/settings.json` の `textlint.configPath` へのプリセットパス指定は、下記のようになっています。
 
 ```text
 tools/docs-linter/swift/.textlintrc.swift.json
 ```
 
-新:
+変更後、利用側の既存 `.vscode/settings.json` の `textlint.configPath` へのプリセットパス指定は、下記のようになります。
 
 ```text
 node_modules/@s2j/docs-linter/swift/.textlintrc.swift.json
