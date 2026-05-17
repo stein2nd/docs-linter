@@ -4,35 +4,80 @@ import { existsSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 //#region src/bin/run-textlint.ts
-var __dirname = dirname(fileURLToPath(import.meta.url));
-/**
-* 1. Config ファイル探索
-*/
-var DOCS_LINTER_BASE = resolve(__dirname, "../presets/base/.textlintrc.base.json");
-var DOCS_LINTER_WP = resolve(__dirname, "../presets/wordpress/.textlintrc.wp.json");
-var DOCS_LINTER_SWIFT = resolve(__dirname, "../presets/swift/.textlintrc.swift.json");
-var targetConfig = [
+var packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+var PRESETS = {
+	base: resolve(packageRoot, "presets/base/.textlintrc.base.json"),
+	wordpress: resolve(packageRoot, "presets/wordpress/.textlintrc.wp.json"),
+	wp: resolve(packageRoot, "presets/wordpress/.textlintrc.wp.json"),
+	swift: resolve(packageRoot, "presets/swift/.textlintrc.swift.json")
+};
+var DEFAULT_PRESET = PRESETS.wordpress;
+var USER_CONFIG_CANDIDATES = [
 	"./.textlintrc",
 	"./.textlintrc.json",
 	"./.textlintrc.jsonc",
 	"./.textlintrc.wp.json",
 	"./.textlintrc.swift.json",
 	"./tools/docs-linter/.textlintrc.local.json"
-].find((p) => existsSync(p)) || DOCS_LINTER_WP || DOCS_LINTER_SWIFT || DOCS_LINTER_BASE;
+];
+function parseArgs(argv) {
+	let profile;
+	const lintTargets = [];
+	for (let i = 0; i < argv.length; i++) {
+		const arg = argv[i];
+		if (arg === "--profile") {
+			const value = argv[++i];
+			if (!value) {
+				console.error("❌ --profile requires a value (base, wordpress, wp, or swift).");
+				process.exit(1);
+			}
+			if (!(value in PRESETS)) {
+				console.error(`❌ Unknown profile: ${value}`);
+				process.exit(1);
+			}
+			profile = value;
+			continue;
+		}
+		if (arg.startsWith("--profile=")) {
+			const value = arg.slice(10);
+			if (!(value in PRESETS)) {
+				console.error(`❌ Unknown profile: ${value}`);
+				process.exit(1);
+			}
+			profile = value;
+			continue;
+		}
+		lintTargets.push(arg);
+	}
+	return {
+		profile,
+		lintTargets: lintTargets.length > 0 ? lintTargets : ["./README.md", "./docs/**/*.md"]
+	};
+}
+function resolveTargetConfig(profile) {
+	const userConfig = USER_CONFIG_CANDIDATES.find((p) => existsSync(p));
+	if (userConfig) return userConfig;
+	if (profile) return PRESETS[profile];
+	return DEFAULT_PRESET;
+}
+function buildNodePath() {
+	const paths = [resolve(packageRoot, "node_modules"), resolve(process.cwd(), "node_modules")];
+	if ({}.NODE_PATH) paths.push({}.NODE_PATH);
+	return paths.join(":");
+}
+var { profile, lintTargets } = parseArgs(process.argv.slice(2));
+var targetConfig = resolveTargetConfig(profile);
 console.log(`🧩 Using config: ${targetConfig}`);
-/**
-* 3. textlint 実行
-*/
 var result = spawnSync("npx", [
 	"textlint",
 	"--config",
 	targetConfig,
-	...["./README.md", "./docs/**/*.md"]
+	...lintTargets
 ], {
 	stdio: "inherit",
 	shell: true,
 	cwd: process.cwd(),
-	env: { NODE_PATH: [resolve(__dirname, "../node_modules"), resolve(process.cwd(), "node_modules")].join(":") }
+	env: { NODE_PATH: buildNodePath() }
 });
 if (result.error) {
 	console.error("❌ Failed to run textlint:", result.error);

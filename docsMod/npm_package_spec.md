@@ -4,210 +4,75 @@
 
 本ドキュメントは、Docs Linter を Git サブモジュール型の共有 lint モジュールから、npm レジストリ (`npmjs.com`) 上で配布可能な npm パッケージ **`@s2j/docs-linter`** として再設計するための仕様を定義します。
 
-## パッケージ戦略
+S2J Docs Linter の npm パッケージ化に際しては、既存利用プロジェクトへの影響を最小化することを最優先とします。現時点で利用プロジェクトは、Docs Linter を単なる lint 設定パッケージとしてではなく、Git Submodule 経由の shared ツールワークスペースとして利用しています。
 
-### 設計意図 (ゴール)
+そのため、即時に Git Submodule モデルを完全廃止することは推奨しません。
 
-* Docs Linter を、Git サブモジュール依存から脱却させる。
-* GitHub Actions における CI 安定性を向上させる。
-* npm レジストリによるバージョン管理を導入する。
-* S2J ブランド配下の再利用可能な developer ツールとして整備する。
-* Swift / WordPress / 汎用ドキュメント向け lint 基盤として再利用可能にする。
+### フェーズ1実装状況 (2026-05)
 
-### 設計方針 (規約)
+フェーズ1では Git Submodule と npm パッケージの **併存** を目的とし、本リポジトリ側では npm 配布の基盤 (メタデータ、CLI、`files`、実行時依存) を整備済みです。進捗の一覧は [実装状況](./status.md) を参照してください。
 
-* npm パッケージ名は、`@s2j/docs-linter` とする。
-* npm レジストリは、`npmjs.com` を利用する。
-* public パッケージとして公開する。
-* semantic バージョニング (`semver`) を採用する。
-* GitHub リポジトリを、source of truth とする。
-* npm パッケージは、GitHub Actions により、publish 可能な構成とする。
-
-### 非対象 (Out of Scope)
-
-以下は、本仕様の対象外とします。
-
-* GitHub Packages 配布
-* プライベート npm パッケージ化
-* pnpm / yarn 固有対応
-* Docker イメージ配布
-* Git サブモジュール方式の、完全な即時廃止
-
-### 設計原則
-
-#### 配布を最優先に
-
-配布方式は、Git clone ではなく、package manager を優先すること。
-
-#### CI 対応
-
-GitHub Actions において、deterministic なインストールを可能にすること。
-
-#### エコシステムの一貫性
-
-S2J エコシステムのネーミング/パッケージングを統一すること。
-
-### 責務
-
-`@s2j/docs-linter` は、以下を提供すること。
-
-* 共通 textlint 設定
-* Swift プリセット
-* WordPress プリセット
-* CLI entrypoint
-* npm パッケージメタデータ
-* publish ワークフロー
-
-### 非責務
-
-以下は、提供対象外。
-
-* Node.js runtime 提供
-* GitHub Actions ワークフロー強制提供
-* IDE プラグイン提供
-* Markdown フォーマッター
-
-## パッケージ ネーミング
-
-### 設計意図 (ゴール)
-
-S2J エコシステム内で一意な、名前空間を確保します。
-
-### 設計方針 (規約)
-
-パッケージ名称は、下記とします。
-
-```json
-{
-  "name": "@s2j/docs-linter"
-}
-```
-
-CLI コマンドは、下記とします。
-
-```bash
-s2j-docs-linter
-```
-
-ブランディングは、下記とします。
-
-```text
-S2J Docs Linter
-```
-
-### 設計原則
-
-#### 名前空間の所有権
-
-`@s2j/*` 名前空間に統一すること。
-
-#### 人間可読性
-
-CLI 名称は、可読性を優先すること。
-
-### 責務
-
-package.json は、下記とすること。
-
-```json
-{
-  "bin": {
-    "s2j-docs-linter": "./dist/bin/run-textlint.js"
-  }
-}
-```
-
-## パッケージ構成
-
-### 設計方針 (規約)
-
-想定構成は、下記とします。
-
-```text
-docs-linter/
-├─ dist/
-├─ docs/
-├┬─ presets/
-│├─ base/
-│├─ swift/
-│└─ wordpress/
-├─ package.json
-└─ README.md
-```
-
-### 設計原則
-
-#### 最小限の公開面積
-
-publish 対象は、必要最小限とすること。
-
-### 責務
-
-files は、下記とすること。
-
-```json
-{
-  "files": [
-    "base/",
-    "swift/",
-    "wordpress/",
-    "dist/",
-    "README.md"
-  ]
-}
-```
-
-## 本リポジトリ `package.json` の `scripts` (サブモジュールから npm への転換)
-
-Git サブモジュール運用から npm モジュール運用へ移行するにあたり、**本リポジトリ** (S2J Docs Linter) の `package.json` に定義された `scripts` のうち、見直しが必要になり得るものと、現状のままでよいものを次に整理します。利用側プロジェクトの `scripts` や CI の書き換えは、[npm 使い方ガイド](./npm_usage.md) を参照します。
-
-### 設計意図 (ゴール)
-
-* 本パッケージの CI およびローカル検証が、公開 tarball、CLI、プリセット配置と整合すること。
-* サブモジュール前提の実行パスやワークアラウンドに依存した検証から脱却すること。
-
-### 修正の検討が必要になり得る `scripts`
-
-| スクリプト名 | 見直しの理由 |
+| 区分 | フェーズ1の状態 |
 | --- | --- |
-| `lint` | 現状は `npx textlint` を直接実行している。パッケージ名を `@s2j/docs-linter`、CLI を `s2j-docs-linter` とする本仕様に合わせ、本リポジトリの自己検証でも **公開 CLI と同じコマンド** (例: `s2j-docs-linter` または `npx s2j-docs-linter`) にそろえるかどうかを決める。そろえる場合はコマンドおよび対象パスを [npm 使い方ガイド](./npm_usage.md) の規約に整合させる。 |
-| `lint:wp` | `--config` で参照している `./presets/wordpress/...` は、本仕様の **パッケージ構成** および **`files`** (`base/`、`swift/`、`wordpress/` を tarball に含める想定) へ合わせてディレクトリを再配置する場合、**設定ファイルの相対パスを変更** する。あるいは、ゼロコンフィグ優先の CLI 実行へ置き換える選択肢もある。 |
-| `lint:swift` | 同上により **`--config` のパス** が変わり得る。また、`NODE_PATH=./node_modules` は、親ディレクトリからサブモジュール内のプリセットを `textlint` だけで動かす際の **モジュール解決の回避策** として用いられてきた。npm パッケージとして **`s2j-docs-linter` が依存解決を担う** 形に寄せるなら、当該の環境変数は **削除または簡略化** できる見込み。引き続き、素の `textlint` のみで検証する場合は、hoisting の状況に応じて一時的に残す判断もあり得る。 |
+| 実装済み | `@s2j/docs-linter` メタデータ、`s2j-docs-linter` CLI、`presets/` の tarball 同梱、実行時 `dependencies` 移行、README の npm 手順 (併記) |
+| 未実施 | npm レジストリ初回 publish、`.github/workflows/npm-publish.yml`、`examples/` の npm 版、README の Submodule → レガシー化 (フェーズ2以降) |
 
-上記に伴い、**CLI の実装** (たとえば、`dist/bin/run-textlint.js` が参照するプリセットの相対パス) も、公開ディレクトリ構成と **同じ転換作業の一部** として更新する。
+## 現在の利用状況の分析
 
-### 転換後も原則として変更不要な `scripts`
+### 概要
 
-次の `scripts` は、サブモジュールから npm への転換そのものとは独立し、原則として現行のまま維持してよい。
+既存利用プロジェクトでは、以下の利用形態が確認されています。
 
-* `clean` / `build` / `dev` — ソースから `dist/` を生成するビルド用。
-* `prepare` — `npm publish` や Git 由来の `npm install` におけるビルドおよび `setup-npmignore` の実行。
-* `postinstall` — インストール後の補助処理 (利用側で `ignore-scripts` を使う場合は別問題であり、本仕様のスクリプト文字列の修正とは切り離して扱う)。
-* `install:compat` — npm エンジン互換用。転換とは無関係。
+#### WordPress プロジェクト
+
+Git Submodule 内の各種ファイル/フォルダーに依存しています。
+
+* root `.textlintrc.json`
+* extends:
+  `./tools/docs-linter/presets/base/.textlintrc.base.json`
+* VSCode:
+  `textlint.nodePath=./tools/docs-linter/node_modules`
+* scripts:
+  `git submodule update --remote`
+* scripts:
+  `NODE_PATH=./tools/docs-linter/node_modules`
+* prelint build workflow
+
+#### Swift プロジェクト
+
+Git Submodule 内の各種ファイル/フォルダーに依存しています。
+
+* VSCode:
+  `./tools/docs-linter/presets/swift/.textlintrc.swift.json`
+* scripts:
+  `git submodule update --remote`
+* scripts:
+  `NODE_PATH=./tools/docs-linter/node_modules`
+* prelint build workflow
+
+### 評価
+
+既存プロジェクトは、Docs Linter の内部ディレクトリ構造に依存しています。
+
+これは public API とみなします。
+
+## バージョン管理ポリシー
+
+### 設計意図 (ゴール)
+
+ユーザーが upgrade リスクを判断できるようにします。
 
 ### 設計原則
 
-#### 公開物との一致
-
-本リポジトリの `lint` 系 `scripts` は、ユーザーが実行する CLI、設定パスと **意味上矛盾しない** ように維持すること。
-
-#### サブモジュール特有の回避策の縮小
-
-npm パッケージと公式 CLI を正とし、`NODE_PATH` など **サブモジュール時代のワークアラウンド** は、新しい実行経路では可能な限り用いないこと。
-
-## バージョン
+* 破壊的変更は、(major カウントアップとして) 明示すること。
 
 ### 設計方針 (規約)
 
-semantic バージョニングは、下記とします。
+セマンティック・バージョニングは、下記の通りとします。
 
-* MAJOR
-* MINOR
-* PATCH
-
-### 設計原則
-
-破壊的変更は、明示すること。
+* major
+* minor
+* patch
 
 ## Publishing
 
@@ -239,3 +104,783 @@ publish ワークフローを提供すること。
 ### 非責務
 
 手動による npm ログインの自動化。
+
+### フェーズ1の状態
+
+* tarball 構成 (`npm pack`) は、整備済み。
+* npm レジストリへの初回 publish および tag 連動ワークフローは、**未実施** ([GitHub Actions Publish ワークフロー](#github-actions-publish-ワークフロー) 参照)。
+
+## パッケージ戦略
+
+### 設計意図 (ゴール)
+
+* Docs Linter を、Git サブモジュール依存から脱却させる。
+* GitHub Actions における CI 安定性を向上させる。
+* npm レジストリによるバージョン管理を導入する。
+* S2J ブランド配下の再利用可能な developer ツールとして整備する。
+* Swift / WordPress / 汎用ドキュメント向け lint 基盤として再利用可能にする。
+
+### 設計原則
+
+* 配布方式は、Git clone ではなく、package manager を優先すること。
+* GitHub Actions において、deterministic なインストールを可能にすること。
+* S2J エコシステムのネーミング/パッケージングを統一すること。
+
+### 設計方針 (規約)
+
+* npm パッケージ名は、`@s2j/docs-linter` とする。
+* npm レジストリは、`npmjs.com` を利用する。
+* public パッケージとして公開する。
+* semantic バージョニング (`semver`) を採用する。
+* GitHub リポジトリを、source of truth とする。
+* npm パッケージは、GitHub Actions により、publish 可能な構成とする。
+
+### 非対象 (Out of Scope)
+
+以下は、本仕様の対象外とします。
+
+* GitHub Packages 配布
+* プライベート npm パッケージ化
+* pnpm / yarn 固有対応
+* Docker イメージ配布
+* Git サブモジュール方式の、完全な即時廃止
+
+### 責務
+
+`@s2j/docs-linter` は、以下を提供すること。
+
+* 共通 textlint 設定
+* Swift プリセット
+* WordPress プリセット
+* CLI entrypoint
+* npm パッケージメタデータ
+* publish ワークフロー
+
+### 非責務
+
+以下は、提供対象外。
+
+* Node.js runtime 提供
+* GitHub Actions ワークフロー強制提供
+* IDE プラグイン提供
+* Markdown フォーマッター
+
+## パッケージ ネーミング
+
+### 設計意図 (ゴール)
+
+S2J エコシステム内で一意な、名前空間を確保します。
+
+### 設計原則
+
+* `@s2j/*` 名前空間に統一すること。
+* CLI 名称は、人間可読性を優先すること。
+
+### 設計方針 (規約)
+
+パッケージ名称は、下記とします。
+
+```json
+{
+  "name": "@s2j/docs-linter"
+}
+```
+
+CLI コマンドは、下記とします。
+
+```bash
+s2j-docs-linter
+```
+
+ブランディングは、下記とします。
+
+```text
+S2J Docs Linter
+```
+
+### 責務
+
+package.json は、下記とすること。
+
+```json
+{
+  "bin": {
+    "s2j-docs-linter": "dist/bin/run-textlint.js",
+    "docs-lint": "dist/bin/run-textlint.js"
+  },
+  "main": "dist/bin/run-textlint.js"
+}
+```
+
+* 正式 CLI: `s2j-docs-linter`。
+* 互換 CLI (フェーズ1): `docs-lint` — 既存ドキュメント、スクリプト向け。フェーズ4で削除を検討する。
+
+## パッケージ構成
+
+### 設計方針 (規約)
+
+想定構成は、下記とします。
+
+```text
+docs-linter/
+├─ dist/
+├─ docs/
+├┬─ presets/
+│├─ base/
+│├─ swift/
+│└─ wordpress/
+├─ package.json
+└─ README.md
+```
+
+### 設計原則
+
+* publish 対象は、必要最小限とすること。
+
+### 責務
+
+files は、下記とすること。プリセットは **リポジトリ root 直下の `presets/` 配下** を維持し、`base/`、`swift/`、`wordpress/` を root 直下へ移動しない ([互換性に関する要件](#互換性に関する要件) 参照)。
+
+```json
+{
+  "files": [
+    "dist/",
+    "presets/",
+    "scripts/",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ]
+}
+```
+
+* scripts/ — postinstall 時の WordPress PRH パッチ (scripts/patch-wp-prh-colon-quote.cjs) を同梱する。
+* src/、examples/、docs/ 等は tarball に含めない。
+
+## 本リポジトリ `package.json` の `scripts` (サブモジュールから npm への転換)
+
+Git サブモジュール運用から npm モジュール運用へ移行するにあたり、**本リポジトリ** (S2J Docs Linter) の `package.json` に定義された `scripts` のうち、見直しが必要になり得るものと、現状のままでよいものを次に整理します。利用側プロジェクトの `scripts` や CI の書き換えは、[npm 使い方ガイド](./npm_usage.md) を参照します。
+
+### 設計意図 (ゴール)
+
+* 本パッケージの CI およびローカル検証が、公開 tarball、CLI、プリセット配置と整合すること。
+* サブモジュール前提の実行パスやワークアラウンドに依存した検証から脱却すること。
+
+### 設計原則
+
+* 本リポジトリの `lint` 系 `scripts` は、ユーザーが実行する CLI、設定パスと **意味上矛盾しない** ように維持すること。
+* npm パッケージと公式 CLI を正とし、`NODE_PATH` など **サブモジュール時代のワークアラウンド** は、新しい実行経路では可能な限り用いないこと。
+
+### 修正の検討が必要になり得る `scripts`
+
+| スクリプト名 | フェーズ1の状態 | 今後の見直し |
+| --- | --- | --- |
+| `lint` | **未変更** — `npx textlint` のまま | 公開 CLI `s2j-docs-linter` への統一を検討 (フェーズ1残タスク候補) |
+| `lint:wp` | **未変更** — `./presets/wordpress/...` を直接参照 | プリセット配置は `presets/` 維持のためパス変更不要。`s2j-docs-linter` (デフォルト WP) への置換を検討 |
+| `lint:swift` | **未変更** — `NODE_PATH=./node_modules` 付きで `textlint` 直実行 | CLI 経由へ寄せる場合は `s2j-docs-linter --profile swift` を検討 |
+
+* フェーズ1では **プリセットのディレクトリ再配置 (`base/` 等を root 直下へ移すこと) は行わない**。
+* 上記に伴い、**CLI の実装** (`dist/bin/run-textlint.js`) は、パッケージ root 基準で `presets/` を解決するよう **フェーズ1で更新済み** である ([CLI 互換レイヤ](#cli-互換レイヤ) 参照)。
+
+### 転換後も原則として変更不要な `scripts`
+
+次の `scripts` は、サブモジュールから npm への転換そのものとは独立し、原則として現行のまま維持してよい。
+
+* `clean` / `build` / `dev` — ソースから `dist/` を生成するビルド用。
+* `prepare` — `npm publish` や Git 由来の `npm install` におけるビルドおよび `setup-npmignore` の実行。
+* `postinstall` — インストール後の補助処理 (利用側で `ignore-scripts` を使う場合は別問題であり、本仕様のスクリプト文字列の修正とは切り離して扱う)。
+* `*:compat` — npm エンジン互換用。転換とは無関係。
+
+## npm 配布のための実装修正
+
+### 概要
+
+本章では、S2J Docs Linter を Git サブモジュール運用から npm モジュール運用へ移行するにあたり、既存実装に対して必要となる修正を定義します。
+
+本仕様は、既存実装を全面的に作り直すことを目的とせず、既存資産を最大限活用しつつ npm パッケージとして publish 可能な構成へ拡張することを目的します。
+
+### 設計意図 (ゴール)
+
+* Git サブモジュール依存を削減する
+* npm レジストリ (`npmjs.com`) からインストール可能にする
+* GitHub Actions における CI 安定性を向上させる
+* S2J エコシステムとして再利用可能な developer ツールにする
+* 既存 CLI 実装 (`run-textlint.ts`) を活用する
+
+### 設計原則
+
+* 既存 Git サブモジュールユーザーへの影響を最小化すること。
+* npm install 後に利用可能な構成とすること。
+* CLI を、パッケージの正式 API として扱うこと。
+
+### 設計方針 (規約)
+
+* 既存構造を可能な限り維持する
+* npm パッケージメタデータを package.json に追加する
+* CLI entrypoint を正式サポートする
+* preset config をパッケージに同梱する
+* Git サブモジュール例は、npm 例と併存可能にする
+
+### 非対象 (Out of Scope)
+
+* textlint rule の全面再設計
+* preset rule の大規模な破壊的変更
+* GitHub Packages 対応
+* pnpm 固有最適化
+* Docker イメージ提供
+* モノレポ化
+
+### 責務
+
+* `package.json` を修正すること。
+* CLI コマンドを公開すること。
+* npm publish に対応すること。
+* README / examples を更新すること。
+* GitHub Actions publish ワークフローを追加すること。
+
+### 非責務
+
+* reviewdog 統合
+* VSCode エクステンション
+* IDE プラグイン
+* GitHub Marketplace Action
+
+### フェーズ1実装範囲
+
+| 責務項目 | フェーズ1 |
+| --- | --- |
+| `package.json` の修正 | 済 |
+| CLI コマンドの公開 | 済 (`s2j-docs-linter` / 互換 `docs-lint`) |
+| npm publish に対応する tarball 構成 | 済 (`npm pack` で `presets/` 同梱を確認) |
+| README の更新 | **一部** — Submodule を主導線のまま、npm 手順を方法2として追記・更新 |
+| GitHub Actions publish ワークフロー | 未 |
+| `examples/` の npm 版 | 未 |
+
+## `package.json` メタデータ更新
+
+### 設計意図 (ゴール)
+
+npm パッケージとして publish 可能なメタデータを整備します。
+
+### 設計原則
+
+* npm レジストリ上で、パッケージを識別しやすくすること。
+
+### 実装修正
+
+`package.json` に、下記を反映する (フェーズ1実装済み。`version` は既存 semver を維持し、初回 npm 公開時点では `1.0.10`)。
+
+```json
+{
+  "name": "@s2j/docs-linter",
+  "version": "1.0.10",
+  "description": "Reusable textlint toolkit for Swift, WordPress, and general documentation projects.",
+  "license": "GPL-2.0-or-later",
+  "homepage": "https://github.com/stein2nd/docs-linter#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stein2nd/docs-linter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stein2nd/docs-linter/issues"
+  }
+}
+```
+
+* **ライセンス**: `MIT` ではなく **`GPL-2.0-or-later`** とする。
+
+## CLI Entrypoint 公開
+
+### 設計意図 (ゴール)
+
+ユーザーが、config パスを意識せず、CLI から利用可能にします。
+
+### 設計原則
+
+* ゼロコンフィグ・ファースト (最小操作で利用可能) とすること。
+
+### 実装修正
+
+既存の下記ファイルを、正式 CLI entrypoint とします。
+
+```text
+src/bin/run-textlint.ts
+dist/bin/run-textlint.js
+```
+
+`package.json`:
+
+```json
+{
+  "bin": {
+    "s2j-docs-linter": "dist/bin/run-textlint.js",
+    "docs-lint": "dist/bin/run-textlint.js"
+  },
+  "main": "dist/bin/run-textlint.js"
+}
+```
+
+### CLI 契約 (フェーズ1)
+
+| 項目 | 仕様 |
+| --- | --- |
+| 正式コマンド | `s2j-docs-linter` |
+| 互換コマンド | `docs-lint` (同一実装) |
+| プロファイル | `--profile base \| wordpress \| wp \| swift` |
+| lint 対象 | コマンド末尾の引数 (未指定時は `./README.md` と `./docs/**/*.md`) |
+| 設定の優先順 | 1: プロジェクト直下のユーザー設定 (下記候補) / 2: `--profile` で指定した bundled preset / 3: 未指定時 **WordPress** preset |
+| ユーザー設定候補 | `./.textlintrc`, `./.textlintrc.json`, `./.textlintrc.jsonc`, `./.textlintrc.wp.json`, `./.textlintrc.swift.json`, `./tools/docs-linter/.textlintrc.local.json` |
+
+### 利用例
+
+```bash
+# デフォルト (WordPress preset、対象は README + docs)
+npx s2j-docs-linter
+
+# プロファイルと対象を指定
+npx s2j-docs-linter --profile swift ./README.md ./docs/**/*.md
+
+npx s2j-docs-linter --profile base ./docs/**/*.md
+```
+
+## ファイルスコープの最適化を Publish
+
+### 設計意図 (ゴール)
+
+不要ファイルを npm パッケージに含めません。
+
+### 設計原則
+
+* 必要最小限のみ公開すること。
+
+### 実装修正
+
+`package.json`:
+
+```json
+{
+  "files": [
+    "dist/",
+    "presets/",
+    "scripts/",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ]
+}
+```
+
+* `presets/` 配下に `base/`、`swift/`、`wordpress/` を含める。
+* root 直下の `base/` 等への再配置は、互換性優先のためフェーズ1では行わない。
+
+下記は、除外対象です。
+
+* src/
+* examples/
+* docs/
+* tsconfig.json
+* vite.config.ts
+
+## 移行のワークフロー例
+
+### 設計意図 (ゴール)
+
+`examples/` のワークフローを、Submodule 前提から npm インストール前提に、段階的に更新します。
+
+### 設計方針 (規約)
+
+* フェーズ1: 本リポジトリの CLI / tarball は利用可能。`examples/` は **未更新** のまま併存可。
+* フェーズ1残タスク … 各 example の lint ステップを `npx s2j-docs-linter` に寄せる (Submodule 併記は可)。
+* 廃止目標 (example 内) … Submodule 専用の `--config tools/docs-linter/...` 直指定。
+* 推奨 (example 内) … `run: npx s2j-docs-linter docs/**/*.md` または `--profile swift`。
+
+### 実装修正: フェーズ1の状態
+
+* **未実施** — `examples/lint-docs.yml` 等は、Submodule / 旧パッケージ名の記述が残る。
+* フェーズ1の本リポジトリ実装 (CLI、tarball) は完了しており、利用側は次のコマンドで lint 可能。
+
+```bash
+npx s2j-docs-linter docs/**/*.md
+npx s2j-docs-linter --profile swift docs/**/*.md
+```
+
+### 実装修正: フェーズ1残タスク
+
+| ファイル | 変更方針 |
+| --- | --- |
+| `examples/lint-docs.yml` | Submodule 取得と npm 併用のまま、lint ステップを `npx s2j-docs-linter` に寄せる案を追加 |
+| `examples/lint-docs.swift.yml` | `--profile swift` 利用例を追加 |
+| `examples/lint-docs.wp.yml` | デフォルト (WordPress) または明示的 WP 利用例を追加 |
+
+* **廃止する記述例** (Submodule 専用の config 直指定):
+
+```yaml
+--config tools/docs-linter/.textlintrc.json
+```
+
+* **推奨する記述例**:
+
+```yaml
+run: npx s2j-docs-linter docs/**/*.md
+```
+
+## 互換性に関する、移行戦略
+
+### 設計意図 (ゴール)
+
+* 既存プロジェクトの CI / VSCode / local lint ワークフローを壊さない
+* Swift / WordPress の既存運用を維持する
+* npm モジュール化への段階移行を可能にする
+* 移行コストを最小化する
+* 破壊的変更を抑制する
+
+### 設計原則
+
+* 既存利用プロジェクトを優先すること。
+* 一括移行ではなく、段階移行とすること。
+* パッケージ内部構造は、既存構造を極力維持すること。
+
+### 設計方針 (規約)
+
+* Git Submodule ユーザーを、即時切り捨てしない
+* npm パッケージと Git Submodule を一定期間、併存させる
+* パッケージ内部構造は、可能な限り維持する
+* プリセットパスの互換性を優先する
+* CLI 互換性を維持する
+
+### 非対象 (Out of Scope)
+
+* Git Submodule 利用の即時廃止
+* プリセットパスの、即時の全面変更
+* VSCode 設定の、即時の全面変更
+* NODE_PATH 依存の、即時の完全除去
+
+### 責務
+
+本方針で対応すること。
+
+* プリセットパスの互換性
+* CLI の移行パス
+* GitHub Actions 移行ガイド
+* VSCode 移行ガイド
+
+### 非責務
+
+本方針で対応しないこと。
+
+* レガシーワークフローの永久維持
+* 非推奨 API の無期限維持
+
+## 互換性に関する要件
+
+### 設計意図 (ゴール)
+
+既存設定の変更を、最小限に抑えます。
+
+### 必須の互換要件
+
+#### プリセットレイアウトの互換性
+
+以下のパスを維持します。
+
+```text
+presets/base/.textlintrc.base.json
+presets/swift/.textlintrc.swift.json
+presets/wordpress/.textlintrc.wp.json
+```
+
+#### `package.json` Node 解決の互換性
+
+利用側の `package.json` では、下記のような利用を、移行期間中、許容します。
+
+```bash
+NODE_PATH=./node_modules
+```
+
+#### `.textlintrc.json` 設定の互換性
+
+利用側の既存 `.textlintrc.json` は、下記のようになっています。
+
+```json
+{
+  "extends": ["./tools/docs-linter/presets/base/.textlintrc.base.json"]
+}
+```
+
+npm パッケージ化後、利用側の `.textlintrc.json` は、下記のように変わります。
+
+```json
+{
+  "extends": ["./node_modules/@s2j/docs-linter/presets/base/.textlintrc.base.json"]
+}
+```
+
+この移行だけで、動作可能とします。
+
+## CLI 互換レイヤ
+
+### 設計意図 (ゴール)
+
+Git サブモジュール前提の、固定パス依存を除去し、config パス指定なしでも利用可能にします。
+
+### 設計原則
+
+* パッケージ単体で動作可能にすること。
+
+### 設計方針 (規約)
+
+下記の CLI を提供します。
+
+```bash
+s2j-docs-linter
+```
+
+### 移行パス
+
+利用側の既存 `package.json` の `scripts > lint:docs` は、下記のようになっています。
+
+```bash
+textlint --config ./.textlintrc.json
+```
+
+あるいは、下記のように、docs-linter 内のプリセットを明示指定しています。
+
+```bash
+textlint --config ./tools/docs-linter/presets/swift/.textlintrc.swift.json
+```
+
+npm パッケージ化後、利用側の `package.json` の `scripts > lint:docs` は、下記のように変わります。
+
+```bash
+s2j-docs-linter
+```
+
+あるいは、下記のように、プロファイルと、対象ファイルを明示指定します。
+
+```bash
+s2j-docs-linter --profile swift ./README.md ./docs/**/*.md
+```
+
+### CLI 内部の config 解決 (フェーズ1実装)
+
+CLI は、**パッケージ root** (`package.json` があるディレクトリ) 基準で bundled preset を解決します。Submodule 配置 (`tools/docs-linter/`) と npm 配置 (`node_modules/@s2j/docs-linter/`) の両方で同じ相対構造が成り立ちます。
+
+```ts
+const packageRoot = path.resolve(__dirname, "../..");
+const presetWp = path.resolve(
+  packageRoot,
+  "presets/wordpress/.textlintrc.wp.json"
+);
+```
+
+* **禁止するもの** (CLI 実装):
+  * bundled preset の解決に `tools/docs-linter/...` など **利用側ワークスペース固定パス** をハードコードすること。
+* **許容するもの** (ユーザー設定):
+  * プロジェクト直下、または `./tools/docs-linter/.textlintrc.local.json` にユーザーが置いた設定を、既存 Submodule ユーザー向けに探索候補とすること。
+
+### デフォルト preset
+
+ユーザー設定と `--profile` がどちらも未指定の場合、CLI のデフォルトは、**WordPress** preset (`presets/wordpress/.textlintrc.wp.json`) とします。
+
+### NODE_PATH (移行期間)
+
+CLI 実行時、内部で下記を `NODE_PATH` に連結します ([互換性に関する、移行戦略](#互換性に関する移行戦略) の非対象「即時の完全除去」に従い、フェーズ1では維持)。
+
+1. `{packageRoot}/node_modules`
+2. `{cwd}/node_modules`
+3. (あれば) 既存の `process.env.NODE_PATH`
+
+## VSCode 互換戦略
+
+### 設計意図 (ゴール)
+
+editor ワークフローを壊しません。
+
+### 移行
+
+利用側の既存 `.vscode/settings.json` は、下記のようになっています。
+
+```json
+"textlint.configPath": "./tools/docs-linter/presets/swift/.textlintrc.swift.json"
+"textlint.nodePath": "./tools/docs-linter/node_modules"
+```
+
+npm パッケージ化後、利用側の `.vscode/settings.json` は、下記のように変わります。
+
+```json
+"textlint.configPath": "./node_modules/@s2j/docs-linter/presets/swift/.textlintrc.swift.json"
+"textlint.nodePath": "./node_modules"
+```
+
+## CI 互換戦略
+
+### 設計意図 (ゴール)
+
+既存 GitHub Actions を最小変更で移行可能にします。
+
+### 移行
+
+利用側の既存 `package.json` の `scripts > prelint:docs` は、下記のようになっています。
+
+```yaml
+git submodule update --remote --merge
+```
+
+削除。
+
+---
+
+利用側の既存 `package.json` の `scripts > postinstall` は、下記のようになっています。
+
+```bash
+cd tools/docs-linter && npm install
+```
+
+削除。
+
+npm パッケージ化後、利用側 CI の依存インストールは、下記のように簡素化できます。
+
+```bash
+npm ci
+```
+
+---
+
+利用側の既存 `package.json` の `scripts > lint:docs` は、下記のようになっています。
+
+```bash
+NODE_PATH=./tools/docs-linter/node_modules
+```
+
+npm パッケージ化後、利用側の `package.json` の `scripts > lint:docs` は、下記のように変わります。
+
+```bash
+NODE_PATH=./node_modules
+```
+
+### 評価
+
+CI の複雑さを大幅削減できます。
+
+## GitHub Actions Publish ワークフロー
+
+### 設計意図 (ゴール)
+
+tag push で npm publish 可能にします。
+
+### 設計原則
+
+* 手動 publish 作業を最小化すること。
+
+### 実装修正
+
+新規に、下記概要のワークフローファイル `.github/workflows/npm-publish.yml` を追加します。
+
+* tag trigger
+* setup-node
+* npm ci
+* npm publish --access public
+
+## 依存関係レビュー
+
+### 設計意図 (ゴール)
+
+runtime 依存関係を明確化します。
+
+### 設計原則
+
+* CLI 実行時に必要な依存を、dependencies に移すこと。
+
+### 実装修正
+
+フェーズ1で、実行時に必要なパッケージは **`dependencies`** に、ビルド専用は **`devDependencies`** に分離します (実装済み)。
+
+* devDependencies (例):
+  * `typescript`
+  * `vite`
+  * `rollup`
+  * `@types/node`
+  * build tools
+* dependencies (例):
+  * `textlint`
+  * textlint ルール、フィルター、プリセット (`textlint-rule-*`, `textlint-rule-preset-*`, `@textlint-ja/*` 等)
+  * GitHub 参照プリセット (`textlint-rule-preset-swift-docs-ja`, `textlint-rule-preset-wp-docs-ja`)
+  * required plugins
+  * required presets
+
+## 移行戦略 - 非推奨化ポリシー
+
+### 設計意図 (ゴール)
+
+既存ユーザーの移行負荷を抑えます。
+
+### 設計原則
+
+* 破壊的移行を避け、段階的移行を優先すること。
+
+### 設計方針 (規約)
+
+1. フェーズ1: Git Submodule と npm パッケージを併存する
+2. フェーズ2: npm パッケージをデフォルト化する
+3. フェーズ3: Git Submodule を非推奨化する
+4. フェーズ4: レガシー機能の削除
+
+### フェーズ1で完了した項目
+
+* `@s2j/docs-linter` としての `package.json` メタデータ
+* CLI `s2j-docs-linter` (互換 `docs-lint`)
+* `presets/` レイアウトの維持と tarball 同梱
+* 実行時 `dependencies` への移行
+* README への npm 手順の併記 (Submodule は引き続き主導線)
+
+### フェーズ1の残タスク (本リポジトリ)
+
+* `.github/workflows/npm-publish.yml` と npmjs への初回 publish
+* `examples/lint-docs*.yml` の npm 併記
+* 本リポジトリ `lint` / `lint:wp` / `lint:swift` の `s2j-docs-linter` への統一 (任意)
+
+## README 移行
+
+### 設計意図 (ゴール)
+
+導入方法を、段階的に npm install 中心に移行します。
+フェーズ1では、Git Submodule を主導線のまま npm 手順を併記します。
+フェーズ2以降で、README のデフォルトを npm に切り替えます。
+
+### 設計方針 (規約)
+
+| フェーズ | README の到達度 |
+| --- | --- |
+| フェーズ1 (実装済み) | 方法1 (Git Submodule) を主導線。方法2 (npm) に `@s2j/docs-linter` / `s2j-docs-linter` / `--profile` を併記。互換 CLI `docs-lint` に言及可。 |
+| フェーズ2以降 (未実施) | デフォルト導線を npm に変更。Submodule 手順をレガシー appendix に移動。 |
+
+フェーズ1で利用側に示す npm 導入の最小例は、下記の通りです。
+
+```bash
+npm install --save-dev @s2j/docs-linter
+npx s2j-docs-linter --profile swift ./README.md ./docs/**/*.md
+```
+
+### 実装修正: フェーズ1 (実装済み)
+
+* **方法1: (Git Submodule)** を README の主導線のまま維持する。
+* **方法2: (npm パッケージ)** を追記/更新し、`@s2j/docs-linter` と `s2j-docs-linter` / `--profile` を記載する。
+* 互換 CLI 名 `docs-lint` に言及してよい。
+
+```bash
+npm install --save-dev @s2j/docs-linter
+npx s2j-docs-linter --profile swift ./README.md ./docs/**/*.md
+```
+
+### 実装修正: フェーズ2以降 (未実施)
+
+* README のデフォルト導線を npm install に変更する。
+* Submodule 手順は、レガシーとして appendix へ移動する。
+
+```bash
+# フェーズ2 以降: メイン導線
+npm install --save-dev @s2j/docs-linter
+
+# レガシー (フェーズ3 で非推奨化)
+git submodule add https://github.com/stein2nd/docs-linter.git tools/docs-linter
+```
