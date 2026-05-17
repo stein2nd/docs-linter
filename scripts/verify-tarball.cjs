@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 /**
  * Verify npm pack tarball contents for @s2j/docs-linter (phase 1 publishing).
+ *
+ * Default: pack into a temp directory (no repo pollution).
+ * --from-artifacts: verify ./artifacts/s2j-docs-linter-<version>.tgz (after npm run pack:artifact).
  */
 const { execSync } = require("node:child_process");
-const { existsSync, mkdtempSync, readFileSync, rmSync } = require("node:fs");
+const { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync } = require("node:fs");
 const { join } = require("node:path");
 const { tmpdir } = require("node:os");
 
@@ -29,8 +32,59 @@ function fail(message) {
   process.exit(1);
 }
 
+function verifyTarballListing(tarballPath) {
+  const listing = execSync(`tar -tzf "${tarballPath}"`, { encoding: "utf8" })
+    .split("\n")
+    .filter(Boolean);
+
+  for (const required of REQUIRED_PATHS) {
+    if (!listing.includes(required)) {
+      fail(`missing required path in tarball: ${required}`);
+    }
+  }
+
+  for (const entry of listing) {
+    for (const forbidden of FORBIDDEN_PREFIXES) {
+      if (entry.startsWith(forbidden)) {
+        fail(`forbidden path in tarball: ${entry}`);
+      }
+    }
+  }
+
+  if (!listing.includes("package/package.json")) {
+    fail("missing package/package.json in tarball");
+  }
+
+  console.log(`✅ tarball verified (${listing.length} entries, ${tarballPath})`);
+}
+
+function resolveArtifactTarball(version) {
+  const artifactsDir = join(process.cwd(), "artifacts");
+  const expectedName = `s2j-docs-linter-${version}.tgz`;
+  const expectedPath = join(artifactsDir, expectedName);
+  if (existsSync(expectedPath)) {
+    return expectedPath;
+  }
+
+  if (!existsSync(artifactsDir)) {
+    fail(`artifacts directory not found: ${artifactsDir} (run npm run pack:artifact first)`);
+  }
+
+  const matches = readdirSync(artifactsDir).filter((name) => name.endsWith(".tgz"));
+  if (matches.length === 1) {
+    return join(artifactsDir, matches[0]);
+  }
+
+  fail(
+    `expected tarball not found: ${expectedPath}` +
+      (matches.length ? ` (found: ${matches.join(", ")})` : "")
+  );
+}
+
 function main() {
+  const fromArtifacts = process.argv.includes("--from-artifacts");
   const pkg = JSON.parse(readFileSync("package.json", "utf8"));
+
   if (pkg.name !== "@s2j/docs-linter") {
     fail(`expected package name @s2j/docs-linter, got ${pkg.name}`);
   }
@@ -41,8 +95,12 @@ function main() {
     fail("package.json.bin.s2j-docs-linter is required");
   }
 
+  if (fromArtifacts) {
+    verifyTarballListing(resolveArtifactTarball(pkg.version));
+    return;
+  }
+
   const workDir = mkdtempSync(join(tmpdir(), "docs-linter-pack-"));
-  let tarballPath;
 
   try {
     const packOutput = execSync(`npm pack --pack-destination "${workDir}"`, {
@@ -50,37 +108,13 @@ function main() {
       stdio: ["ignore", "pipe", "inherit"]
     });
     const tarballName = packOutput.trim().split("\n").pop();
-    tarballPath = join(workDir, tarballName);
+    const tarballPath = join(workDir, tarballName);
     if (!existsSync(tarballPath)) {
       fail(`tarball not found: ${tarballPath}`);
     }
-
-    const listing = execSync(`tar -tzf "${tarballPath}"`, { encoding: "utf8" })
-      .split("\n")
-      .filter(Boolean);
-
-    for (const required of REQUIRED_PATHS) {
-      if (!listing.includes(required)) {
-        fail(`missing required path in tarball: ${required}`);
-      }
-    }
-
-    for (const entry of listing) {
-      for (const forbidden of FORBIDDEN_PREFIXES) {
-        if (entry.startsWith(forbidden)) {
-          fail(`forbidden path in tarball: ${entry}`);
-        }
-      }
-    }
-
-    const pkgJsonPath = "package/package.json";
-    if (!listing.includes(pkgJsonPath)) {
-      fail("missing package/package.json in tarball");
-    }
-
-    console.log(`✅ tarball verified (${listing.length} entries, ${tarballPath})`);
+    verifyTarballListing(tarballPath);
   } finally {
-    if (workDir && existsSync(workDir)) {
+    if (existsSync(workDir)) {
       rmSync(workDir, { recursive: true, force: true });
     }
   }
