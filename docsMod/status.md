@@ -109,6 +109,60 @@
 | GitHub Actions publish ワークフロー | 設計済み | 100 | [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml) — registry 運用はフェーズ2 |
 | npm 認証・シークレット管理 (文書) | 済 | 100 | [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) — フェーズ2 OIDC 推奨 |
 
+### フェーズ2: サマリー
+
+フェーズ2では、S2J Docs Linter (`@s2j/docs-linter`) の **GitHub Actions を用いた npm Registry 自動 publish 基盤の構築** を対象とする。
+
+フェーズ1で package 自体の成立性を確認したうえで、フェーズ2では以下を実現する。
+
+* GitHub tag push による publish automation
+* npm organization (`s2j`) への正式 package 登録
+* GitHub Actions release workflow の整備
+* npm authentication の CI 統合
+* release artifact 管理
+* publish 運用の標準化
+
+フェーズ2完了時点で、S2J Docs Linter は **GitHub リポジトリを source of truth とし、npm リポジトリに継続的にリリース可能な OSS パッケージ** となる。
+
+### フェーズ2優先タスクと完了条件の対応
+
+| 優先 | タスク | 完了条件 |
+|------|--------|----------|
+| P0 | npm authentication integration | GitHub Actions から npm publish 認証成功 |
+| P0 | publish workflow implementation | tag push で publish workflow 起動 |
+| P0 | `@s2j/docs-linter` initial publish | npmjs.com organization `s2j` に package 登録成功 |
+| P1 | release artifact generation | tarball artifact を GitHub Actions で保存可能 |
+| P1 | workflow verification | test tag で publish dry-run 成功 |
+| P2 | trusted publishing migration design | NPM_TOKEN から OIDC への移行方針定義 |
+
+### フェーズ2完了条件
+
+以下をすべて満たした場合、フェーズ2完了とする。
+
+#### 必須
+
+* `@s2j/docs-linter` が npm registry に公開されている
+* npm organization `s2j` に package が表示される
+* GitHub Actions workflow から publish が成功する
+* GitHub Actions 上で `npm ci` → `npm publish` が再現可能
+* publish artifact (`.tgz`) が version 単位で生成可能
+
+#### 推奨
+
+* GitHub Actions 上で `npm publish --dry-run` テストが可能
+* release workflow documentation が README / docs に反映済
+* publish secret / auth strategy が仕様化済
+
+#### 将来拡張（フェーズ3候補）
+
+以下はフェーズ2完了条件には含めない。
+
+* npm Trusted Publishing (OIDC)
+* semantic-release
+* automatic changelog generation
+* dist-tag management
+* prerelease channel
+
 ### 機能一覧 (実装状況サマリー)
 
 | 機能名 (仕様セクション) | 実装済み/未実装 | 実装％ | 完了条件 (要約) | 備考 |
@@ -186,6 +240,173 @@
 | 1 | npmjs への初回 `npm publish --access public` | **必須** (フェーズ1クローズ) | 0 | #11 — `npm view @s2j/docs-linter version` が `1.0.10` |
 | 2 | 利用側プロジェクトでの受け入れ試験 | 推奨 | 0 | #12 — Submodule 併存のまま `npx s2j-docs-linter` と VSCode 互換パスが動作 |
 | 3 | GHA からの tag 連動 publish 運用 | フェーズ2 | 0 | 初回手動 publish 後: (A) GitHub Secret `NPM_TOKEN` + 現行ワークフロー、または (B) [npm trusted publishing (OIDC)](./npm_auth_secret_manage_spec.md#4-フェーズ2-npm-trusted-publishing-推奨) へ移行 |
+
+### フェーズ2で完了した項目
+
+※ 進捗に応じて更新
+
+### フェーズ2で完了した主な変更 (コード・文書)
+
+※ 実装後に追記
+
+#### コード
+
+* `.github/workflows/npm-publish.yml`
+* `package.json`
+* release scripts
+* publish verification scripts
+
+#### 文書
+
+* `docsMod/npm_auth_spec.md`
+* `docsMod/npm_package_spec.md`
+* `docsMod/npm_usage.md`
+* `README.md`
+
+### フェーズ2の残タスク
+
+#### 1. GitHub Actions Publish Workflow 実装
+
+対象:
+
+```text
+.github/workflows/npm-publish.yml
+```
+
+内容:
+
+* tag trigger
+* setup-node
+* npm ci
+* npm publish
+* artifact upload
+
+状態:
+
+* 未着手
+
+#### 2. GitHub Secret Integration
+
+対象:
+
+GitHub repository settings
+
+内容:
+
+* `NPM_TOKEN` 登録
+* Actions permissions review
+
+状態:
+
+* 未着手
+
+#### 3. Initial Package Publish
+
+対象:
+
+npmjs.com
+
+内容:
+
+初回:
+
+```text
+@s2j/docs-linter
+```
+
+publish 成功
+
+状態:
+
+* 未着手
+
+#### 4. Publish Dry Run Workflow Verification
+
+対象:
+
+GitHub Actions
+
+内容:
+
+以下成功:
+
+```bash
+npm publish --dry-run --access public
+```
+
+状態:
+
+* 未着手
+
+#### 5. Release Artifact Retention
+
+対象:
+
+GitHub Actions artifact
+
+内容:
+
+保存先:
+
+```text
+./artifacts
+```
+
+artifact:
+
+```text
+s2j-docs-linter-x.y.z.tgz
+```
+
+状態:
+
+* 未着手
+
+#### 6. Trusted Publishing 移行設計
+
+対象:
+
+npm auth strategy
+
+内容:
+
+NPM_TOKEN 依存から OIDC への移行
+
+状態:
+
+設計のみ
+
+優先度:
+
+フェーズ3
+
+### フェーズ2のマイルストーン
+
+#### M1
+
+GitHub Actions で:
+
+```bash
+npm publish --dry-run
+```
+
+成功
+
+#### M2
+
+test tag push で workflow success
+
+#### M3
+
+`@s2j/docs-linter` 初回 publish
+
+#### M4
+
+artifact retention 確立
+
+#### M5
+
+フェーズ2完了
 
 ### 補足
 
