@@ -84,7 +84,7 @@
 | 13 | root 互換レイアウト (`base/` `swift/` `wordpress/` を tarball 同梱) | **済** | 100 | ビルド時ミラー + `verify:tarball` の `package/swift/.textlintrc.swift.json` 等 |
 | 14 | VSCode / `extends` の移行ガイド ([npm_usage.md](./npm_usage.md)) | **済** | 100 | Submodule → `node_modules/@s2j/docs-linter/{swift,presets/*,base}/` の before/after |
 | 15 | 移行のワークフロー例 (`examples/` + `lint:docs` 移行ドキュメント) | **済** | 100 | [examples/lint-docs*.yml](../examples/lint-docs.yml) の `npx s2j-docs-linter`；[npm_usage.md](./npm_usage.md) の Submodule → npm 表 |
-| 16 | バージョン付き tarball を `./artifacts/` に生成・検証（リポジトリ root 非汚染） | **済** | 100 | `npm run verify:artifact` → `artifacts/s2j-docs-linter-1.0.10.tgz`；`.gitignore` に `artifacts/`；GHA `upload-artifact` |
+| 16 | バージョン付き tarball を `./artifacts/` に生成・検証 (リポジトリ root 非汚染) | **済** | 100 | `npm run verify:artifact` → `artifacts/s2j-docs-linter-1.0.10.tgz`；`.gitignore` に `artifacts/`；GHA `upload-artifact` |
 
 **集計**: 完了 **14 / 16** (実装％ **88%**)。本リポジトリ責務 (#1–10, #13–16) は **14 / 14 (100%)**。
 
@@ -153,7 +153,7 @@
 * release workflow documentation が README / docs に反映済
 * publish secret / auth strategy が仕様化済
 
-#### 将来拡張（フェーズ3候補）
+#### 将来拡張 (フェーズ3候補)
 
 以下はフェーズ2完了条件には含めない。
 
@@ -221,7 +221,7 @@
 | `package.json` | publish 用 scripts (`pack:artifact` 等)、`files` に root ミラー、`build` にミラー生成、`bin.docs-lint` | #5–8, #16 |
 | `tsconfig.build.json` | 本番ビルド用 (`noEmit: false`、`dist/` 出力) | #8 |
 | `scripts/verify-tarball.cjs` | 必須・禁止パス検証；`--from-artifacts` で `./artifacts/` を検証 | #4, #9, #16 |
-| `.gitignore` | `artifacts/` を追加（root への tarball 流出防止） | #16 |
+| `.gitignore` | `artifacts/` を追加 (root への tarball 流出防止) | #16 |
 | `src/scripts/link-preset-layout-compat.ts` | ビルド時に `presets/*` → root `base/` `swift/` `wordpress/` をミラー | #13 |
 | `examples/lint-docs*.yml` | lint ステップを `npx s2j-docs-linter` に更新、npm / `npm_usage` 導線コメント | #15 |
 | `README.md` | 方法2 (npm) を `@s2j/docs-linter` / `s2j-docs-linter` に更新、`npm_usage.md` へ導線 | #10 |
@@ -243,11 +243,11 @@
 
 ### フェーズ2で完了した項目
 
-※ 進捗に応じて更新
+進捗に応じて更新します。
 
 ### フェーズ2で完了した主な変更 (コード・文書)
 
-※ 実装後に追記
+実装後に追記します。
 
 #### コード
 
@@ -265,148 +265,54 @@
 
 ### フェーズ2の残タスク
 
-#### 1. GitHub Actions Publish Workflow 実装
+#### 1. GitHub Actions Publish ワークフローの実装
 
-対象:
+下記を内容とする、`.github/workflows/npm-publish.yml` を実装します。未着手です。
 
-```text
-.github/workflows/npm-publish.yml
-```
-
-内容:
-
-* tag trigger
+* tag をトリガーとする
 * setup-node
 * npm ci
 * npm publish
-* artifact upload
+* artifact のアップロード
 
-状態:
+#### 2. GitHub Secret 連携
 
-* 未着手
-
-#### 2. GitHub Secret Integration
-
-対象:
-
-GitHub repository settings
-
-内容:
+下記を内容とする、GitHub リポジトリの設定で `NPM_TOKEN` を登録します。未着手です。
 
 * `NPM_TOKEN` 登録
-* Actions permissions review
+* Actions 権限の確認
 
-状態:
+#### 3. パッケージの初回 Publish
 
-* 未着手
+下記を内容とし、npmjs.com を対象とします。未着手です。
 
-#### 3. Initial Package Publish
+* 初回 `@s2j/docs-linter` publish が成功
 
-対象:
+#### 4. Publish Dry-Run ワークフローの検証
 
-npmjs.com
+下記を内容とし、GitHub Actions を対象とします。未着手です。
 
-内容:
+* `npm publish --dry-run --access public` が成功
 
-初回:
+#### 5. リリース Artifact の保持
 
-```text
-@s2j/docs-linter
-```
+下記のような、GitHub Actions artifact を所定の保存先 `./artifacts` に保村します。未着手です。
 
-publish 成功
-
-状態:
-
-* 未着手
-
-#### 4. Publish Dry Run Workflow Verification
-
-対象:
-
-GitHub Actions
-
-内容:
-
-以下成功:
-
-```bash
-npm publish --dry-run --access public
-```
-
-状態:
-
-* 未着手
-
-#### 5. Release Artifact Retention
-
-対象:
-
-GitHub Actions artifact
-
-内容:
-
-保存先:
-
-```text
-./artifacts
-```
-
-artifact:
-
-```text
-s2j-docs-linter-x.y.z.tgz
-```
-
-状態:
-
-* 未着手
+* artifact: `s2j-docs-linter-x.y.z.tgz`
 
 #### 6. Trusted Publishing 移行設計
 
-対象:
+フェーズ3に向けて、下記を内容とした、npm auth 戦略を設計します。
 
-npm auth strategy
-
-内容:
-
-NPM_TOKEN 依存から OIDC への移行
-
-状態:
-
-設計のみ
-
-優先度:
-
-フェーズ3
+* NPM_TOKEN 依存から OIDC への移行
 
 ### フェーズ2のマイルストーン
 
-#### M1
-
-GitHub Actions で:
-
-```bash
-npm publish --dry-run
-```
-
-成功
-
-#### M2
-
-test tag push で workflow success
-
-#### M3
-
-`@s2j/docs-linter` 初回 publish
-
-#### M4
-
-artifact retention 確立
-
-#### M5
-
-フェーズ2完了
+1. M1: GitHub Actions で `npm publish --dry-run` 成功
+2. M2: test tag push で workflow success
+3. M3: `@s2j/docs-linter` 初回 publish
+4. M4: artifact retention 確立
+5. M5: フェーズ2完了
 
 ### 補足
 
@@ -419,8 +325,8 @@ artifact retention 確立
     * publish tarball にのみ同梱。
 * **tarball artifact**:
     * 実 tarball は `npm run pack:artifact` で `./artifacts/s2j-docs-linter-<version>.tgz` に出力。
-    * `artifacts/` は `.gitignore` 対象。リポジトリ root の `*.tgz` も gitignore 済み（旧来の root 出力は手動削除可）。
-    * GHA では tag push 時に `upload-artifact` で `s2j-docs-linter-<tag>` として保存（registry 運用開始前でも tarball 履歴を追跡可能）。
+    * `artifacts/` は `.gitignore` 対象。リポジトリ root の `*.tgz` も gitignore 済み (旧来の root 出力は手動削除可)。
+    * GHA では tag push 時に `upload-artifact` で `s2j-docs-linter-<tag>` として保存 (registry 運用開始前でも tarball 履歴を追跡可能)。
 * **postinstall**:
     * フェーズ1 scripts 仕様の非対象。
     * 現状は `setup-npmignore` と `scripts/patch-wp-prh-colon-quote.cjs` を実行。
