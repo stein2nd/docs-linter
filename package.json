@@ -62,7 +62,7 @@
   },
   "dependencies": {
     "@textlint-ja/textlint-rule-no-synonyms": "^1.3.0",
-    "textlint": "^15.7.0",
+    "textlint": "^15.7.1",
     "textlint-filter-rule-allowlist": "^4.0.0",
     "textlint-filter-rule-comments": "^1.3.0",
     "textlint-rule-ja-hiragana-keishikimeishi": "^1.1.0",
@@ -71,7 +71,7 @@
     "textlint-rule-ja-space-around-code": "^2.4.2",
     "textlint-rule-ja-space-between-half-and-full-width": "^2.4.2",
     "textlint-rule-max-kanji-continuous-len": "^1.1.1",
-    "textlint-rule-no-dead-link": "^6.2.1",
+    "textlint-rule-no-dead-link": "^6.2.2",
     "textlint-rule-no-doubled-joshi": "^5.1.1",
     "textlint-rule-no-dropping-the-ra": "^3.0.0",
     "textlint-rule-no-mixed-zenkaku-and-hankaku-alphabet": "^1.0.1",
@@ -83,9 +83,9 @@
     "textlint-rule-terminology": "^5.2.16"
   },
   "devDependencies": {
-    "@types/node": "^25.8.0",
+    "@types/node": "^25.9.1",
     "rollup": "^4.60.4",
     "typescript": "^6.0.3",
-    "vite": "^8.0.13"
+    "vite": "^8.0.14"
   }
 }
