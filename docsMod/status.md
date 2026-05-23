@@ -4,7 +4,7 @@
 
 **移行フェーズ**は [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) に従い、現時点は **フェーズ1** (Git Submodule と npm パッケージの併存) です。
 
-最終更新 …**2026-05-18** — [Publishing (パッケージ構成)](./npm_package_spec.md#publishing-パッケージ構成---フェーズ1優先タスク) を反映 (`pack:artifact` / `verify:artifact`、`artifacts/`、GHA `upload-artifact`)。`@s2j/docs-linter@1.0.10`、tarball **22 entries**、ローカル検証一式成功。
+最終更新 …**2026-05-23** — ローカル `npm publish --dry-run --access public` を再確認 (tarball **22 entries**、25.0 kB / 83.2 kB unpacked)。`npm publish --access public` は、**`ENEEDAUTH`** (npmjs 未ログイン) で停止。パッケージ構成・ビルドは、publish 可能。**#11は、認証待ち**。
 
 ### 仕様書 (参照元)
 
@@ -34,12 +34,12 @@
 | GHA publish ワークフロー | **設計済み** — [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml) (`verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish`；registry 運用はフェーズ2) |
 | publish 認証方針 (文書) | **済** — [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) (フェーズ2 OIDC を推奨) |
 | README / npm_usage / examples 整合 | **済** — install・CLI・`lint:docs` 移行例・VSCode/`extends`・CI サンプルを一致 |
-| npm レジストリ公開 | **未** — 手動 `npm publish --access public` 待ち (#11) |
+| npm レジストリ公開 | **未** (認証待ち) — 2026-05-23: dry-run 成功、`npm publish --access public` は `ENEEDAUTH` (#11) |
 
 | 区分 (仕様書) | フェーズ1の状態 |
 | --- | --- |
 | 実装済み | メタデータ、CLI、`scripts` 整理、tarball 検証 (22 entries)、**`pack:artifact` / `artifacts/`**、root 互換レイアウト、`examples/`・[npm_usage.md](./npm_usage.md) 整合、GHA 雛形 (`upload-artifact` 含む)、[npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) |
-| 未実施 | npmjs への初回 publish (#11)、利用側受け入れ試験 (#12)、GHA からの registry 運用開始 (フェーズ2)、README の Submodule → レガシー化 (フェーズ2以降) |
+| 未実施 | npmjs への初回 publish (#11 — tarball 準備済み、npm 認証のみ未)、利用側受け入れ試験 (#12)、GHA からの registry 運用開始 (フェーズ2)、README の Submodule → レガシー化 (フェーズ2以降) |
 
 **実装％の算出**
 
@@ -61,16 +61,16 @@
 | [npm 使い方ガイド整合](./npm_package_spec.md#npm-使い方ガイド-との整合---フェーズ1優先タスク) | #3, #10 | 済 | 100 |
 | [GitHub Actions Publish](./npm_package_spec.md#github-actions-publish-ワークフロー---フェーズ1優先タスク) | #16 (artifact 保持) | 済 (設計) | 100 |
 | [npm 認証・シークレット管理](./npm_auth_secret_manage_spec.md) (文書) | — | 済 (方針) | 100 |
-| (運用) レジストリ公開・受け入れ試験 | #11–12 | 未 | 0 |
+| (運用) レジストリ公開・受け入れ試験 | #11–12 | 未 (#11: 認証待ち) | 0 |
 
 ### フェーズ1完了条件
 
-仕様のフェーズ1優先タスクのゴール・責務に対応します。検証は **2026-05-18** 時点で下記を確認済みです。
+仕様のフェーズ1優先タスクのゴール・責務に対応します。検証は **2026-05-23** 時点で下記を確認済みです (#11 の registry 公開のみ未)。
 
 | # | 完了条件 | 状態 | 実装％ | 検証方法 |
 | ---: | --- | --- | ---: | --- |
 | 1 | `npm pack` 成功 (`npm pack --dry-run` を標準) | **済** | 100 | `npm run pack:check` または `npm pack --dry-run` |
-| 2 | `npm publish --dry-run` 成功 | **済** | 100 | `npm run publish:dry-run` |
+| 2 | `npm publish --dry-run` 成功 | **済** | 100 | `npm run publish:dry-run` — 2026-05-23 再確認 (`prepare` → `build` → tarball 22 files) |
 | 3 | `npx s2j-docs-linter --help` 成功 | **済** | 100 | `npx s2j-docs-linter --help` または `node dist/bin/run-textlint.js --help` |
 | 4 | tarball 内容検証 (`presets/` + root 互換パス) | **済** | 100 | `npm run verify:tarball` / `verify:artifact` — **22 entries** |
 | 5 | `package.json` 必須フィールド (`name`, `version`, `files`, `bin`) | **済** | 100 | `@s2j/docs-linter@1.0.10`、`files` に `presets/` と `base/` `swift/` `wordpress/` |
@@ -79,7 +79,7 @@
 | 8 | ビルド entrypoint (`clean` / `build` / `prepare`) | **済** | 100 | `npm run build` — `tsc` + `setup-npmignore` + `link-preset-layout-compat` |
 | 9 | `files` に runtime のみ同梱 (`scripts/patch-…` のみ) | **済** | 100 | `verify:tarball` (禁止: `src/`, `examples/`, `docs/`) |
 | 10 | README / [npm_usage.md](./npm_usage.md) / install examples の整合 | **済** | 100 | install・CLI・`--profile`・`lint:docs` before/after；README 方法2 ↔ `npm_usage.md` |
-| 11 | npmjs への初回 `npm publish` | **未** | 0 | 手動 `npm publish --access public` — `npm view @s2j/docs-linter version` が `1.0.10` になること |
+| 11 | npmjs への初回 `npm publish` | **未** (認証待ち) | 0 | 2026-05-23: `npm publish --access public` → `ENEEDAUTH`。次: `npm login` または `@s2j` publish 権限付きトークン → 再実行。完了: `npm view @s2j/docs-linter version` → `1.0.10` |
 | 12 | 利用側プロジェクトでの受け入れ試験 | **未** | 0 | 各利用プロジェクトで `npm install --save-dev @s2j/docs-linter` と `npx s2j-docs-linter` |
 | 13 | root 互換レイアウト (`base/` `swift/` `wordpress/` を tarball 同梱) | **済** | 100 | ビルド時ミラー + `verify:tarball` の `package/swift/.textlintrc.swift.json` 等 |
 | 14 | VSCode / `extends` の移行ガイド ([npm_usage.md](./npm_usage.md)) | **済** | 100 | Submodule → `node_modules/@s2j/docs-linter/{swift,presets/*,base}/` の before/after |
@@ -88,7 +88,7 @@
 
 **集計**: 完了 **14 / 16** (実装％ **88%**)。本リポジトリ責務 (#1–10, #13–16) は **14 / 14 (100%)**。
 
-**フェーズ1クローズの目安**: 上表 **#11–12** のみが「未」になった時点。本リポジトリのコード・文書・検証基盤・GHA 雛形・認証方針文書は **完了** とみなせます。
+**フェーズ1クローズの目安**: 上表 **#11–12** のみが「未」になった時点。本リポジトリのコード、文書、検証基盤、GHA 雛形、認証方針文書は、**完了** とみなせます。#11は、tarball / dry-run 側が完了しており、**npmjs 認証と初回 publish のみ** が残っています。
 
 ### npm 配布: フェーズ1実装範囲
 
@@ -167,7 +167,7 @@
 
 | 機能名 (仕様セクション) | 実装済み/未実装 | 実装％ | 完了条件 (要約) | 備考 |
 | --- | --- | ---: | --- | --- |
-| [Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク) | 一部 | 91 | ローカル pack / dry-run / tarball 検証 (#1–2, #4–9) | レジストリ初回 publish (#11) のみ未 |
+| [Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク) | 一部 | 91 | ローカル pack / dry-run / tarball 検証 (#1–2, #4–9) | レジストリ初回 publish (#11) のみ未 — dry-run 済、`ENEEDAUTH` |
 | [Publishing (パッケージ構成) - フェーズ1優先](./npm_package_spec.md#publishing-パッケージ構成---フェーズ1優先タスク) | 実装済み | 100 | `pack:artifact`、`artifacts/`、再現可能な検証 (#1–2, #4, #7, #16) | GHA artifact 名 `s2j-docs-linter-<tag>` |
 | [npm パッケージ仕様](./npm_package_spec.md) (文書) | 実装済み | 100 | コードと仕様の同期 | パッケージ構成セクション反映済み |
 | [`package.json` メタデータ更新](./npm_package_spec.md#packagejson-メタデータ更新) | 実装済み | 100 | `@s2j/docs-linter`、semver、`LICENSE` 等 | `1.0.10` (#5–6) |
@@ -176,7 +176,7 @@
 | [CLI 互換レイヤ](./npm_package_spec.md#cli-互換レイヤ) / [互換性に関する要件](./npm_package_spec.md#互換性に関する要件) | 実装済み | 100 | パッケージ root 基準の preset 解決、互換 `docs-lint` | |
 | [互換性に関する、移行戦略 - フェーズ1優先](./npm_package_spec.md#互換性に関する移行戦略---フェーズ1優先タスク) | 実装済み | 100 | tarball に `base/` `swift/` `wordpress/` 同梱 | `npm_usage.md` に VSCode / `extends` (#13–14) |
 | [依存関係レビュー](./npm_package_spec.md#依存関係レビュー) | 実装済み | 100 | 実行時 → `dependencies` | |
-| [Publishing](./npm_package_spec.md#publishing) (全体) | 一部 | 88 | 完了条件 **14/16** 済 | #11–12 未。GHA registry 運用はフェーズ2 |
+| [Publishing](./npm_package_spec.md#publishing) (全体) | 一部 | 88 | 完了条件 **14/16** 済 | #11 (認証待ち)・#12 未。GHA registry 運用はフェーズ2 |
 | [本リポジトリ `package.json` の `scripts` - フェーズ1優先](./npm_package_spec.md#本リポジトリ-packagejson-の-scripts---フェーズ1優先タスク) | 実装済み | 100 | `clean` / `build` / `prepare` / publish 検証群 / CLI 経由 `lint*` | `postinstall` はフェーズ1非対象で現状維持 (#8) |
 | [移行のワークフロー例](./npm_package_spec.md#移行のワークフロー例) | 実装済み | 100 | `examples/lint-docs*.yml` で `npx s2j-docs-linter` | Submodule 取得ステップは併存 (#15) |
 | [移行のワークフロー例 - フェーズ1優先](./npm_package_spec.md#移行のワークフロー例---フェーズ1優先タスク) | 実装済み | 100 | migration examples + `lint:docs` before/after | [npm_usage.md](./npm_usage.md) + `examples/` (#10, #15) |
@@ -237,7 +237,7 @@
 
 | # | タスク | 優先度 | 実装％ | 完了条件 (#) |
 | ---: | --- | --- | ---: | ---: |
-| 1 | npmjs への初回 `npm publish --access public` | **必須** (フェーズ1クローズ) | 0 | #11 — `npm view @s2j/docs-linter version` が `1.0.10` |
+| 1 | npmjs への初回 `npm publish --access public` | **必須** (フェーズ1クローズ) | 0 | #11 — 2026-05-23 dry-run 成功、`ENEEDAUTH` で停止。`npm login` 後に再実行 → `npm view @s2j/docs-linter version` が `1.0.10` |
 | 2 | 利用側プロジェクトでの受け入れ試験 | 推奨 | 0 | #12 — Submodule 併存のまま `npx s2j-docs-linter` と VSCode 互換パスが動作 |
 | 3 | GHA からの tag 連動 publish 運用 | フェーズ2 | 0 | 初回手動 publish 後: (A) GitHub Secret `NPM_TOKEN` + 現行ワークフロー、または (B) [npm trusted publishing (OIDC)](./npm_auth_secret_manage_spec.md#4-フェーズ2-npm-trusted-publishing-推奨) へ移行 |
 
@@ -265,15 +265,12 @@
 
 ### フェーズ2の残タスク
 
-#### 1. GitHub Actions Publish ワークフローの実装
+#### 1. GitHub Actions Publish ワークフローの運用開始
 
-下記を内容とする、`.github/workflows/npm-publish.yml` を実装します。未着手です。
+[`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml) は **雛形済み** (tag `v*`、`verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish`)。**registry への実 publish 運用**は未開始です。
 
-* tag をトリガーとする
-* setup-node
-* npm ci
-* npm publish
-* artifact のアップロード
+* `NPM_TOKEN` 登録後の tag push 検証
+* GHA 上での `npm publish --access public` 成功確認
 
 #### 2. GitHub Secret 連携
 
@@ -284,21 +281,20 @@
 
 #### 3. パッケージの初回 Publish
 
-下記を内容とし、npmjs.com を対象とします。未着手です。
+フェーズ1残タスク #11 と同一。tarball / dry-run は **済** (2026-05-23)。**npm 認証** (`npm login` または publish トークン) 後に `npm publish --access public` を実行します。
 
-* 初回 `@s2j/docs-linter` publish が成功
+* 初回 `@s2j/docs-linter@1.0.10` publish が成功
+* `npm view @s2j/docs-linter version` → `1.0.10`
 
 #### 4. Publish Dry-Run ワークフローの検証
 
-下記を内容とし、GitHub Actions を対象とします。未着手です。
-
-* `npm publish --dry-run --access public` が成功
+* ローカル … **済** (2026-05-23): `npm publish --dry-run --access public` 成功
+* GHA … **未**: tag push ワークフロー上での dry-run / publish 成功確認
 
 #### 5. リリース Artifact の保持
 
-下記のような、GitHub Actions artifact を所定の保存先 `./artifacts` に保村します。未着手です。
-
-* artifact: `s2j-docs-linter-x.y.z.tgz`
+* ローカル … **済**: `pack:artifact` → `./artifacts/s2j-docs-linter-<version>.tgz`、`verify:artifact` (2026-05-18 以降)
+* GHA … **未運用**: `upload-artifact` (`s2j-docs-linter-<tag>`) の tag push 時保存を初回 publish 後に検証
 
 #### 6. Trusted Publishing 移行設計
 
@@ -335,8 +331,8 @@
     * ワークフローは `${{ secrets.NPM_TOKEN }}` を参照するのみ (値はリポジトリに含めない)。
     * IDE の `Context access might be invalid: NPM_TOKEN` は Secret 未登録時の静的警告であり、登録後も残ることがある。
     * 長期運用は [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) の OIDC 移行を推奨する。
-* **ローカル検証の一式** (2026-05-18 確認済み):
-    * 下記は、コマンド一覧。
+* **ローカル検証の一式** (2026-05-23 確認済み):
+    * 下記は、コマンド一覧。`npm publish --access public` は **`ENEEDAUTH`** — npmjs ログイン後に再実行。
 
 ```bash
 npm run build
@@ -344,7 +340,8 @@ npm run pack:check
 npm run pack:artifact
 npm run verify:tarball
 npm run verify:artifact
-npm run publish:dry-run
+npm run publish:dry-run          # => tarball 22 files, @s2j/docs-linter@1.0.10
+npm publish --access public      # => ENEEDAUTH (認証後に再実行)
 npx s2j-docs-linter --help
 npx s2j-docs-linter --version   # => 1.0.10
 npm run lint                    # 本リポジトリ README 等 (build 後)
