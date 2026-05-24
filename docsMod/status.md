@@ -4,7 +4,7 @@
 
 **移行フェーズ**は [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) に従い、現時点は **フェーズ1** (Git Submodule と npm パッケージの併存) です。**フェーズ1完了条件 #1–16 はすべて済** (2026-05-24)。
 
-最終更新 …**2026-05-24** — **`@s2j/docs-linter@1.0.11`** publish 済。**#12 受け入れ試験** — 利用側 **9 リポジトリ** (WordPress 4 / Swift 3 / 仕様ドキュメント 2) で Submodule → npm 移行・`npm run lint:docs` 成功。フェーズ1 **100%** (16/16)。
+最終更新 …**2026-05-24** — フェーズ1 **クローズ** (完了条件 **16/16 → 100%**)。npm 最新 `@s2j/docs-linter@1.0.11`（`sudachi-synonyms-dictionary` 同梱）。**#12** — 利用側 **9 リポジトリ**で Submodule → npm 移行・`npm run lint:docs` 成功。フェーズ2は **約 20%**（マイルストーン 1/5 済、GHA 運用未）。
 
 ### 仕様書 (参照元)
 
@@ -53,7 +53,7 @@
 
 | 仕様セクション (フェーズ1優先) | 完了条件 # | 状態 | 実装％ |
 | --- | ---: | --- | ---: |
-| [Publishing](./npm_package_spec.md#publishing---フェーズ1優先タスク) | #1–2, #4–9, #11 | 済 | 100 |
+| [Publishing](./npm_package_spec.md#publishing---フェーズ1優先タスク) | #1–2, #4–9, #11–12 | 済 | 100 |
 | [Publishing (パッケージ構成)](./npm_package_spec.md#publishing-パッケージ構成---フェーズ1優先タスク) | #1–2, #3–4, #7, #16 | 済 | 100 |
 | [本リポジトリ `scripts`](./npm_package_spec.md#本リポジトリ-packagejson-の-scripts---フェーズ1優先タスク) | #7–8 | 済 | 100 |
 | [移行のワークフロー例](./npm_package_spec.md#移行のワークフロー例---フェーズ1優先タスク) | #10, #15 | 済 | 100 |
@@ -79,7 +79,7 @@
 | 8 | ビルド entrypoint (`clean` / `build` / `prepare`) | **済** | 100 | `npm run build` — `tsc` + `setup-npmignore` + `link-preset-layout-compat` |
 | 9 | `files` に runtime のみ同梱 (`scripts/patch-…` のみ) | **済** | 100 | `verify:tarball` (禁止: `src/`, `examples/`, `docs/`) |
 | 10 | README / [npm_usage.md](./npm_usage.md) / install examples の整合 | **済** | 100 | install・CLI・`--profile`・`lint:docs` before/after；README 方法2 ↔ `npm_usage.md` |
-| 11 | npmjs への初回 `npm publish` | **済** | 100 | 2026-05-23: `@s2j/docs-linter@1.0.10` 初回。2026-05-24: `@s2j/docs-linter@1.0.11` (`sudachi-synonyms-dictionary` 同梱)。`npm view @s2j/docs-linter version` → `1.0.11` |
+| 11 | npmjs への `npm publish` | **済** | 100 | `1.0.10` 初回 (2026-05-23)、`1.0.11` (`sudachi-synonyms-dictionary` 同梱、2026-05-24)。`npm view @s2j/docs-linter version` → `1.0.11` |
 | 12 | 利用側プロジェクトでの受け入れ試験 | **済** | 100 | 2026-05-24: **9 リポジトリ** — 下表「#12 受け入れ試験」参照。いずれも Submodule → `@s2j/docs-linter@1.0.11`、`npm run lint:docs` で lint 結果を確認 |
 | 13 | root 互換レイアウト (`base/` `swift/` `wordpress/` を tarball 同梱) | **済** | 100 | ビルド時ミラー + `verify:tarball` の `package/swift/.textlintrc.swift.json` 等 |
 | 14 | VSCode / `extends` の移行ガイド ([npm_usage.md](./npm_usage.md)) | **済** | 100 | Submodule → `node_modules/@s2j/docs-linter/{swift,presets/*,base}/` の before/after |
@@ -94,12 +94,14 @@
 
 Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs` で lint 結果が得られることを確認済みです。
 
-| 区分 | リポジトリ | 備考 |
+| 区分 | リポジトリ | プリセット / 備考 |
 | --- | --- | --- |
-| WordPress プラグイン (npm) | S2J Alliance Manager、S2J Slug Generater、S2J Media Library Date Corrector | WordPress プリセット想定 |
-| WordPress プラグイン (Composer + npm) | S2J Similarity Service | Composer 併存のまま npm 化 |
-| Swift アプリ / ツール | S2J About Window、S2J Source List、S2J Cozy Brew | Swift プリセット想定 |
-| 仕様ドキュメント | WP Plugin Spec、Xcode Common Spec | ドキュメント lint |
+| WordPress プラグイン (npm) | S2J Alliance Manager、S2J Slug Generater、S2J Media Library Date Corrector | WordPress (`--profile wordpress` または `.textlintrc.wp.json`) |
+| WordPress プラグイン (Composer + npm) | S2J Similarity Service | WordPress + Composer 併存 |
+| Swift アプリ / ツール | S2J About Window、S2J Source List、S2J Cozy Brew | Swift (`--profile swift` または `.textlintrc.swift.json`) |
+| 仕様ドキュメント | WP Plugin Spec、Xcode Common Spec | 各リポジトリの textlint 設定に準拠 |
+
+**#12 集計**: WordPress **4** / Swift **3** / 仕様ドキュメント **2** ＝ **9 リポジトリ**。いずれも `@s2j/docs-linter@1.0.11` を使用。
 
 ### npm 配布: フェーズ1実装範囲
 
@@ -124,7 +126,15 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 フェーズ2では、S2J Docs Linter (`@s2j/docs-linter`) の **GitHub Actions を用いた npm Registry 自動 publish 基盤の構築** を対象とする。
 
-フェーズ1で package 自体の成立性を確認したうえで、フェーズ2では以下を実現する。
+| 項目 | 状態 |
+| --- | --- |
+| **フェーズ2 実装％ (マイルストーン)** | **20%** — M1–M5 のうち **M3 のみ済** (手動 publish。GHA 運用は未) |
+| **フェーズ2 必須完了条件** | **50%** — 5 項目中 **2 済** / **2 未** / **1 部分済** (#5 ローカルのみ) |
+| npm レジストリ | **済** — 最新 `@s2j/docs-linter@1.0.11`（フェーズ1 #11 で達成） |
+| GHA publish ワークフロー | **雛形済み** — [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml)。**registry 運用は未開始** |
+| 認証 | **未** — `NPM_TOKEN` または npm trusted publishing (OIDC) の CI 統合 |
+
+フェーズ1で package 自体の成立性と利用側移行を確認したうえで、フェーズ2では以下を実現する。
 
 * GitHub tag push による publish automation
 * npm organization (`s2j`) への正式 package 登録
@@ -137,14 +147,14 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 ### フェーズ2優先タスクと完了条件の対応
 
-| 優先 | タスク | 完了条件 |
-|------|--------|----------|
-| P0 | npm authentication integration | GitHub Actions から npm publish 認証成功 |
-| P0 | publish workflow implementation | tag push で publish workflow 起動 |
-| P0 | `@s2j/docs-linter` initial publish | npmjs.com organization `s2j` に package 登録成功 (**済** — `@s2j/docs-linter@1.0.11`、最新) |
-| P1 | release artifact generation | tarball artifact を GitHub Actions で保存可能 |
-| P1 | workflow verification | test tag で publish dry-run 成功 |
-| P2 | trusted publishing migration design | NPM_TOKEN から OIDC への移行方針定義 |
+| 優先 | タスク | 完了条件 | 状態 | 実装％ |
+|------|--------|----------|------|------:|
+| P0 | npm authentication integration | GitHub Actions から npm publish 認証成功 | 未 | 0 |
+| P0 | publish workflow implementation | tag push で publish workflow 起動・成功 | 雛形済み、未運用 | 50 |
+| P0 | `@s2j/docs-linter` initial publish | npmjs.com organization `s2j` に package 登録成功 | **済** (`1.0.11`) | 100 |
+| P1 | release artifact generation | tarball artifact を GitHub Actions で保存可能 | ローカル済、GHA 未 | 50 |
+| P1 | workflow verification | test tag で publish dry-run 成功 | ローカル dry-run 済、GHA 未 | 50 |
+| P2 | trusted publishing migration design | NPM_TOKEN から OIDC への移行方針定義 | 文書済み ([npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md)) | 100 |
 
 ### フェーズ2完了条件
 
@@ -152,17 +162,23 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 #### 必須
 
-* `@s2j/docs-linter` が npm registry に公開されている — **済** (最新 `1.0.11`)
-* npm organization `s2j` に package が表示される — **済** (手動 publish 後)
-* GitHub Actions workflow から publish が成功する
-* GitHub Actions 上で `npm ci` → `npm publish` が再現可能
-* publish artifact (`.tgz`) が version 単位で生成可能
+| # | 完了条件 | 状態 | 実装％ |
+| ---: | --- | --- | ---: |
+| 1 | `@s2j/docs-linter` が npm registry に公開されている | **済** (最新 `1.0.11`) | 100 |
+| 2 | npm organization `s2j` に package が表示される | **済** | 100 |
+| 3 | GitHub Actions workflow から publish が成功する | 未 | 0 |
+| 4 | GitHub Actions 上で `npm ci` → `npm publish` が再現可能 | 未 | 0 |
+| 5 | publish artifact (`.tgz`) が version 単位で生成可能 (GHA) | ローカル済、GHA 未 | 50 |
+
+**集計**: 必須 **2.5 / 5 → 50%**（#5 はローカル `pack:artifact` のみ済のため 50% 扱い）。
 
 #### 推奨
 
-* GitHub Actions 上で `npm publish --dry-run` テストが可能
-* release workflow documentation が README / docs に反映済
-* publish secret / auth strategy が仕様化済
+| # | 完了条件 | 状態 | 実装％ |
+| ---: | --- | --- | ---: |
+| 1 | GitHub Actions 上で `npm publish --dry-run` テストが可能 | 未 (ローカルは済) | 50 |
+| 2 | release workflow documentation が README / docs に反映済 | 部分 (GHA 雛形・認証仕様文書は済) | 50 |
+| 3 | publish secret / auth strategy が仕様化済 | **済** ([npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md)) | 100 |
 
 #### 将来拡張 (フェーズ3候補)
 
@@ -191,7 +207,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [本リポジトリ `package.json` の `scripts` - フェーズ1優先](./npm_package_spec.md#本リポジトリ-packagejson-の-scripts---フェーズ1優先タスク) | 実装済み | 100 | `clean` / `build` / `prepare` / publish 検証群 / CLI 経由 `lint*` | `postinstall` はフェーズ1非対象で現状維持 (#8) |
 | [移行のワークフロー例](./npm_package_spec.md#移行のワークフロー例) | 実装済み | 100 | `examples/lint-docs*.yml` で `npx s2j-docs-linter` | Submodule 取得ステップは併存 (#15) |
 | [移行のワークフロー例 - フェーズ1優先](./npm_package_spec.md#移行のワークフロー例---フェーズ1優先タスク) | 実装済み | 100 | migration examples + `lint:docs` before/after | [npm_usage.md](./npm_usage.md) + `examples/` (#10, #15) |
-| [互換性に関する、移行戦略](./npm_package_spec.md#互換性に関する移行戦略) (フェーズ1) | 実装済み | 100 | 併存基盤 + root 互換レイアウト + 移行ドキュメント | 利用側 VSCode / CI 適用は各プロジェクト |
+| [互換性に関する、移行戦略](./npm_package_spec.md#互換性に関する移行戦略) (フェーズ1) | 実装済み | 100 | 併存基盤 + root 互換レイアウト + 移行ドキュメント | **9 リポジトリ**で Submodule → npm 移行完了 (#12) |
 | [README 移行](./npm_package_spec.md#readme-移行) | フェーズ1済 | 100 | Submodule 主 + npm 併記、動作する CLI 例 | フェーズ2でデフォルト npm 化 (#10) |
 | [GitHub Actions Publish ワークフロー](./npm_package_spec.md#github-actions-publish-ワークフロー) | 設計済み | 100 | `verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish` | フェーズ2: `NPM_TOKEN` 設定後に運用開始 |
 | [GitHub Actions Publish - フェーズ1優先](./npm_package_spec.md#github-actions-publish-ワークフロー---フェーズ1優先タスク) | 実装済み | 100 | tag `v*` / `npm ci` / 検証 / artifact 保存 / publish 定義 | registry への実 publish 運用はフェーズ2 |
@@ -334,7 +350,10 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
     * 長期運用は [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) の OIDC 移行を推奨する。
 * **npm publish / 受け入れ試験 (2026-05-24)**:
     * レジストリ最新 … `@s2j/docs-linter@1.0.11`
-    * 受け入れ (#12) … **9 リポジトリ** — WordPress: Alliance Manager / Slug Generater / Media Library Date Corrector / Similarity Service (Composer+npm)；Swift: About Window / Source List / Cozy Brew；仕様: WP Plugin Spec / Xcode Common Spec
+    * 受け入れ (#12) … **9 リポジトリ**
+        * WordPress… Alliance Manager / Slug Generater / Media Library Date Corrector / Similarity Service (Composer+npm)
+        * Swift… About Window / Source List / Cozy Brew
+        * 仕様… WP Plugin Spec / Xcode Common Spec
 * **ローカル検証の一式** (2026-05-24 確認済み):
 
 ```bash
