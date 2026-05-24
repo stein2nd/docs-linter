@@ -13,8 +13,8 @@
 
 ## 1. 初回セットアップ (NPM_TOKEN)
 
-1. [npmjs.com](https://www.npmjs.com/) にログインし、**Access Tokens** で **Automation** トークンを発行します (`Publish` 権限、`s2j` 組織スコープ)。
-2. GitHub リポジトリ `stein2nd/docs-linter` → **Settings** → **Secrets and variables** → **Actions** で `NPM_TOKEN` を登録します。
+1. `npmjs.com` にログインし、**Access Tokens** で **Automation** トークンを発行 (`Publish` 権限、`s2j` 組織スコープ)。
+2. GitHub リポジトリ `stein2nd/docs-linter` → **Settings** → **Secrets and variables** → **Actions** で `NPM_TOKEN` を登録。
 3. **Settings** → **Actions** → **General** で workflow 実行権限を確認します (Read and write permissions は不要。`contents: read` のみ)。
 
 ```bash
@@ -28,10 +28,10 @@ tag push 前に、GHA 上で tarball 検証と `npm publish --dry-run` を確認
 
 1. GitHub → **Actions** → **Publish to npm** → **Run workflow**
 2. **dry_run** を `true` のまま実行
-3. 成功することを確認:
-   - `npm ci` → `verify:tarball` → `pack:artifact` → `upload-artifact` → `publish:dry-run`
+3. 成功することを確認
+   * `npm ci` → `verify:tarball` → `pack:artifact` → `upload-artifact` → `publish:dry-run`
 
-CLI から実行する例:
+CLI から実行する例は、下記になります。
 
 ```bash
 gh workflow run npm-publish.yml --repo stein2nd/docs-linter -f dry_run=true
@@ -53,13 +53,14 @@ git tag v1.0.12
 git push origin v1.0.12
 ```
 
-4. Actions で **Publish to npm** が起動し、以下が実行されます:
-   - tag / `package.json` version 一致検証 (`scripts/verify-release-tag.cjs`)
-   - `npm ci` → `verify:tarball` → `pack:artifact`
-   - artifact 保存 (`s2j-docs-linter-v1.0.12`)
-   - `npm publish --access public`
+4. Actions で **Publish to npm** が起動し、以下が実行される
 
-5. 公開確認:
+   * tag / `package.json` version 一致検証 (`scripts/verify-release-tag.cjs`)
+   * `npm ci` → `verify:tarball` → `pack:artifact`
+   * artifact 保存 (`s2j-docs-linter-v1.0.12`)
+   * `npm publish --access public`
+
+5. 公開確認
 
 ```bash
 npm view @s2j/docs-linter version
