@@ -47,6 +47,8 @@
     "pack:check": "npm pack --dry-run",
     "pack:artifact": "mkdir -p artifacts && npm pack --pack-destination ./artifacts",
     "publish:dry-run": "npm publish --dry-run --access public",
+    "publish:whoami": "node ./scripts/check-npm-auth.cjs",
+    "publish:public": "node ./scripts/check-npm-auth.cjs --publish",
     "lint:package": "npm pack --dry-run",
     "verify:tarball": "node ./scripts/verify-tarball.cjs",
     "verify:artifact": "npm run pack:artifact && node ./scripts/verify-tarball.cjs --from-artifacts",
