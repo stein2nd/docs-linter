@@ -2,9 +2,9 @@
 
 本ページは、[npm パッケージ仕様](./npm_package_spec.md) にもとづく実装修正の進捗を一覧化します。仕様書の [フェーズ1実装状況](./npm_package_spec.md#フェーズ1実装状況-2026-05) と相互参照します。publish 認証・シークレット方針は [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) を参照してください。
 
-**移行フェーズ**は [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) に従い、現時点は **フェーズ1** (Git Submodule と npm パッケージの併存) です。**フェーズ1完了条件 #1–16 はすべて済** (2026-05-24)。
+**移行フェーズ**は [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) に従い、**フェーズ1 完了** (Git Submodule と npm パッケージの併存)。**フェーズ2 進行中** (GHA publish 基盤)。フェーズ1完了条件 **#1–16 はすべて済** (2026-05-24)。
 
-最終更新 …**2026-05-24** — フェーズ1 **クローズ** (完了条件 **16/16 → 100%**)。フェーズ2 **約 85%** — M1 dry-run GHA 成功、M4 artifact GHA 保存確認。`NPM_TOKEN` 登録 + `v1.0.12` tag push で M2/M5 完了可能。
+最終更新 …**2026-05-24** — フェーズ1 **クローズ** (**16/16 → 100%**)。フェーズ2 **必須 58%** / **マイルストーン 60%** / **推奨 100%** — ワークフロー・[release.md](./release.md) 実装済み、GHA dry-run (M1) 成功。**残**: `NPM_TOKEN` 登録 + `v1.0.12` tag push (M2/M5)。
 
 ### 仕様書 (参照元)
 
@@ -12,6 +12,7 @@
 | --- | --- |
 | [npm パッケージ仕様](./npm_package_spec.md) | npm 配布、CLI、互換、移行、GHA publish、**パッケージ構成 (artifact)** の全体仕様 |
 | [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) | フェーズ1 `NPM_TOKEN` / フェーズ2 npm trusted publishing (OIDC) / secret 運用 |
+| [npm リリース手順](./release.md) | GHA tag publish、`NPM_TOKEN` 登録、dry-run 検証 |
 | [npm 使い方ガイド](./npm_usage.md) | install / CLI / `package.json` `lint:docs` 移行 / VSCode・`extends` / CI |
 | [仕様書の起点](./specs.md) | 上記への導線 |
 
@@ -31,15 +32,15 @@
 | tarball (`npm pack`) | **済** — dry-run (`pack:check`) + 内容検証 (`verify:tarball`) — **22 entries** |
 | tarball artifact (`./artifacts/`) | **済** — `pack:artifact` → `s2j-docs-linter-<version>.tgz`、`verify:artifact`、`.gitignore` で root 非汚染 |
 | publish 準備 (`npm publish --dry-run`) | **済** — `npm run publish:dry-run` 成功 |
-| GHA publish ワークフロー | **設計済み** — [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml) (`verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish`；registry 運用はフェーズ2) |
+| GHA publish ワークフロー | **実装済み** — [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml)（`workflow_dispatch` dry-run、tag/version 検証）。**registry 自動 publish 運用はフェーズ2 残** |
 | publish 認証方針 (文書) | **済** — [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) (フェーズ2 OIDC を推奨) |
 | README / npm_usage / examples 整合 | **済** — install・CLI・`lint:docs` 移行例・VSCode/`extends`・CI サンプルを一致 |
 | npm レジストリ公開 | **済** — 最新 `@s2j/docs-linter@1.0.11` (#11)。`1.0.10` 初回 (2026-05-23)、`1.0.11` peer 依存修正 (2026-05-24) |
 
 | 区分 (仕様書) | フェーズ1の状態 |
 | --- | --- |
-| 実装済み | メタデータ、CLI、`scripts` 整理、tarball 検証 (22 entries)、**`pack:artifact` / `artifacts/`**、root 互換レイアウト、`examples/`・[npm_usage.md](./npm_usage.md) 整合、GHA 雛形、**npmjs publish** (`1.0.10` / `1.0.11`)、**利用側受け入れ試験** (**9** リポジトリ — WordPress / Swift / 仕様ドキュメント) |
-| 未実施 | GHA からの registry 運用開始 (フェーズ2)、README の Submodule → レガシー化 (フェーズ2以降) |
+| 実装済み | メタデータ、CLI、`scripts` 整理、tarball 検証 (22 entries)、**`pack:artifact` / `artifacts/`**、root 互換レイアウト、`examples/`・[npm_usage.md](./npm_usage.md) 整合、**GHA publish ワークフロー** (dry-run 検証済)、**npmjs publish** (`1.0.10` / `1.0.11`)、**利用側受け入れ試験** (**9** リポジトリ) |
+| 未実施 | GHA からの registry **自動** publish 運用 (フェーズ2 残)、README の Submodule → レガシー化 (フェーズ2以降) |
 
 **実装％の算出**
 
@@ -119,7 +120,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | README の更新 (フェーズ1範囲) | 済 | 100 | Submodule 主導線 + 方法2 (npm) 併記、`npm_usage.md` 導線 (#10) |
 | [npm 使い方ガイド](./npm_usage.md) との整合 | 済 | 100 | install / CLI / `lint:docs` / CI / VSCode・`extends` が README・仕様と一致 (#10, #14) |
 | `examples/` の npm 版 | 済 | 100 | `npx s2j-docs-linter`、`@s2j/docs-linter` install コメント (#15) |
-| GitHub Actions publish ワークフロー | 設計済み | 100 | [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml) — registry 運用はフェーズ2 |
+| GitHub Actions publish ワークフロー | 実装済み | 100 | [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml) — dry-run GHA 成功 (M1)。registry 自動 publish はフェーズ2 残 |
 | npm 認証・シークレット管理 (文書) | 済 | 100 | [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) — フェーズ2 OIDC 推奨 |
 
 ### フェーズ2: サマリー
@@ -128,11 +129,13 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | 項目 | 状態 |
 | --- | --- |
-| **フェーズ2 実装％ (マイルストーン)** | **85%** — **M1 済** (GHA dry-run)、**M3 済**、**M4 部分済** (GHA artifact 保存確認)。M2/M5 は `NPM_TOKEN` + `v1.0.12` tag push 待ち |
-| **フェーズ2 必須完了条件** | **60%** — 5 項目中 **2 済** / **2 未** / **1 部分済** (#5 GHA artifact 保存まで確認) |
-| npm レジストリ | **済** — 最新 `@s2j/docs-linter@1.0.11`（次リリース候補 `1.0.12` を GHA 検証用に準備） |
-| GHA publish ワークフロー | **実装済み** — [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml)（`workflow_dispatch` dry-run、tag/version 検証）。**registry 運用は未開始** |
-| 認証 | **未** — GitHub Secret `NPM_TOKEN` 未登録（[release.md](./release.md) 手順） |
+| **フェーズ2 必須完了条件** | **58%** — 5 項目中 **2 済** / **2 未** / **1 部分済** (#5: GHA dry-run で artifact 保存確認) |
+| **フェーズ2 推奨完了条件** | **100%** — 3 項目中 **3 済** |
+| **フェーズ2 マイルストーン (M1–M5)** | **60%** — M1 **済** / M2 **未** / M3 **済** / M4 **部分済 (90%)** / M5 **未** |
+| **本リポジトリ実装 (フェーズ2)** | **90%** — ワークフロー・スクリプト・[release.md](./release.md) 済。`NPM_TOKEN` + tag push のみ残 |
+| npm レジストリ (公開済) | **済** — 最新 `@s2j/docs-linter@1.0.11`（リポジトリ `package.json` は **`1.0.12`** — GHA publish 待ち） |
+| GHA publish ワークフロー | **実装・dry-run 検証済** — [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml)。tag push による本番 publish は **未** |
+| 認証 | **未** — GitHub Secret `NPM_TOKEN` 未登録（[release.md](./release.md) §1） |
 
 フェーズ1で package 自体の成立性と利用側移行を確認したうえで、フェーズ2では以下を実現する。
 
@@ -145,15 +148,24 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 フェーズ2完了時点で、S2J Docs Linter は **GitHub リポジトリを source of truth とし、npm リポジトリに継続的にリリース可能な OSS パッケージ** となる。
 
+**実装％の算出 (フェーズ2)**
+
+| スコープ | 分子 / 分母 | 実装％ |
+| --- | --- | ---: |
+| 必須完了条件 | #1–5 の実装％合計 **290** / 500 | **58%** (2 済 + 1 部分済 90%) |
+| 推奨完了条件 | #1–3 のうち **済** の件数 | **3 / 3 → 100%** |
+| マイルストーン M1–M5 | (100 + 0 + 100 + 90 + 0) / 5 | **60%** |
+| 本リポジトリ実装 | ワークフロー・スクリプト・文書 9/10 相当 | **90%** (`NPM_TOKEN` 登録 + tag publish 運用のみ残) |
+
 ### フェーズ2優先タスクと完了条件の対応
 
 | 優先 | タスク | 完了条件 | 状態 | 実装％ |
 |------|--------|----------|------|------:|
-| P0 | npm authentication integration | GitHub Actions から npm publish 認証成功 | 未 (`NPM_TOKEN` 登録待ち) | 0 |
-| P0 | publish workflow implementation | tag push で publish workflow 起動・成功 | **実装済み**、未運用 | 80 |
+| P0 | npm authentication integration | GitHub Actions から npm publish 認証成功 | 未 (`NPM_TOKEN` 未登録) | 0 |
+| P0 | publish workflow implementation | tag push で publish workflow 起動・成功 | **実装済み** (dry-run GHA 成功)、本番 publish **未** | 80 |
 | P0 | `@s2j/docs-linter` initial publish | npmjs.com organization `s2j` に package 登録成功 | **済** (`1.0.11`) | 100 |
-| P1 | release artifact generation | tarball artifact を GitHub Actions で保存可能 | **GHA 確認済** (dry-run run `26359090580`) | 90 |
-| P1 | workflow verification | test tag で publish dry-run 成功 | **GHA dry-run 済** (`1.0.12`)、tag publish 未 | 80 |
+| P1 | release artifact generation | tarball artifact を GitHub Actions で保存可能 | **部分済** (dry-run run [`26359090580`](https://github.com/stein2nd/docs-linter/actions/runs/26359090580)) | 90 |
+| P1 | workflow verification | test tag で publish dry-run 成功 | **GHA dry-run 済** (`1.0.12`)、tag push publish **未** | 80 |
 | P2 | trusted publishing migration design | NPM_TOKEN から OIDC への移行方針定義 | 文書済み ([npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md)) | 100 |
 
 ### フェーズ2完了条件
@@ -166,19 +178,21 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | ---: | --- | --- | ---: |
 | 1 | `@s2j/docs-linter` が npm registry に公開されている | **済** (最新 `1.0.11`) | 100 |
 | 2 | npm organization `s2j` に package が表示される | **済** | 100 |
-| 3 | GitHub Actions workflow から publish が成功する | 未 | 0 |
-| 4 | GitHub Actions 上で `npm ci` → `npm publish` が再現可能 | 未 | 0 |
-| 5 | publish artifact (`.tgz`) が version 単位で生成可能 (GHA) | **GHA 確認済** (dry-run で `upload-artifact` 成功) | 90 |
+| 3 | GitHub Actions workflow から publish が成功する | **未** (`NPM_TOKEN` + `v1.0.12` tag push 待ち) | 0 |
+| 4 | GitHub Actions 上で `npm ci` → `npm publish` が再現可能 | **未** (dry-run パスは GHA 成功) | 0 |
+| 5 | publish artifact (`.tgz`) が version 単位で生成可能 (GHA) | **部分済** (dry-run で `upload-artifact` 成功) | 90 |
 
-**集計**: 必須 **3.9 / 5 → 78%**（#5 は tag 連動 publish 前の artifact 保存まで確認）。
+**集計**: 必須 **290 / 500 → 58%**（#1–2 済、#5 部分済 90%、#3–4 未）。
 
 #### 推奨
 
 | # | 完了条件 | 状態 | 実装％ |
 | ---: | --- | --- | ---: |
-| 1 | GitHub Actions 上で `npm publish --dry-run` テストが可能 | **済** (run `26359090580`, 2026-05-24) | 100 |
-| 2 | release workflow documentation が README / docs に反映済 | **済** ([release.md](./release.md)、README 導線) | 100 |
+| 1 | GitHub Actions 上で `npm publish --dry-run` テストが可能 | **済** ([run `26359090580`](https://github.com/stein2nd/docs-linter/actions/runs/26359090580), 2026-05-24) | 100 |
+| 2 | release workflow documentation が README / docs に反映済 | **済** ([release.md](./release.md)、README 導線、[specs.md](./specs.md)) | 100 |
 | 3 | publish secret / auth strategy が仕様化済 | **済** ([npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md)) | 100 |
+
+**集計**: 推奨 **3 / 3 → 100%**。
 
 #### 将来拡張 (フェーズ3候補)
 
@@ -197,7 +211,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク) | 実装済み | 100 | pack / dry-run / tarball / registry / 受け入れ (#1–2, #4–9, #11–12) | 最新 `@s2j/docs-linter@1.0.11` |
 | [Publishing (パッケージ構成) - フェーズ1優先](./npm_package_spec.md#publishing-パッケージ構成---フェーズ1優先タスク) | 実装済み | 100 | `pack:artifact`、`artifacts/`、再現可能な検証 (#1–2, #4, #7, #16) | GHA artifact 名 `s2j-docs-linter-<tag>` |
 | [npm パッケージ仕様](./npm_package_spec.md) (文書) | 実装済み | 100 | コードと仕様の同期 | パッケージ構成セクション反映済み |
-| [`package.json` メタデータ更新](./npm_package_spec.md#packagejson-メタデータ更新) | 実装済み | 100 | `@s2j/docs-linter`、semver、`LICENSE` 等 | `1.0.11` (#5–6) |
+| [`package.json` メタデータ更新](./npm_package_spec.md#packagejson-メタデータ更新) | 実装済み | 100 | `@s2j/docs-linter`、semver、`LICENSE` 等 | リポジトリ `1.0.12` / npm 最新 `1.0.11` (#5–6) |
 | [CLI Entrypoint 公開](./npm_package_spec.md#cli-entrypoint-公開) | 実装済み | 100 | `bin` / `--profile` / 設定解決 / `--help` / `--version` | textlint を `node` 直実行 (#3) |
 | [ファイルスコープの最適化 (Publish)](./npm_package_spec.md#ファイルスコープの最適化を-publish) | 実装済み | 100 | `files` + `verify:tarball` | `presets/` + root ミラー (#4, #9) |
 | [CLI 互換レイヤ](./npm_package_spec.md#cli-互換レイヤ) / [互換性に関する要件](./npm_package_spec.md#互換性に関する要件) | 実装済み | 100 | パッケージ root 基準の preset 解決、互換 `docs-lint` | |
@@ -209,13 +223,13 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [移行のワークフロー例 - フェーズ1優先](./npm_package_spec.md#移行のワークフロー例---フェーズ1優先タスク) | 実装済み | 100 | migration examples + `lint:docs` before/after | [npm_usage.md](./npm_usage.md) + `examples/` (#10, #15) |
 | [互換性に関する、移行戦略](./npm_package_spec.md#互換性に関する移行戦略) (フェーズ1) | 実装済み | 100 | 併存基盤 + root 互換レイアウト + 移行ドキュメント | **9 リポジトリ**で Submodule → npm 移行完了 (#12) |
 | [README 移行](./npm_package_spec.md#readme-移行) | フェーズ1済 | 100 | Submodule 主 + npm 併記、動作する CLI 例 | フェーズ2でデフォルト npm 化 (#10) |
-| [GitHub Actions Publish ワークフロー](./npm_package_spec.md#github-actions-publish-ワークフロー) | 実装済み | 100 | `verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish` | `workflow_dispatch` dry-run、[release.md](./release.md) |
-| [GitHub Actions Publish - フェーズ1優先](./npm_package_spec.md#github-actions-publish-ワークフロー---フェーズ1優先タスク) | 実装済み | 100 | tag `v*` / `npm ci` / 検証 / artifact 保存 / publish 定義 | registry への実 publish 運用はフェーズ2 |
-| [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) | 文書済み | 100 | フェーズ1 `NPM_TOKEN` / フェーズ2 OIDC 方針 | ワークフローは現状フェーズ1パターン |
+| [GitHub Actions Publish ワークフロー](./npm_package_spec.md#github-actions-publish-ワークフロー) | 実装済み | 100 | `verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish` | M1 dry-run 成功。本番 publish は `NPM_TOKEN` + tag 待ち |
+| [GitHub Actions Publish - フェーズ1優先](./npm_package_spec.md#github-actions-publish-ワークフロー---フェーズ1優先タスク) | 実装済み | 100 | tag `v*` / `npm ci` / 検証 / artifact / publish 定義 | `workflow_dispatch` + `verify-release-tag.cjs` 追加 (2026-05-24) |
+| [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) | 文書済み | 100 | フェーズ1 `NPM_TOKEN` / フェーズ3 OIDC 方針 | ワークフローは `NPM_TOKEN` パターン。Secret **未登録** |
 | [npm 使い方ガイド との整合 - フェーズ1優先](./npm_package_spec.md#npm-使い方ガイド-との整合---フェーズ1優先タスク) / [npm_usage.md](./npm_usage.md) | 実装済み | 100 | README のコマンドが実際に動く | `lint:docs` / VSCode / `extends` / CI (#10, #14) |
 | [VSCode 互換戦略](./npm_package_spec.md#vscode-互換戦略) | ガイド済み | 100 | [npm_usage.md](./npm_usage.md) に移行例 | 利用側での設定変更は各プロジェクト (#14) |
 | [CI 互換戦略](./npm_package_spec.md#ci-互換戦略) | ガイド済み | 100 | `npm_usage.md` / `examples/` に CI 例 | 利用側 CI 移行は各プロジェクト (#15) |
-| [バージョン管理ポリシー](./npm_package_spec.md#バージョン管理ポリシー) | 運用開始 | — | semver 運用 | `1.0.11` が npmjs 最新 |
+| [バージョン管理ポリシー](./npm_package_spec.md#バージョン管理ポリシー) | 運用開始 | — | semver 運用 | npm 最新 `1.0.11`、リポジトリ `1.0.12` (publish 待ち) |
 | [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ2〜4 | 未着手 | 0 | フェーズ2以降 | |
 
 ### フェーズ1で完了した項目
@@ -233,7 +247,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * tarball 自動検証 (`scripts/verify-tarball.cjs`) — temp 検証と `--from-artifacts` 検証 — **22 entries**
 * **`./artifacts/`** へのバージョン付き tarball (`s2j-docs-linter-<version>.tgz`)、`.gitignore` で root の `*.tgz` 汚染を回避
 * `examples/lint-docs*.yml` の `npx s2j-docs-linter` 化、`@s2j/docs-linter` install 手順コメント
-* `.github/workflows/npm-publish.yml` … tag `v*` → `verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish` (設計・雛形。registry 運用はフェーズ2)
+* `.github/workflows/npm-publish.yml` … tag `v*` / `workflow_dispatch` → `verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish` (2026-05-24 強化。GHA dry-run 成功)
 * [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) … フェーズ1 `NPM_TOKEN`、フェーズ2 npm trusted publishing (OIDC) 推奨
 * 本リポジトリ `scripts` 整理 … `clean` / `build` (`tsc` + ミラー生成) / `prepare`、publish 用 dry-run 群
 * 本リポジトリ `lint` / `lint:wp` / `lint:swift` をビルド済み CLI 経由に統一
@@ -259,7 +273,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | `docsMod/npm_package_spec.md` | フェーズ1優先タスク・**パッケージ構成**・GHA・残タスクの注記 | 文書 |
 | `docsMod/npm_auth_secret_manage_spec.md` | 認証優先順位 (OIDC > 自動化トークン > 手動)、secret 運用、GHA 例 | 文書 |
 | `docsMod/specs.md` | 認証仕様・実装状況への導線 | 文書 |
-| `.github/workflows/npm-publish.yml` | `verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish` | #16 (設計) |
+| `.github/workflows/npm-publish.yml` | 初版: tag `v*` → `verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish` | #16 (設計) |
 | (運用) npmjs publish | `@s2j/docs-linter@1.0.10` 初回、`1.0.11` peer 依存修正 | #11 |
 | (運用) 利用側受け入れ試験 | 9 リポジトリ (WordPress / Swift / 仕様ドキュメント) — `lint:docs` 成功 | #12 |
 
@@ -271,7 +285,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | ---: | --- | --- | ---: | ---: |
 | 1 | npmjs への publish | フェーズ1 | **100** | #11 — `@s2j/docs-linter@1.0.11` |
 | 2 | 利用側プロジェクトでの受け入れ試験 | フェーズ1 | **100** | #12 — 9 リポジトリで `lint:docs` 成功 (下表参照) |
-| 3 | GHA からの tag 連動 publish 運用 | **フェーズ2** | 0 | `NPM_TOKEN` または OIDC で GHA 運用開始 |
+| 3 | GHA からの tag 連動 publish 運用 | **フェーズ2** | **80** | ワークフロー実装・dry-run GHA 成功。`NPM_TOKEN` + tag publish 未 |
 
 ### フェーズ2で完了した項目
 
@@ -280,12 +294,23 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * **GHA ワークフロー強化** (2026-05-24): `workflow_dispatch` (dry-run)、tag/version 一致検証 (`scripts/verify-release-tag.cjs`)、`NPM_TOKEN` 未設定時の明示エラー
 * **リリース手順文書**: [release.md](./release.md) — `NPM_TOKEN` 登録、dry-run、tag push 手順
 * **GHA dry-run 検証 (M1)**: workflow_dispatch `dry_run=true` 成功 (run [`26359090580`](https://github.com/stein2nd/docs-linter/actions/runs/26359090580), 2026-05-24)
-* **GHA artifact 保存 (M4 部分)**: 上記 run で `s2j-docs-linter-manual-*` artifact 保存確認
+* **GHA artifact 保存 (M4 部分)**: run `26359090580` で artifact `s2j-docs-linter-main` 保存確認
 
 #### 運用 (手動)
 
 * npmjs publish … `@s2j/docs-linter@1.0.10` (初回)、`1.0.11` (`sudachi-synonyms-dictionary` 同梱)
 * 利用側受け入れ … 上記 9 リポジトリで Submodule → npm、`npm run lint:docs` 成功
+
+### フェーズ2で完了した主な変更 (コード・文書)
+
+| 対象 | 内容 | 関連 |
+| --- | --- | --- |
+| `.github/workflows/npm-publish.yml` | `workflow_dispatch` (dry-run)、tag/version 検証、`NPM_TOKEN` 未設定エラー | M1, P0 |
+| `scripts/verify-release-tag.cjs` | tag と `package.json` version 一致検証 | M2 前提 |
+| `docsMod/release.md` | `NPM_TOKEN` 登録、dry-run、tag push 手順 | 推奨 #2 |
+| `package.json` | `1.0.12`、`verify:release-tag` script | M2 候補 |
+| `README.md` / `docsMod/specs.md` | [release.md](./release.md) 導線 | 推奨 #2 |
+| (運用) GHA dry-run | run [`26359090580`](https://github.com/stein2nd/docs-linter/actions/runs/26359090580) 成功 (2026-05-24) | M1, 推奨 #1 |
 
 ### フェーズ2の残タスク
 
@@ -303,13 +328,9 @@ gh secret set NPM_TOKEN --repo stein2nd/docs-linter
 
 #### 3. tag push による本番 publish (M2 / フェーズ2 必須 #3–5) — **残**
 
-`1.0.12` を main に merge 後:
+`1.0.12` を main に merge 後、`git tag v1.0.12 && git push origin v1.0.12` を実行します。
 
-```bash
-git tag v1.0.12 && git push origin v1.0.12
-```
-
-成功後 `npm view @s2j/docs-linter version` → `1.0.12`、Actions Artifacts に `s2j-docs-linter-v1.0.12` を確認。
+成功後 `npm view @s2j/docs-linter version` → `1.0.12`、Actions Artifacts に `s2j-docs-linter-v1.0.12` を確認します。
 
 #### 4. Trusted Publishing 移行設計
 
@@ -317,11 +338,15 @@ git tag v1.0.12 && git push origin v1.0.12
 
 ### フェーズ2のマイルストーン
 
-1. M1: GitHub Actions で `npm publish --dry-run` 成功 — **済** (2026-05-24, run `26359090580`)
-2. M2: test tag push で workflow success — **未** (`NPM_TOKEN` + `v1.0.12` tag push 待ち)
-3. M3: `@s2j/docs-linter` npmjs publish — **済** (最新 `1.0.11`)
-4. M4: artifact retention 確立 — **部分済** (GHA dry-run で artifact 保存確認。tag 連動は M2 後)
-5. M5: フェーズ2完了 — **未** (M2 成功後)
+| # | マイルストーン | 状態 | 実装％ | 検証 |
+| ---: | --- | --- | ---: | --- |
+| M1 | GitHub Actions で `npm publish --dry-run` 成功 | **済** | 100 | run [`26359090580`](https://github.com/stein2nd/docs-linter/actions/runs/26359090580) (2026-05-24) |
+| M2 | test tag push で workflow success (本番 publish) | **未** | 0 | `NPM_TOKEN` + `git tag v1.0.12 && git push origin v1.0.12` |
+| M3 | `@s2j/docs-linter` npmjs publish (初回) | **済** | 100 | 最新 `@s2j/docs-linter@1.0.11` |
+| M4 | artifact retention 確立 (GHA) | **部分済** | 90 | dry-run で artifact 保存。tag 連動は M2 後 |
+| M5 | フェーズ2完了 | **未** | 0 | M2 成功後 |
+
+**集計**: マイルストーン **(100 + 0 + 100 + 90 + 0) / 5 → 60%**。
 
 ### 補足
 
@@ -342,10 +367,12 @@ git tag v1.0.12 && git push origin v1.0.12
     * tarball には patch スクリプトのみ同梱。
 * **GHA と secret**:
     * ワークフローは `${{ secrets.NPM_TOKEN }}` を参照するのみ (値はリポジトリに含めない)。
+    * **2026-05-24 時点**: GitHub Secret `NPM_TOKEN` は **未登録** (`gh secret list` 空)。
     * IDE の `Context access might be invalid: NPM_TOKEN` は Secret 未登録時の静的警告であり、登録後も残ることがある。
     * 長期運用は [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) の OIDC 移行を推奨する。
 * **npm publish / 受け入れ試験 (2026-05-24)**:
     * レジストリ最新 … `@s2j/docs-linter@1.0.11`
+    * リポジトリ `package.json` … **`1.0.12`** (GHA publish 候補、npm 未公開)
     * 受け入れ (#12) … **9 リポジトリ**
         * WordPress… Alliance Manager / Slug Generater / Media Library Date Corrector / Similarity Service (Composer+npm)
         * Swift… About Window / Source List / Cozy Brew
@@ -354,8 +381,18 @@ git tag v1.0.12 && git push origin v1.0.12
 
 ```bash
 npm run verify:tarball
-npm run publish:dry-run
-npm view @s2j/docs-linter version   # => 1.0.11
-npx s2j-docs-linter --version       # => 1.0.11
+npm run publish:dry-run          # package.json 1.0.12 (npm 未公開のため成功)
+node ./scripts/verify-release-tag.cjs v1.0.12
+npm view @s2j/docs-linter version   # => 1.0.11 (npm 最新)
+npx s2j-docs-linter --version       # => 1.0.12 (ローカル)
 npm run lint
+```
+
+* **GHA 検証 (2026-05-24)**:
+
+```bash
+gh workflow run npm-publish.yml -f dry_run=true   # M1 dry-run
+gh run list --workflow=npm-publish.yml --limit 1
+# tag publish (M2): NPM_TOKEN 登録後
+git tag v1.0.12 && git push origin v1.0.12
 ```
