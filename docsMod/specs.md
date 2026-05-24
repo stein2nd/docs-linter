@@ -10,6 +10,7 @@
 | [npm パッケージ仕様](./npm_package_spec.md) | `@s2j/docs-linter` として npmjs で運用する。 |
 | [npm 使い方ガイド](./npm_usage.md) | Git サブモジュールではなく npm モジュールとして利用する。 |
 | [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) | フェーズ2での、GitHub Actions secret 利用 |
+| [npm リリース手順](./release.md) | GHA tag publish、`NPM_TOKEN` 登録、dry-run 検証 |
 | [実装状況](./status.md) | 実装状況サマリー、移行タスク、Backlog |
 
 ---

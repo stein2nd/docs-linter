@@ -1,17 +1,19 @@
 # ============================================================
-# Publish @s2j/docs-linter to npm (tag-triggered)
+# Publish @s2j/docs-linter to npm (tag-triggered + manual dry-run)
 # ------------------------------------------------------------
-# 仕様: docsMod/npm_package_spec.md
-#   - GitHub Actions Publish ワークフロー
+# 仕様: docsMod/npm_package_spec.md / docsMod/release.md
 #   - フェーズ1: 設計・ファイル追加 (Automation After Validation)
-#   - フェーズ2: 初回手動 publish 成功後、NPM_TOKEN 設定して tag push で運用
+#   - フェーズ2: NPM_TOKEN 設定後、tag push または手動 dry-run で運用
 #
-# 必須:
+# 必須 (tag push で publish する場合):
 #   - リポジトリ Secrets に NPM_TOKEN (npmjs automation token)
-#   - package.json version と tag (例: v1.0.10) の一致
+#   - package.json version と tag (例: v1.0.12) の一致
 #
 # トリガー:
-#   git tag v1.0.10 && git push origin v1.0.10
+#   git tag v1.0.12 && git push origin v1.0.12
+#
+# 手動 dry-run (M1 検証):
+#   Actions → Publish to npm → Run workflow → dry_run: true
 # ============================================================
 
 name: Publish to npm
@@ -20,6 +22,12 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry-run only (verify tarball + pack artifact; skip npm publish)"
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -27,6 +35,8 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -40,6 +50,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify tag matches package version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: node ./scripts/verify-release-tag.cjs "${{ github.ref_name }}"
+
       - name: Verify publish tarball
         run: npm run verify:tarball
 
@@ -49,11 +63,24 @@ jobs:
       - name: Upload pack artifact
         uses: actions/upload-artifact@v4
         with:
-          name: s2j-docs-linter-${{ github.ref_name }}
+          name: s2j-docs-linter-${{ github.ref_name || format('manual-{0}', github.run_number) }}
           path: artifacts/*.tgz
           if-no-files-found: error
 
+      - name: Publish dry-run
+        if: env.DRY_RUN == 'true'
+        run: npm run publish:dry-run
+
+      - name: Verify NPM_TOKEN is configured
+        if: env.DRY_RUN != 'true'
+        run: |
+          if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
+            echo "::error::NPM_TOKEN secret is not configured. See docsMod/release.md"
+            exit 1
+          fi
+
       - name: Publish to npm
+        if: env.DRY_RUN != 'true'
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

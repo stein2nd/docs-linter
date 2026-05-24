@@ -827,6 +827,10 @@ peer 依存の都合で通常の `npm install` が失敗する場合は、`npm i
 
 公開時 (`npm pack` / `npm publish`) は `prepare` でビルドと `.npmignore` 生成が走るため、公開物の取りこぼしに注意してください。
 
+#### npm リリース (メンテナー向け)
+
+GitHub Actions による tag 連動 publish の手順は [docsMod/release.md](./docsMod/release.md) を参照してください。初回運用前にリポジトリ Secret `NPM_TOKEN` (npm automation token) の登録が必要です。
+
 #### ルールの追加・修正
 
 * **新しいルールの追加**:

@@ -1,6 +1,6 @@
 {
   "name": "@s2j/docs-linter",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Reusable textlint toolkit for Swift, WordPress, and general documentation projects.",
   "type": "module",
   "author": "Koutarou ISHIKAWA",
@@ -52,6 +52,7 @@
     "lint:package": "npm pack --dry-run",
     "verify:tarball": "node ./scripts/verify-tarball.cjs",
     "verify:artifact": "npm run pack:artifact && node ./scripts/verify-tarball.cjs --from-artifacts",
+    "verify:release-tag": "node ./scripts/verify-release-tag.cjs",
     "dev": "npx vite build --watch",
     "lint": "node dist/bin/run-textlint.js './README.md' '**/*.md'",
     "lint:wp": "node dist/bin/run-textlint.js --profile wordpress './README.md' '**/*.md'",

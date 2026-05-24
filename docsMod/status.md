@@ -4,7 +4,7 @@
 
 **移行フェーズ**は [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) に従い、現時点は **フェーズ1** (Git Submodule と npm パッケージの併存) です。**フェーズ1完了条件 #1–16 はすべて済** (2026-05-24)。
 
-最終更新 …**2026-05-24** — フェーズ1 **クローズ** (完了条件 **16/16 → 100%**)。npm 最新 `@s2j/docs-linter@1.0.11`（`sudachi-synonyms-dictionary` 同梱）。**#12** — 利用側 **9 リポジトリ**で Submodule → npm 移行・`npm run lint:docs` 成功。フェーズ2は **約 20%**（マイルストーン 1/5 済、GHA 運用未）。
+最終更新 …**2026-05-24** — フェーズ1 **クローズ** (完了条件 **16/16 → 100%**)。npm 最新 `@s2j/docs-linter@1.0.11`（`sudachi-synonyms-dictionary` 同梱）。**#12** — 利用側 **9 リポジトリ**で Submodule → npm 移行・`npm run lint:docs` 成功。フェーズ2は **約 70%**（実装・文書済み、`NPM_TOKEN` 登録 + GHA 運用検証待ち）。
 
 ### 仕様書 (参照元)
 
@@ -128,11 +128,11 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | 項目 | 状態 |
 | --- | --- |
-| **フェーズ2 実装％ (マイルストーン)** | **20%** — M1–M5 のうち **M3 のみ済** (手動 publish。GHA 運用は未) |
+| **フェーズ2 実装％ (マイルストーン)** | **70%** — ワークフロー強化・[release.md](./release.md) 済。**M3 済**。M1/M2/M4/M5 は `NPM_TOKEN` + GHA 検証待ち |
 | **フェーズ2 必須完了条件** | **50%** — 5 項目中 **2 済** / **2 未** / **1 部分済** (#5 ローカルのみ) |
-| npm レジストリ | **済** — 最新 `@s2j/docs-linter@1.0.11`（フェーズ1 #11 で達成） |
-| GHA publish ワークフロー | **雛形済み** — [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml)。**registry 運用は未開始** |
-| 認証 | **未** — `NPM_TOKEN` または npm trusted publishing (OIDC) の CI 統合 |
+| npm レジストリ | **済** — 最新 `@s2j/docs-linter@1.0.11`（次リリース候補 `1.0.12` を GHA 検証用に準備） |
+| GHA publish ワークフロー | **実装済み** — [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml)（`workflow_dispatch` dry-run、tag/version 検証）。**registry 運用は未開始** |
+| 認証 | **未** — GitHub Secret `NPM_TOKEN` 未登録（[release.md](./release.md) 手順） |
 
 フェーズ1で package 自体の成立性と利用側移行を確認したうえで、フェーズ2では以下を実現する。
 
@@ -149,11 +149,11 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | 優先 | タスク | 完了条件 | 状態 | 実装％ |
 |------|--------|----------|------|------:|
-| P0 | npm authentication integration | GitHub Actions から npm publish 認証成功 | 未 | 0 |
-| P0 | publish workflow implementation | tag push で publish workflow 起動・成功 | 雛形済み、未運用 | 50 |
+| P0 | npm authentication integration | GitHub Actions から npm publish 認証成功 | 未 (`NPM_TOKEN` 登録待ち) | 0 |
+| P0 | publish workflow implementation | tag push で publish workflow 起動・成功 | **実装済み**、未運用 | 80 |
 | P0 | `@s2j/docs-linter` initial publish | npmjs.com organization `s2j` に package 登録成功 | **済** (`1.0.11`) | 100 |
 | P1 | release artifact generation | tarball artifact を GitHub Actions で保存可能 | ローカル済、GHA 未 | 50 |
-| P1 | workflow verification | test tag で publish dry-run 成功 | ローカル dry-run 済、GHA 未 | 50 |
+| P1 | workflow verification | test tag で publish dry-run 成功 | ローカル dry-run 済 (`1.0.12`)、GHA 未 | 50 |
 | P2 | trusted publishing migration design | NPM_TOKEN から OIDC への移行方針定義 | 文書済み ([npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md)) | 100 |
 
 ### フェーズ2完了条件
@@ -176,8 +176,8 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | # | 完了条件 | 状態 | 実装％ |
 | ---: | --- | --- | ---: |
-| 1 | GitHub Actions 上で `npm publish --dry-run` テストが可能 | 未 (ローカルは済) | 50 |
-| 2 | release workflow documentation が README / docs に反映済 | 部分 (GHA 雛形・認証仕様文書は済) | 50 |
+| 1 | GitHub Actions 上で `npm publish --dry-run` テストが可能 | 未 (ローカル `1.0.12` 済) | 50 |
+| 2 | release workflow documentation が README / docs に反映済 | **済** ([release.md](./release.md)、README 導線) | 100 |
 | 3 | publish secret / auth strategy が仕様化済 | **済** ([npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md)) | 100 |
 
 #### 将来拡張 (フェーズ3候補)
@@ -209,7 +209,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [移行のワークフロー例 - フェーズ1優先](./npm_package_spec.md#移行のワークフロー例---フェーズ1優先タスク) | 実装済み | 100 | migration examples + `lint:docs` before/after | [npm_usage.md](./npm_usage.md) + `examples/` (#10, #15) |
 | [互換性に関する、移行戦略](./npm_package_spec.md#互換性に関する移行戦略) (フェーズ1) | 実装済み | 100 | 併存基盤 + root 互換レイアウト + 移行ドキュメント | **9 リポジトリ**で Submodule → npm 移行完了 (#12) |
 | [README 移行](./npm_package_spec.md#readme-移行) | フェーズ1済 | 100 | Submodule 主 + npm 併記、動作する CLI 例 | フェーズ2でデフォルト npm 化 (#10) |
-| [GitHub Actions Publish ワークフロー](./npm_package_spec.md#github-actions-publish-ワークフロー) | 設計済み | 100 | `verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish` | フェーズ2: `NPM_TOKEN` 設定後に運用開始 |
+| [GitHub Actions Publish ワークフロー](./npm_package_spec.md#github-actions-publish-ワークフロー) | 実装済み | 100 | `verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish` | `workflow_dispatch` dry-run、[release.md](./release.md) |
 | [GitHub Actions Publish - フェーズ1優先](./npm_package_spec.md#github-actions-publish-ワークフロー---フェーズ1優先タスク) | 実装済み | 100 | tag `v*` / `npm ci` / 検証 / artifact 保存 / publish 定義 | registry への実 publish 運用はフェーズ2 |
 | [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) | 文書済み | 100 | フェーズ1 `NPM_TOKEN` / フェーズ2 OIDC 方針 | ワークフローは現状フェーズ1パターン |
 | [npm 使い方ガイド との整合 - フェーズ1優先](./npm_package_spec.md#npm-使い方ガイド-との整合---フェーズ1優先タスク) / [npm_usage.md](./npm_usage.md) | 実装済み | 100 | README のコマンドが実際に動く | `lint:docs` / VSCode / `extends` / CI (#10, #14) |
@@ -277,6 +277,9 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 * **M3**: `@s2j/docs-linter` npmjs publish — **済** (最新 `1.0.11`)
 * **受け入れ試験 (フェーズ1 #12)**: **9 リポジトリ** — WordPress (npm 3 / Composer+npm 1)、Swift 3、仕様ドキュメント 2 — **済** (2026-05-24)
+* **GHA ワークフロー強化** (2026-05-24): `workflow_dispatch` (dry-run)、tag/version 一致検証 (`scripts/verify-release-tag.cjs`)、`NPM_TOKEN` 未設定時の明示エラー
+* **リリース手順文書**: [release.md](./release.md) — `NPM_TOKEN` 登録、dry-run、tag push 手順
+* **次リリース候補**: `package.json` `1.0.12` — GHA dry-run / publish 検証用（ローカル `publish:dry-run` 成功確認済み）
 
 #### 運用 (手動)
 
@@ -285,47 +288,44 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 ### フェーズ2の残タスク
 
-#### 1. GitHub Actions Publish ワークフローの運用開始
+#### 1. GitHub Secret `NPM_TOKEN` 登録 — **最優先**
 
-[`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml) は **雛形済み** (tag `v*`、`verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish`)。**registry への実 publish 運用**は未開始です。
+[release.md](./release.md) §1 に従い、npm automation token を GitHub Secret `NPM_TOKEN` として登録してください。
 
-* `NPM_TOKEN` 登録後の tag push 検証
-* GHA 上での `npm publish --access public` 成功確認
+```bash
+gh secret set NPM_TOKEN --repo stein2nd/docs-linter
+```
 
-#### 2. GitHub Secret 連携
+#### 2. GHA dry-run 検証 (M1)
 
-下記を内容とする、GitHub リポジトリの設定で `NPM_TOKEN` を登録します。未着手です。
+main にワークフロー変更を push 後:
 
-* `NPM_TOKEN` 登録
-* Actions 権限の確認
+```bash
+gh workflow run npm-publish.yml -f dry_run=true
+gh run watch
+```
 
-#### 3. パッケージの Publish
+#### 3. tag push による本番 publish (M2 / フェーズ2 必須 #3–5)
 
-**済** — 最新 `@s2j/docs-linter@1.0.11`。`npm view @s2j/docs-linter version` → `1.0.11`。
+`1.0.12` を main に merge 後:
 
-#### 4. Publish Dry-Run ワークフローの検証
+```bash
+git tag v1.0.12 && git push origin v1.0.12
+```
 
-* ローカル … **済** (2026-05-23): `npm publish --dry-run --access public` 成功
-* GHA … **未**: tag push ワークフロー上での dry-run / publish 成功確認
+成功後 `npm view @s2j/docs-linter version` → `1.0.12`、Actions Artifacts に `s2j-docs-linter-v1.0.12` を確認。
 
-#### 5. リリース Artifact の保持
+#### 4. Trusted Publishing 移行設計
 
-* ローカル … **済**: `pack:artifact` → `./artifacts/s2j-docs-linter-<version>.tgz`、`verify:artifact` (2026-05-18 以降)
-* GHA … **未運用**: `upload-artifact` (`s2j-docs-linter-<tag>`) の tag push 時保存を初回 publish 後に検証
-
-#### 6. Trusted Publishing 移行設計
-
-フェーズ3に向けて、下記を内容とした、npm auth 戦略を設計します。
-
-* NPM_TOKEN 依存から OIDC への移行
+フェーズ3に向けた OIDC 移行 — 文書済み ([npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md))。
 
 ### フェーズ2のマイルストーン
 
-1. M1: GitHub Actions で `npm publish --dry-run` 成功 — **未** (ローカル dry-run は済)
-2. M2: test tag push で workflow success — **未**
+1. M1: GitHub Actions で `npm publish --dry-run` 成功 — **未** (ローカル `1.0.12` 済。`workflow_dispatch` 実装済み)
+2. M2: test tag push で workflow success — **未** (`v1.0.12` + `NPM_TOKEN` 待ち)
 3. M3: `@s2j/docs-linter` npmjs publish — **済** (最新 `1.0.11`)
 4. M4: artifact retention 確立 — **未** (ローカル済、GHA 未運用)
-5. M5: フェーズ2完了 — **未**
+5. M5: フェーズ2完了 — **未** (M1/M2/M4 成功後)
 
 ### 補足
 
