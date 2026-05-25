@@ -706,6 +706,14 @@ npm update @s2j/docs-linter
 Git サブモジュールでの利用は、非推奨です。
 新しいプロジェクトでは、npm パッケージのインストールを使用する必要があります。
 
+## ロードマップ
+
+* プロジェクトのロードマップと実装状況
+  * [docsMod/status.md](./docsMod/status.md)
+* ガバナンス
+  * [メンテナンス方針](./docsMod/maintenance_policy.md)
+  * [SemVer 方針](./docsMod/versioning_policy.md)
+
 ## ❓ FAQ
 
 **Q: textlint が動作しない**
