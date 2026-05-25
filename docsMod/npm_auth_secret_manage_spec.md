@@ -101,96 +101,82 @@ flowchart TD
 
 * 開発者のローカルマシンにおける、認証情報の管理
 
-## 3. フェーズ1: `NPM_TOKEN`
+## 3. Transitional Compatibility: `NPM_TOKEN` (Legacy / Optional)
 
 ### 設計意図 (ゴール)
 
-npm trusted publishing 導入前の publish 自動化を実現します。
+npm Trusted Publishing 導入前の、一時的な互換運用を許容します。
 
 ### 設計原則
 
-* 段階移行を許容すること。
-* publish 専用トークンを使うこと。
+* 段階移行を許容する。
+* 必要最小権限のみ。
 
 ### 設計方針 (規約)
 
-GitHub Actions secret で `npm publish --access public` を実行する際に、`NPM_TOKEN` を使用します。
-具体的な利用例は、「GitHub Actions 例」の [フェーズ1: `NPM_TOKEN`](#3-フェーズ1-npm_token) を参照してください。
+`NPM_TOKEN` は、下記の用途において、legacy compatibility としてのみ許容します。GitHub Actions の標準 publish 認証方式としては、採用しません。
 
-### 必須要件
+* ローカルでの手動 publish
+* 一時的な CI の代替手段
 
-トークンは、下記を満たします。
+### 非対象 (Out of Scope)
 
-* npm 自動化トークン
-* publish 権限のみ
-* `s2j` 組織のパッケージ publish 権限
-* 最小スコープ
-
-### 禁止事項
-
-下記を禁止します。
-
-* 個人用ログインパスワード
-* 平文によるトークンコミット
-* .npmrc コミット
-* 再利用可能トークンの広範囲共有
+* 長期運用
+* デフォルトの公開認証
 
 ### 責務
 
-フェーズ1で定義すること。
-
-* トークンベースの publish
-* GitHub secret ストレージ
+* 代替認証
 
 ### 非責務
 
-フェーズ1では定義しないこと。
+* 標準的なリリース自動化
 
-* トークンの永続性
-
-## 4. フェーズ2: npm trusted publishing (推奨)
+## 4. フェーズ2: npm Trusted Publishing (推奨)
 
 ### 設計意図 (ゴール)
 
-GitHub Actions から secret なしで npm publish を可能にします。
+GitHub Actions から secretless npm publish を実現します。
 
 ### 設計原則
 
-* CI に credential を保存しないこと。
-* GitHub Actions 識別情報を npm レジストリに委譲すること。
+* GitHub Secrets に publish token を保存しない。
+* GitHub Actions OIDC identity を npm registry に委譲する。
+* 長期 secret を削減する。
 
 ### 設計方針 (規約)
 
-最終的な推奨方式は、npm trusted publishing とします。
+標準 publish 認証方式は、「npm Trusted Publishing」です。
+その対象は、下記の通りです。
 
-対象は、下記の順番です。
-
-* GitHub リポジトリ
+* GitHub repository
 * GitHub Actions
-* npmjs.com の組織 `s2j`
+* npm organization `s2j`
 
-### 概要
-
-GitHub Actions OIDC 識別情報を npm trusted publishing に登録します。
-これにより、下記が不要になります。
+GitHub Actions:
 
 ```yaml
-secrets.NPM_TOKEN
-NODE_AUTH_TOKEN
+permissions:
+  contents: read
+  id-token: write
 ```
+
+npm 側では、Trusted Publisher 登録を必須とします。
+
+### 非対象 (Out of Scope)
+
+* NPM_TOKEN ベース標準運用
+* 手動によるトークンのローテーション
 
 ### 責務
 
-フェーズ2で定義すること。
-npm trusted publishing に移行後は、下記が可能になります。
-
-* 長期トークン廃止
-* secret 入れ替え不要
-* GitHub リポジトリの信頼境界に統合
+* trusted publisher の登録
+* OIDC publish 認証
+* GitHub Actions との連携
 
 ### 非責務
 
-フェーズ1では定義しないこと。
+* レガシートークンのライフサイクル
 
 ## 5. GitHub Actions 例
 

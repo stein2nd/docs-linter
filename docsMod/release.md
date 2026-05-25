@@ -9,9 +9,44 @@
 | パッケージ | `@s2j/docs-linter` |
 | ワークフロー | [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml) |
 | トリガー | tag `v*` push、または手動 `workflow_dispatch` |
-| 認証 (フェーズ2) | GitHub Secret `NPM_TOKEN` (npm automation token) |
+| 認証 (推奨) | **npm Trusted Publishing (OIDC)** — GitHub Actions / `stein2nd` / `docs-linter` / `npm-publish.yml` |
+| 認証 (レガシー) | GitHub Secret `NPM_TOKEN` — **不要** (Trusted Publisher 登録済み) |
 
-## 1. 初回セットアップ (NPM_TOKEN)
+## 1. 認証セットアップ (Trusted Publishing)
+
+npm Trusted Publisher を登録済みです (2026-05-24)。
+
+| 項目 | 値 |
+| --- | --- |
+| Publisher | GitHub Actions |
+| Organization or user | `stein2nd` |
+| Repository | `docs-linter` |
+| Workflow filename | `npm-publish.yml` |
+| Allowed actions | Allow publish、Allow stage publish |
+
+ワークフロー側の要件は、下記の通りです。
+
+```yaml
+permissions:
+  contents: read
+  id-token: write
+```
+
+`NPM_TOKEN` や `NODE_AUTH_TOKEN` は **不要** です。GitHub Secret に `NPM_TOKEN` を登録しない運用を推奨します。
+
+### ローカル手動 publish (メンテナー)
+
+Trusted Publishing は GitHub Actions 専用です。ローカルから publish する場合は `npm login` 後に実行します。
+
+```bash
+npm whoami                    # => stein2nd
+npm publish --dry-run --access public
+npm publish --access public
+```
+
+## 1a. レガシー: NPM_TOKEN (非推奨)
+
+Trusted Publisher 導入前のフェーズ2手順です。**新規セットアップでは使用しないでください。**
 
 1. `npmjs.com` にログインし、**Access Tokens** で **Automation** トークンを発行 (`Publish` 権限、`s2j` 組織スコープ)。
 2. GitHub リポジトリ `stein2nd/docs-linter` → **Settings** → **Secrets and variables** → **Actions** で `NPM_TOKEN` を登録。
@@ -91,12 +126,87 @@ npm run publish:whoami           # 手動 publish 時
 
 | 症状 | 対処 |
 | --- | --- |
-| `NPM_TOKEN secret is not configured` | GitHub Secret に `NPM_TOKEN` を登録 |
-| `Tag/version mismatch` | tag (`v1.0.12`) と `package.json` `version` (`1.0.12`) を一致させる |
+| `404 Not Found` on `npm publish` (ローカル) | `npm logout` → `npm login` → `npm whoami` で再認証 ([Troubleshooting](#troubleshooting) 参照) |
+| `Tag/version mismatch` | tag (`v1.0.13`) と `package.json` `version` (`1.0.13`) を一致させる |
 | `You cannot publish over the previously published versions` | version を上げるか、dry-run 用に未公開 version を用意 |
-| publish 403 / 401 | トークンの publish 権限・`s2j` org スコープを確認 |
-| IDE 警告 `Context access might be invalid: NPM_TOKEN` | Secret 未登録時の静的警告。登録後も残ることがある |
+| GHA publish 403 / OIDC 失敗 | npm Trusted Publisher の owner/repo/workflow 名が一致するか確認 |
+| `NPM_TOKEN secret is not configured` | OIDC 運用では不要。ワークフローが `id-token: write` になっているか確認 |
 
-## 7. 将来 (フェーズ3): Trusted Publishing (OIDC)
+## 7. 検証 (2026-05-24)
 
-長期運用では [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) の **npm trusted publishing (OIDC)** への移行を推奨します。移行後は `NPM_TOKEN` が不要になります。
+手動 publish および Trusted Publisher 登録を確認済みです。
+
+* `npm view @s2j/docs-linter version` → **`1.0.12`**
+* `@s2j/docs-linter` が npm organization **`s2j`** に表示
+* Trusted Publisher: GitHub Actions / `stein2nd` / `docs-linter` / `npm-publish.yml`
+
+**残**: tag push による **GHA OIDC publish** の初回成功 (次バージョン `1.0.13` 以降)。
+
+## Trusted Publishing リリースフロー
+
+### 設計意図 (ゴール)
+
+GitHub Actions から secretless release を実現します。
+
+### 設計方針 (規約)
+
+npm Trusted Publishing を利用します。
+
+### 事前準備
+
+* npm organization: `s2j`
+* npm package: `@s2j/docs-linter`
+* GitHub repository: `stein2nd/docs-linter`
+
+### npm Trusted Publisher 登録
+
+所属 organization のパッケージ一覧 `https://www.npmjs.com/settings/所属組織/packages` の当該パッケージの「設定」`https://www.npmjs.com/package/@所属組織/リポジトリ名/access` で、Trusted Publisher を、下記の内容で登録します。
+
+* Publisher: `GitHub Actions`
+* Organization or user: GitHub のユーザー名
+* Repository: GitHub のリポジトリ名
+* Workflow filename: `npm-publish.yml`
+* Allowed actions: `Allow publish`、`Allow stage publish`
+
+### GitHub Actions
+
+permissions:
+
+```yaml
+permissions:
+  contents: read
+  id-token: write
+```
+
+### Release
+
+tag:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+### Verification
+
+```bash
+npm view @s2j/docs-linter version
+```
+
+## Troubleshooting
+
+### `npm publish` で `E404 Not Found` が出る
+
+たとえば `404 Not Found - PUT https://registry.npmjs.org/@s2j%2fdocs-linter` の場合、「npm CLI 認証失敗」の可能性があります。
+
+* `npm config get registry` の実行結果が、`https://registry.npmjs.org/`
+* `npm config get userconfig` の実行結果が、`~/.npmrc`
+* `cat ~/.npmrc` の実行結果が、`//registry.npmjs.org/:_authToken=省略`
+* `npm whoami` の実行結果が、`ユーザー名`
+
+この時、`npm whoami` 実行結果が `ユーザー名` ではない場合は、一旦 `npm logout` します。
+`npm login` でログインし直した後、再認証後に、再試行します。下記が全てエラーなく実行できれば、publish 成功です。
+
+* `npm whoami` を実行すると、`ユーザー名`
+* `npm publish --dry-run --access public` が、エラーなく成功
+* `npm publish --access public` が、エラーなく成功

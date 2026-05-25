@@ -2,15 +2,14 @@
 # Publish @s2j/docs-linter to npm (tag-triggered + manual dry-run)
 # ------------------------------------------------------------
 # 仕様: docsMod/npm_package_spec.md / docsMod/release.md
-#   - フェーズ1: 設計・ファイル追加 (Automation After Validation)
-#   - フェーズ2: NPM_TOKEN 設定後、tag push または手動 dry-run で運用
+# 認証: npm Trusted Publishing (OIDC) — stein2nd/docs-linter / npm-publish.yml
 #
 # 必須 (tag push で publish する場合):
-#   - リポジトリ Secrets に NPM_TOKEN (npmjs automation token)
-#   - package.json version と tag (例: v1.0.12) の一致
+#   - npm Trusted Publisher 登録済み (GitHub Actions / stein2nd / docs-linter / npm-publish.yml)
+#   - package.json version と tag (例: v1.0.13) の一致
 #
 # トリガー:
-#   git tag v1.0.12 && git push origin v1.0.12
+#   git tag v1.0.13 && git push origin v1.0.13
 #
 # 手動 dry-run (M1 検証):
 #   Actions → Publish to npm → Run workflow → dry_run: true
@@ -31,6 +30,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   publish:
@@ -71,16 +71,6 @@ jobs:
         if: env.DRY_RUN == 'true'
         run: npm run publish:dry-run
 
-      - name: Verify NPM_TOKEN is configured
-        if: env.DRY_RUN != 'true'
-        run: |
-          if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
-            echo "::error::NPM_TOKEN secret is not configured. See docsMod/release.md"
-            exit 1
-          fi
-
       - name: Publish to npm
         if: env.DRY_RUN != 'true'
         run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

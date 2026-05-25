@@ -246,3 +246,32 @@ CI セーフな lint 実行をすること。
 ### 非責務
 
 reviewdog 統合。
+
+## Release
+
+### 設計意図 (ゴール)
+
+release を安全かつ再現可能にします。
+
+### 設計原則
+
+* release は、GitHub Actions を標準とする。
+* 認証は、GitHub OIDC を利用する。
+
+### 設計方針 (規約)
+
+publish トリガーの例は、下記になります。
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+GitHub Actions は、`npm publish --access public`
+認証は、npm Trusted Publishing になります。
+
+GitHub Secrets は、不要になります。
+
+### 非対象 (Out of Scope)
+
+* 手動による、秘密鍵のローテーション

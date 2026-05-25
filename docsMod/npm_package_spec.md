@@ -112,6 +112,23 @@ publish ワークフローを提供すること。
 * `.github/workflows/npm-publish.yml` は、**追加済み** (フェーズ1では設計と雛形。registry への自動 publish 運用は、初回手動 publish 成功後のフェーズ2)。
 * npm レジストリへの初回 publish は、**未実施** ([GitHub Actions Publish ワークフロー](#github-actions-publish-ワークフロー) 参照)。
 
+### Trusted Publishing Integration
+
+正式 publish は、npm Trusted Publishing を標準とします。
+GitHub Actions は、OIDC federation を利用し、`NPM_TOKEN` を使用しません。
+
+GitHub Actions:
+
+```yaml
+permissions:
+  contents: read
+  id-token: write
+```
+
+npm レジストリでは、Trusted Publisher 登録済みであること。
+
+Legacy token publish は fallback とします。
+
 ## Publishing - フェーズ1優先タスク
 
 ### 設計意図 (ゴール)
