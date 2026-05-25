@@ -1,0 +1,10 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Documentation
+    url: https://github.com/stein2nd/docs-linter/blob/main/README.md
+    about: Read project documentation first
+
+  - name: Contribution Guide
+    url: https://github.com/stein2nd/docs-linter/blob/main/CONTRIBUTING.md
+    about: Contribution expectations and workflow
