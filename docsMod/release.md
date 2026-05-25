@@ -7,6 +7,7 @@
 | 項目 | 内容 |
 | --- | --- |
 | パッケージ | `@s2j/docs-linter` |
+| 変更履歴 | [CHANGELOG.md](../CHANGELOG.md) |
 | ワークフロー | [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml) |
 | トリガー | tag `v*` push、または手動 `workflow_dispatch` |
 | 認証 (推奨) | **npm Trusted Publishing (OIDC)** — GitHub Actions / `stein2nd` / `docs-linter` / `npm-publish.yml` |
@@ -76,11 +77,31 @@ gh run watch
 
 **注意**: 既に npm に公開済みのバージョンでは `publish:dry-run` が失敗します。dry-run 検証前に `package.json` の `version` を未公開の semver に上げてください。
 
-## 3. バージョン更新と tag push (本番 publish)
+## 3. CHANGELOG 更新
 
-1. `package.json` の `version` を更新 (semver)
-2. 変更を main に merge
-3. tag を作成して push:
+リリース前に [CHANGELOG.md](../CHANGELOG.md) を更新します。`package.json` の `version` 更新および tag push **より前** に main へ merge してください。
+
+1. 先頭 (最新バージョン) にエントリを追加する
+
+   ```markdown
+   ## [1.0.14] - 2026-05-26
+
+   - 変更内容を箇条書き
+   ```
+
+2. 記載内容の目安
+   * 利用者に影響する変更 (CLI、presets、依存関係、互換性)
+   * publish 基盤・CI の変更 (該当する場合)
+   * パッチリリースでは修正・依存更新のみでも可
+
+3. バージョン番号は、これから publish する `package.json` `version` と一致させる
+
+## 4. バージョン更新と tag push (本番 publish)
+
+1. [CHANGELOG.md](../CHANGELOG.md) を更新 (§3)
+2. `package.json` の `version` を更新 (semver)
+3. 変更を main に merge
+4. tag を作成して push:
 
 ```bash
 # 例: 1.0.12 をリリース
@@ -88,21 +109,21 @@ git tag v1.0.12
 git push origin v1.0.12
 ```
 
-4. Actions で **Publish to npm** が起動し、以下が実行される
+5. Actions で **Publish to npm** が起動し、以下が実行される
 
    * tag / `package.json` version 一致検証 (`scripts/verify-release-tag.cjs`)
    * `npm ci` → `verify:tarball` → `pack:artifact`
    * artifact 保存 (`s2j-docs-linter-v1.0.12`)
    * `npm publish --access public`
 
-5. 公開確認
+6. 公開確認
 
 ```bash
 npm view @s2j/docs-linter version
 npx s2j-docs-linter@latest --version
 ```
 
-## 4. ローカル検証 (push 前)
+## 5. ローカル検証 (push 前)
 
 ```bash
 npm run verify:tarball
@@ -112,7 +133,7 @@ node ./scripts/verify-release-tag.cjs v1.0.12
 npm run publish:whoami           # 手動 publish 時
 ```
 
-## 5. フェーズ2 完了条件との対応
+## 6. フェーズ2 完了条件との対応
 
 | 完了条件 | 検証方法 |
 | --- | --- |
@@ -122,7 +143,7 @@ npm run publish:whoami           # 手動 publish 時
 | tarball artifact (GHA) | workflow の **Artifacts** タブ |
 | dry-run (推奨) | `workflow_dispatch` + `dry_run=true` |
 
-## 6. Trusted Publishing リリースフロー
+## 7. Trusted Publishing リリースフロー
 
 ### 設計意図 (ゴール)
 
@@ -173,7 +194,7 @@ git push origin v1.0.0
 npm view @s2j/docs-linter version
 ```
 
-## 7. トラブルシュート
+## 8. トラブルシュート
 
 | 症状 | 対処 |
 | --- | --- |
@@ -199,7 +220,7 @@ npm view @s2j/docs-linter version
 * `npm publish --dry-run --access public` が、エラーなく成功
 * `npm publish --access public` が、エラーなく成功
 
-## 8. 検証 (2026-05-25)
+## 9. 検証 (2026-05-25)
 
 フェーズ2 GHA OIDC publish を確認済みです。
 
