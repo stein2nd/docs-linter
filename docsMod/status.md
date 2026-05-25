@@ -2,9 +2,9 @@
 
 本ページは、[npm パッケージ仕様](./npm_package_spec.md) にもとづく実装修正の進捗を一覧化します。仕様書の [フェーズ1実装状況](./npm_package_spec.md#フェーズ1実装状況-2026-05) と相互参照します。publish 認証・シークレット方針は [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) を参照してください。
 
-**移行フェーズ**は [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) に従い、**フェーズ1 完了**、**フェーズ2 完了**、**フェーズ3 完了**、**フェーズ4 未着手**。
+**移行フェーズ**は [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) に従い、**フェーズ1 完了**、**フェーズ2 完了**、**フェーズ3 完了**、**フェーズ4 着手**。
 
-最終更新 …**2026-05-25** — フェーズ1 **クローズ** (**16/16 → 100%**)。フェーズ2 **クローズ** — 必須 **100%** / OIDC **100%** / 推奨 **100%** / M1–M5 **100%**。フェーズ3 **クローズ** — 必須 **100%** (#1–6) / 推奨 **100%** (#1–3)。npm 最新 **`@s2j/docs-linter@1.0.13`**。フェーズ4 **未着手** — 必須 **26%** / 推奨 **8%**。
+最終更新 …**2026-05-25** — フェーズ1 **クローズ** (**16/16 → 100%**)。フェーズ2 **クローズ** — 必須 **100%** / OIDC **100%** / 推奨 **100%** / M1–M5 **100%**。フェーズ3 **クローズ** — 必須 **100%** (#1–6) / 推奨 **100%** (#1–3)。npm 最新 **`@s2j/docs-linter@1.0.13`**。フェーズ4 **着手** — 必須 **46%** (1 済 / 3 部分済 / 1 未) / 推奨 **8%**。必須 #2 [CHANGELOG.md](../CHANGELOG.md) **済** (Git 管理、[release.md](./release.md) §3 連携)。
 
 ### 全体進捗 (サマリー)
 
@@ -17,9 +17,9 @@
 | フェーズ2 M1–M5 | マイルストーン | **100%** (5/5 済) | **クローズ** (2026-05-25) |
 | フェーズ3 必須 | #1–6 | **100%** (6/6 済) | **クローズ** (2026-05-25) |
 | フェーズ3 推奨 | #1–3 | **100%** (3/3 済) | **クローズ** (2026-05-25) |
-| **次の焦点** | フェーズ4 | — | OSS 成熟化 (CHANGELOG / matrix CI 等) |
-| フェーズ4 必須 | #1–5 | **26%** (0 済 / 3 部分済 / 2 未) | 未着手 |
-| フェーズ4 推奨 | #1–5 | **8%** (0 済 / 1 部分済 / 4 未) | 未着手 |
+| **次の焦点** | フェーズ4 | — | OSS 成熟化 (matrix CI / 依存関係 review 等) |
+| フェーズ4 必須 | #1–5 | **46%** (1 済 / 3 部分済 / 1 未) | 着手 |
+| フェーズ4 推奨 | #1–5 | **8%** (0 済 / 1 部分済 / 4 未) | 着手 |
 
 ### 仕様書 (参照元)
 
@@ -27,8 +27,9 @@
 | --- | --- |
 | [npm パッケージ仕様](./npm_package_spec.md) | npm 配布、CLI、互換、移行、GHA publish、**パッケージ構成 (artifact)** の全体仕様 |
 | [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) | Trusted Publishing (OIDC) 登録済、`NPM_TOKEN` 非使用方針 |
-| [npm リリース手順](./release.md) | GHA tag publish、Trusted Publishing (OIDC)、dry-run 検証 |
+| [npm リリース手順](./release.md) | GHA tag publish、**CHANGELOG 更新** (§3)、Trusted Publishing (OIDC)、dry-run 検証 |
 | [npm 使い方ガイド](./npm_usage.md) | install / CLI / `package.json` `lint:docs` 移行 / VSCode・`extends` / CI |
+| [CHANGELOG.md](../CHANGELOG.md) | npm 公開版の変更履歴 (`1.0.10`–) |
 | [仕様書の起点](./specs.md) | 上記への導線 |
 
 ### フェーズ1: サマリー
@@ -55,7 +56,8 @@
 | 区分 (仕様書) | フェーズ1の状態 |
 | --- | --- |
 | 実装済み | メタデータ、CLI、`scripts` 整理、tarball 検証 (22 entries)、**`pack:artifact` / `artifacts/`**、root 互換レイアウト、`examples/`・[npm_usage.md](./npm_usage.md) 整合、**GHA publish ワークフロー** (OIDC 運用)、**npmjs publish** (`1.0.10`–`1.0.12` 手動 / **`1.0.13`** GHA OIDC)、**利用側受け入れ試験** (**9** リポジトリ) |
-| 未実施 (フェーズ4) | CHANGELOG / matrix CI / 依存関係 review workflow |
+| 部分実施 (フェーズ4) | [CHANGELOG.md](../CHANGELOG.md) 運用 (必須 #2 **済**) |
+| 未実施 (フェーズ4) | SemVer ガバナンス文書、matrix CI、依存関係 review workflow |
 
 **実装％の算出**
 
@@ -344,9 +346,10 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | 項目 | 状態 |
 | --- | --- |
-| **フェーズ4 必須完了条件** | **26%** — 5 項目中 **0 済** / **3 部分済** / **2 未** |
+| **フェーズ4 必須完了条件** | **46%** — 5 項目中 **1 済** / **3 部分済** / **1 未** |
 | **フェーズ4 推奨完了条件** | **8%** — 5 項目中 **0 済** / **1 部分済** / **4 未** |
-| **本リポジトリ実装 (フェーズ4)** | **26%** — 文書・CI 基盤の一部のみ |
+| **本リポジトリ実装 (フェーズ4)** | **46%** — 文書・CI 基盤 + [CHANGELOG.md](../CHANGELOG.md) 運用 (Git 管理、[release.md](./release.md) §3 連携済) |
+| **CHANGELOG** | **済** — `1.0.10`–`1.0.13` 記載、リリース手順に組み込み (必須 #2) |
 | 前提 | フェーズ3 **済** (2026-05-25) |
 
 * 対象
@@ -362,18 +365,18 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | スコープ | 分子 / 分母 | 実装％ |
 | --- | --- | ---: |
-| 必須完了条件 | #1–5 の実装％合計 **130** / 500 | **26%** |
+| 必須完了条件 | #1–5 の実装％合計 **230** / 500 | **46%** |
 | 推奨完了条件 | #1–5 の実装％合計 **40** / 500 | **8%** |
-| 優先タスク P0–P2 | (40 + 0 + 30 + 0 + 0) / 5 | **14%** |
+| 優先タスク P0–P2 | (40 + 100 + 30 + 0 + 0) / 5 | **34%** |
 
-**フェーズ4クローズ**: **未達** — CHANGELOG 運用・依存関係レビュー CI 等が未整備。
+**フェーズ4クローズ**: **未達** — 依存関係レビュー CI・Node matrix CI 等が未整備。
 
 ### フェーズ4: 優先タスクと完了条件の対比
 
 | 優先 | タスク | 完了条件 | 状態 | 実装％ |
 |------|--------|----------|------|------:|
 | P0 | リリースガバナンス | SemVer 準拠の確立 | **部分済** ([release.md](./release.md) に tag/version 手順) | 40 |
-| P0 | 変更履歴の管理 | リリース履歴の可視化 | **未** (`CHANGELOG.md` なし) | 0 |
+| P0 | 変更履歴の管理 | リリース履歴の可視化 | **済** ([CHANGELOG.md](../CHANGELOG.md) Git 管理 + [release.md](./release.md) §3) | 100 |
 | P1 | CI の強化 | マトリックス / 互換性の検証 | **部分済** (`engines.node >=20`、publish は Node 24 のみ) | 30 |
 | P1 | 依存関係のメンテナンス | 依存関係の健全性維持 | **未** (review workflow なし) | 0 |
 | P2 | エコシステムの拡張 | 追加のプリセット / ツール | **未** | 0 |
@@ -387,12 +390,12 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | # | 完了条件 | 状態 | 実装％ | 検証方法 |
 | ---: | --- | --- | ---: | --- |
 | 1 | SemVer ガバナンスの文書化 | **部分済** | 40 | [release.md](./release.md) に semver tag 手順。専用ガバナンス文書なし |
-| 2 | CHANGELOG.md 運用開始 | **未** | 0 | リポジトリ root に `CHANGELOG.md` なし |
+| 2 | CHANGELOG.md 運用開始 | **済** | 100 | [CHANGELOG.md](../CHANGELOG.md) に `1.0.10`–`1.0.13` 記載。Git 管理。[release.md](./release.md) §3 に更新手順 |
 | 3 | 依存関係レビューのワークフロー | **未** | 0 | Dependabot / scheduled review workflow なし |
 | 4 | Node バージョンの互換性 CI | **部分済** | 30 | `package.json` `engines.node >=20`。GHA publish は Node 24 のみ。matrix CI なし |
 | 5 | npm パッケージのメンテナンス方針の文書化 | **部分済** | 60 | [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md)、[release.md](./release.md) |
 
-**集計**: 必須 **130 / 500 → 26%** (0 済 / 3 部分済 / 2 未)。
+**集計**: 必須 **230 / 500 → 46%** (1 済 / 3 部分済 / 1 未)。
 
 #### 推奨
 
@@ -416,13 +419,23 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | # | タスク | 優先度 | 実装％ | 完了条件 (#) |
 | ---: | --- | --- | ---: | ---: |
-| 1 | `CHANGELOG.md` 作成・運用開始 | P0 | **0** | 必須 #2 |
-| 2 | SemVer ガバナンス文書の整備 | P0 | **40** | 必須 #1 |
-| 3 | Node 互換性 matrix CI | P1 | **30** | 必須 #4 |
-| 4 | 依存関係レビュー workflow | P1 | **0** | 必須 #3 |
-| 5 | `CONTRIBUTING.md` / Issue テンプレート | P2 | **0** | 推奨 #3–4 |
+| 1 | SemVer ガバナンス文書の整備 | P0 | **40** | 必須 #1 |
+| 2 | Node 互換性 matrix CI | P1 | **30** | 必須 #4 |
+| 3 | 依存関係レビュー workflow | P1 | **0** | 必須 #3 |
+| 4 | `CONTRIBUTING.md` / Issue テンプレート | P2 | **0** | 推奨 #3–4 |
 
-**前提**: フェーズ3 **済** (2026-05-25)。フェーズ4 本格着手可能。
+**前提**: フェーズ3 **済** (2026-05-25)。フェーズ4 本格着手中 (必須 #2 **済**)。
+
+### フェーズ4で完了した項目
+
+* **必須 #2**: [CHANGELOG.md](../CHANGELOG.md) 運用開始 — `1.0.10`–`1.0.13` 履歴記載、Git 管理、[release.md](./release.md) §3–§4 に更新・リリース連携手順
+
+### フェーズ4で完了した主な変更 (コード・文書)
+
+| 対象 | 内容 | 関連 |
+| --- | --- | --- |
+| [CHANGELOG.md](../CHANGELOG.md) | npm 公開版の変更履歴 (`1.0.10`–`1.0.13`)、Git 管理 | 必須 #2 |
+| [release.md](./release.md) | §3 CHANGELOG 更新手順、§4 リリースフローへの組み込み | 必須 #2 |
 
 ### 機能一覧 (実装状況サマリー)
 
@@ -436,7 +449,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [ファイルスコープの最適化 (Publish)](./npm_package_spec.md#ファイルスコープの最適化を-publish) | 実装済み | 100 | `files` + `verify:tarball` | `presets/` + root ミラー (#4, #9) |
 | [CLI 互換レイヤ](./npm_package_spec.md#cli-互換レイヤ) / [互換性に関する要件](./npm_package_spec.md#互換性に関する要件) | 実装済み | 100 | パッケージ root 基準の preset 解決、互換 `docs-lint` | |
 | [互換性に関する、移行戦略 - フェーズ1優先](./npm_package_spec.md#互換性に関する移行戦略---フェーズ1優先タスク) | 実装済み | 100 | tarball に `base/` `swift/` `wordpress/` 同梱 | `npm_usage.md` に VSCode / `extends` (#13–14) |
-| [依存関係レビュー](./npm_package_spec.md#依存関係レビュー) | 実装済み | 100 | 実行時 → `dependencies`；`sudachi-synonyms-dictionary` 同梱 (1.0.11) | |
+| [依存関係レビュー](./npm_package_spec.md#依存関係レビュー) | 実装済み | 100 | 実行時 → `dependencies`；`sudachi-synonyms-dictionary` 同梱 (`>=18.0.0`, 1.0.11) | フェーズ4 #3 (review workflow) は **未** |
 | [Publishing](./npm_package_spec.md#publishing) (全体) | 実装済み | 100 | フェーズ1 **16/16** + フェーズ2 **5/5** + フェーズ3 **9/9** 済 | フェーズ3 **クローズ** (2026-05-25) |
 | [本リポジトリ `package.json` の `scripts` - フェーズ1優先](./npm_package_spec.md#本リポジトリ-packagejson-の-scripts---フェーズ1優先タスク) | 実装済み | 100 | `clean` / `build` / `prepare` / publish 検証群 / CLI 経由 `lint*` | `postinstall` はフェーズ1非対象で現状維持 (#8) |
 | [移行のワークフロー例](./npm_package_spec.md#移行のワークフロー例) | 実装済み | 100 | `examples/lint-docs*.yml` で `npx s2j-docs-linter` | フェーズ3 #5 **済**。legacy Submodule ステップは reference |
@@ -449,9 +462,10 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [npm 使い方ガイド との整合 - フェーズ1優先](./npm_package_spec.md#npm-使い方ガイド-との整合---フェーズ1優先タスク) / [npm_usage.md](./npm_usage.md) | 実装済み | 100 | README のコマンドが実際に動く | `lint:docs` / VSCode / `extends` / CI (#10, #14) |
 | [VSCode 互換戦略](./npm_package_spec.md#vscode-互換戦略) | ガイド済み | 100 | [npm_usage.md](./npm_usage.md) に移行例 | 利用側 **9 リポ** canonical 設定 (フェーズ3 推奨 #3 **済**) |
 | [CI 互換戦略](./npm_package_spec.md#ci-互換戦略) | ガイド済み | 100 | `npm_usage.md` / `examples/` に CI 例 | 利用側 **9 リポ** GHA docs lint 成功 (フェーズ3 #5 **済**) |
-| [バージョン管理ポリシー](./npm_package_spec.md#バージョン管理ポリシー) | 運用開始 | — | semver 運用 | npm 最新 **`1.0.13`** (GHA OIDC) |
+| [バージョン管理ポリシー](./npm_package_spec.md#バージョン管理ポリシー) | 運用開始 | — | semver 運用 + CHANGELOG | npm 最新 **`1.0.13`** (GHA OIDC) |
+| CHANGELOG / リリース履歴 (フェーズ4) | **済** | 100 | `CHANGELOG.md` 運用 + [release.md](./release.md) 連携 | 必須 #2 **済** (2026-05-25) |
 | [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ3 | **済** | 100 | Submodule 非推奨化・利用側 cutover | 必須 #1–6 + 推奨 #1–3 **済** (2026-05-25) |
-| [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ4 | 未着手 | 26 | レガシー機能削除・OSS 成熟化 | 必須 #1–5 |
+| [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ4 | 着手 | 46 | レガシー機能削除・OSS 成熟化 | 必須 #1–5 |
 
 ### フェーズ1で完了した項目
 
@@ -589,7 +603,9 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * **フェーズ3 / 4**:
     * フェーズ3 … **クローズ** — 必須 **100%** (#1–6) + 推奨 **100%** (#1–3), 2026-05-25
     * フェーズ3 推奨 #2–3 … migration guide / VSCode canonical 設定 — 利用側 **9 リポ** 定着済
-    * フェーズ4 … 必須 **26%** / 推奨 **8%** — [release.md](./release.md) / [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) により一部文書化済。`CHANGELOG.md`・matrix CI・依存関係 review workflow は未整備
+    * フェーズ4 … 必須 **46%** (1 済 / 3 部分済 / 1 未) / 推奨 **8%**
+    * フェーズ4 必須 #2 … [CHANGELOG.md](../CHANGELOG.md) **済** — `1.0.10`–`1.0.13`、Git 管理、[release.md](./release.md) §3 連携 (2026-05-25)
+    * フェーズ4 残 … SemVer ガバナンス文書 (#1)、依存関係 review workflow (#3)、Node matrix CI (#4)、CONTRIBUTING / Issue テンプレ (推奨 #3–4)
 * **ローカル検証の一式**:
     * 下記コマンドを利用する。
 
@@ -599,10 +615,10 @@ npm view @s2j/docs-linter version  # => 1.0.13
 npm run lint
 ```
 
-* **GHA リリース手順** (以降の semver):
+* **GHA リリース手順** (以降の semver) — 詳細は [release.md](./release.md) §3–§4:
 
 ```bash
-# package.json version を更新 → main に merge
+# CHANGELOG.md 更新 + package.json version を更新 → main に merge
 git tag vX.Y.Z && git push origin vX.Y.Z
 gh run watch
 npm view @s2j/docs-linter version
