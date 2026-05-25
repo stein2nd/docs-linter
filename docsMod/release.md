@@ -194,7 +194,13 @@ git push origin v1.0.0
 npm view @s2j/docs-linter version
 ```
 
-## 8. トラブルシュート
+## 8. GitHub リリースノート
+
+タグ公開ワークフローにより、GitHub Releases が自動的に作成されます。
+リリースノートは、`generate_release_notes: true` を使用して自動生成されます。
+これは標準的なリリースノートの仕組みです。
+
+## 9. トラブルシュート
 
 | 症状 | 対処 |
 | --- | --- |
