@@ -787,7 +787,9 @@ A: 以下の手順を確認してください。
 
 ## Contributing
 
-貢献をお待ちしています。以下の手順に従ってください。
+貢献をお待ちしています。**詳細は [CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。**
+
+以下はクイックスタートです。
 
 1. リポジトリをフォークしてください。
 2. 機能ブランチを作成してください (`git checkout -b feature/amazing-feature`)。
