@@ -4,7 +4,7 @@
 
 **移行フェーズ**は [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) に従い、**フェーズ1 完了** (併存)、**フェーズ2 完了** (GHA OIDC publish 運用)、**フェーズ3 進行中** (利用側 npm 移行 / Submodule 非推奨化)、**フェーズ4 未着手** (OSS 成熟化)。
 
-最終更新 …**2026-05-25** — フェーズ1 **クローズ** (**16/16 → 100%**)。フェーズ2 **クローズ** — 必須 **100%** / OIDC **100%** / 推奨 **100%** / マイルストーン **100%**。フェーズ3 **進行中** — 必須 **62%** / 推奨 **83%** (フェーズ1 #12 受入試験 **9 リポジトリ** を部分達成として計上)。フェーズ4 **未着手** — 必須 **26%** / 推奨 **8%**。
+最終更新 …**2026-05-25** — フェーズ1 **クローズ** (**16/16 → 100%**)。フェーズ2 **クローズ** — 必須 **100%** / OIDC **100%** / 推奨 **100%** / マイルストーン **100%**。フェーズ3 **進行中** — 必須 **75%** / 推奨 **83%** (利用側 **9 リポジトリ** npm 化・`tools/docs-linter` 削除済)。フェーズ4 **未着手** — 必須 **26%** / 推奨 **8%**。
 
 ### 全体進捗 (サマリー)
 
@@ -15,7 +15,7 @@
 | フェーズ2 OIDC | O1–O4 | **100%** (4/4 済) | **クローズ** (2026-05-25) |
 | フェーズ2 推奨 | #1–3 | **100%** (3/3 済) | **クローズ** (2026-05-25) |
 | フェーズ2 M1–M5 | マイルストーン | **100%** (5/5 済) | **クローズ** (2026-05-25) |
-| フェーズ3 必須 | #1–6 | **62%** (2 済 / 3 部分済 / 1 未) | **進行中** |
+| フェーズ3 必須 | #1–6 | **75%** (4 済 / 1 部分済 / 1 未) | **進行中** |
 | フェーズ3 推奨 | #1–3 | **83%** (1 済 / 2 部分済) | **進行中** |
 | フェーズ4 必須 | #1–5 | **26%** (0 済 / 3 部分済 / 2 未) | 未着手 |
 | フェーズ4 推奨 | #1–5 | **8%** (0 済 / 1 部分済 / 4 未) | 未着手 |
@@ -107,16 +107,16 @@
 
 #### #12 受け入れ試験 (2026-05-24)
 
-Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs` で lint 結果が得られることを確認済みです。
+Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs` で lint 結果が得られることを確認済みです。利用側 **9 リポジトリ** では `tools/docs-linter` を削除し、npm モジュール版へ cutover 済みです (フェーズ3 必須 #1–2)。
 
 | 区分 | リポジトリ | プリセット / 備考 |
 | --- | --- | --- |
 | WordPress プラグイン (npm) | S2J Alliance Manager、S2J Slug Generater、S2J Media Library Date Corrector | WordPress (`--profile wordpress` または `.textlintrc.wp.json`) |
 | WordPress プラグイン (Composer + npm) | S2J Similarity Service | WordPress + Composer 併存 |
 | Swift アプリ / ツール | S2J About Window、S2J Source List、S2J Cozy Brew | Swift (`--profile swift` または `.textlintrc.swift.json`) |
-| 仕様ドキュメント | WP Plugin Spec、Xcode Common Spec | 各リポジトリの textlint 設定に準拠 |
+| 仕様ドキュメント | WordPress Plugin Spec、Xcode Common Specs | 各リポジトリの textlint 設定に準拠。npm 化・`tools/docs-linter` 削除済 |
 
-**#12 集計**: WordPress **4** / Swift **3** / 仕様ドキュメント **2** ＝ **9 リポジトリ**。いずれも `@s2j/docs-linter@1.0.11` を使用。
+**#12 集計**: WordPress **4** / Swift **3** / 仕様ドキュメント **2** ＝ **9 リポジトリ**。いずれも `@s2j/docs-linter` npm 化、`tools/docs-linter` 削除済 (フェーズ3 #1–2 達成)。
 
 ### npm 配布: フェーズ1実装範囲
 
@@ -240,10 +240,10 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | 項目 | 状態 |
 | --- | --- |
-| **フェーズ3 必須完了条件** | **62%** — 6 項目中 **2 済** / **3 部分済** / **1 未** |
+| **フェーズ3 必須完了条件** | **75%** — 6 項目中 **4 済** / **1 部分済** / **1 未** |
 | **フェーズ3 推奨完了条件** | **83%** — 3 項目中 **1 済** / **2 部分済** |
 | **本リポジトリ実装 (フェーズ3)** | **35%** — README / examples の Submodule レガシー化は未 |
-| **利用側マイグレーション** | **65%** — フェーズ1 #12 で **9 リポジトリ** 受入試験済。Submodule 完全削除は未確認 |
+| **利用側マイグレーション** | **100%** — **9 リポジトリ** npm 化・`tools/docs-linter` 削除済 (必須 #1–2 **済**) |
 | npm レジストリ (公開済) | **済** — 最新 **`@s2j/docs-linter@1.0.13`** (GHA OIDC) |
 | README 導線 | **未** — 方法1 (Submodule) が主導線のまま ([README 移行](./npm_package_spec.md#readme-移行)) |
 
@@ -260,19 +260,19 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | スコープ | 分子 / 分母 | 実装％ |
 | --- | --- | ---: |
-| 必須完了条件 | #1–6 の実装％合計 **370** / 600 | **62%** |
+| 必須完了条件 | #1–6 の実装％合計 **450** / 600 | **75%** |
 | 推奨完了条件 | #1–3 の実装％合計 **250** / 300 | **83%** |
-| 優先タスク P0–P2 | (65 + 0 + 70 + 50 + 65) / 5 | **50%** |
+| 優先タスク P0–P2 | (100 + 50 + 70 + 50 + 65) / 5 | **67%** |
 | 本リポジトリ (README / examples) | Submodule レガシー化・npm デフォルト化 | **35%** |
 
-**フェーズ3クローズ**: **未達** — Submodule 依存削除 (#6) と README デフォルト npm 化が残存。
+**フェーズ3クローズ**: **未達** — 本リポジトリの Submodule レガシー (必須 #6: README / examples) が残存。
 
 ### フェーズ3: 優先タスクと完了条件の対比
 
 | 優先 | タスク | 完了条件 | 状態 | 実装％ |
 |------|--------|----------|------|------:|
-| P0 | 既存ユーザーのマイグレーション | 主要利用プロジェクトで npm package 化成功 | **部分済** (9 リポジトリ受入試験済) | 65 |
-| P0 | Git サブモジュールの依存関係の削除 | `tools/docs-linter` 不要化 | **未** | 0 |
+| P0 | 既存ユーザーのマイグレーション | 主要利用プロジェクトで npm package 化成功 | **済** (**9 リポジトリ**、`tools/docs-linter` 削除済) | 100 |
+| P0 | Git サブモジュールの依存関係の削除 | `tools/docs-linter` 不要化 | **部分済** (利用側 **9/9** 済。本リポジトリ README / examples 残存) | 50 |
 | P1 | VSCode マイグレーション | textlint config / nodePath マイグレーション | **部分済** ([npm_usage.md](./npm_usage.md) ガイド済) | 70 |
 | P1 | CI マイグレーション | GitHub Actions サブモジュールの依存関係の削除 | **部分済** (`examples/lint-docs*.yml` は npm 手順併記、Submodule 取得残存) | 50 |
 | P2 | マイグレーションドキュメントの完成 | README / docs 更新完了 | **部分済** (`npm_usage.md` + [release.md](./release.md)。README flip 未) | 65 |
@@ -285,14 +285,14 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | # | 完了条件 | 状態 | 実装％ | 検証方法 |
 | ---: | --- | --- | ---: | --- |
-| 1 | Swift プロジェクト (例: S2J About Window) 移行に成功 | **部分済** | 60 | フェーズ1 #12 受入試験済 (Swift **3** リポジトリ)。Submodule 完全削除は未確認 |
-| 2 | WordPress プラグインプロジェクト (例: S2J Alliance Manager) 移行に成功 | **部分済** | 60 | フェーズ1 #12 受入試験済 (WordPress **4** リポジトリ)。Submodule 完全削除は未確認 |
+| 1 | Swift プロジェクト (例: S2J About Window) 移行に成功 | **済** | 100 | Swift **3** リポジトリ (S2J About Window、S2J Source List、S2J Cozy Brew) — npm 化、`tools/docs-linter` 削除済 |
+| 2 | WordPress プラグインプロジェクト (例: S2J Alliance Manager) 移行に成功 | **済** | 100 | WordPress **4** リポジトリ (S2J Alliance Manager、S2J Slug Generater、S2J Media Library Date Corrector、S2J Similarity Service) — npm 化、`tools/docs-linter` 削除済 |
 | 3 | `npm install --save-dev @s2j/docs-linter` で利用可能 | **済** | 100 | npmjs 公開済 (`1.0.13`)。受入試験で `@1.0.11` 利用確認 |
 | 4 | `npx s2j-docs-linter` 成功 | **済** | 100 | フェーズ1 #3、`examples/` および受入試験 |
 | 5 | GitHub Actions でのドキュメント lint に成功 | **部分済** | 50 | [examples/lint-docs*.yml](../examples/lint-docs.yml) に npm lint 手順。`submodules: true` 併存 |
-| 6 | Git サブモジュールの依存関係を削除 | **未** | 0 | [README](../README.md) 方法1 (Submodule) が主導線。利用側 `.gitmodules` 削除は未確認 |
+| 6 | Git サブモジュールの依存関係を削除 | **部分済** | 50 | 利用側 **9 リポジトリ** では `.gitmodules` / `tools/docs-linter` 削除済。本リポジトリ [README](../README.md) 方法1 (Submodule) / `examples/` の Submodule 取得は残存 |
 
-**集計**: 必須 **370 / 600 → 62%** (2 済 / 3 部分済 / 1 未)。
+**集計**: 必須 **450 / 600 → 75%** (4 済 / 1 部分済 / 1 未)。
 
 #### 推奨
 
@@ -314,16 +314,16 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | # | タスク | 優先度 | 実装％ | 完了条件 (#) |
 | ---: | --- | --- | ---: | ---: |
-| 1 | 利用側 Submodule 完全削除の確認 | P0 | **0** | 必須 #6 — `.gitmodules` / `tools/docs-linter` 不要化 |
+| 1 | 本リポジトリ README / examples の Submodule レガシー削除 | P0 | **50** | 必須 #6 — 利用側は **9/9** 済。本リポジトリが残存 |
 | 2 | README デフォルト導線を npm に変更 | P2 | **0** | 推奨 #2 — [README 移行](./npm_package_spec.md#readme-移行) フェーズ2以降 |
 | 3 | `examples/lint-docs*.yml` から Submodule 取得削除 | P1 | **50** | 必須 #5 — npm のみ CI サンプル |
-| 4 | 主要利用プロジェクトの本番 cutover | P0 | **65** | 必須 #1–2 — 受入試験 (9 リポ) を本番運用へ |
+| 4 | 主要利用プロジェクトの本番 cutover | P0 | **100** | 必須 #1–2 — **9 リポジトリ** npm 化・`tools/docs-linter` 削除済 |
 
 ### フェーズ4: サマリー
 
 フェーズ4では、S2J Docs Linter の **OSS パッケージとしての成熟化・安定運用** を対象とします。
 
-フェーズ3でマイグレーションを完了した後、フェーズ4ではエコシステム / 品質 / 保守性を強化します。**現時点では未着手** (フェーズ3 必須 #6 未達のため)。
+フェーズ3でマイグレーションを完了した後、フェーズ4ではエコシステム / 品質 / 保守性を強化します。**現時点では未着手** (フェーズ3 必須 #6 本リポジトリ分が残存)。
 
 | 項目 | 状態 |
 | --- | --- |
@@ -433,7 +433,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [VSCode 互換戦略](./npm_package_spec.md#vscode-互換戦略) | ガイド済み | 100 | [npm_usage.md](./npm_usage.md) に移行例 | 利用側での設定変更は各プロジェクト (#14) |
 | [CI 互換戦略](./npm_package_spec.md#ci-互換戦略) | ガイド済み | 100 | `npm_usage.md` / `examples/` に CI 例 | 利用側 CI 移行は各プロジェクト (#15) |
 | [バージョン管理ポリシー](./npm_package_spec.md#バージョン管理ポリシー) | 運用開始 | — | semver 運用 | npm 最新 **`1.0.13`** (GHA OIDC) |
-| [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ3 | 進行中 | 62 | Submodule 非推奨化・利用側 cutover | 必須 #1–6。#12 受入 **9 リポ** を部分達成として計上 |
+| [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ3 | 進行中 | 75 | Submodule 非推奨化・利用側 cutover | 必須 #1–2 **済** (9 リポ)。#6 は本リポジトリ残存 |
 | [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ4 | 未着手 | 26 | レガシー機能削除・OSS 成熟化 | 必須 #1–5。フェーズ3 完了が前提 |
 | [README 移行](./npm_package_spec.md#readme-移行) (フェーズ3) | 未着手 | 0 | npm デフォルト化、Submodule を appendix へ | 必須 #6 / 推奨 #2 |
 
@@ -511,7 +511,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 #### 運用 (手動)
 
 * npmjs publish … `@s2j/docs-linter@1.0.10` (初回)、`1.0.11`、`1.0.12` (2026-05-24 手動)、**`1.0.13`** (2026-05-25 GHA OIDC)
-* 利用側受け入れ … 上記 9 リポジトリで Submodule → npm、`npm run lint:docs` 成功
+* 利用側受け入れ … 上記 **9 リポジトリ** npm 化・`tools/docs-linter` 削除済、`npm run lint:docs` 成功
 
 ### フェーズ2で完了した主な変更 (コード・文書)
 
@@ -567,9 +567,9 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * **npm publish / 受け入れ試験**:
     * レジストリ最新 … **`@s2j/docs-linter@1.0.13`** (`npm view` 確認済、2026-05-25)
     * GHA OIDC publish … **`1.0.13`** / 手動 publish … **`1.0.10`–`1.0.12`**
-    * 受け入れ (#12) … **9 リポジトリ** (`@s2j/docs-linter@1.0.11` で検証済)
+    * 受け入れ (#12) … **9 リポジトリ** npm 化・`tools/docs-linter` 削除済 (フェーズ3 #1–2 **済**)
 * **フェーズ3 / 4**:
-    * フェーズ3 … 必須 **62%** — フェーズ1 #12 受入試験 (**9 リポジトリ**) により #1–2・#3–4・推奨 #1 は部分〜完了。ブロッカーは **必須 #6** (Submodule 依存削除) と README npm デフォルト化。
+    * フェーズ3 … 必須 **75%** — 利用側 **9 リポジトリ** で必須 #1–2 **済** (`tools/docs-linter` 削除済)。残りは **#5–6** (本リポジトリ README / examples の Submodule レガシー) と README npm デフォルト化。
     * フェーズ4 … 必須 **26%** — [release.md](./release.md) / [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) により一部文書化済。`CHANGELOG.md`・matrix CI・依存関係 review workflow は未整備。
 * **ローカル検証の一式**:
     * 下記コマンドを利用する。
