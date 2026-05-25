@@ -701,6 +701,11 @@ npm update @s2j/docs-linter
 * **npm パッケージにより簡単なインストールとアップデート**
 * **Swift 開発では textlint-rule-preset-swift-docs-ja を活用**
 
+## レガシー移行リファレンス (Git サブモジュール)
+
+Git サブモジュールでの利用は、非推奨です。
+新しいプロジェクトでは、npm パッケージのインストールを使用する必要があります。
+
 ## ❓ FAQ
 
 **Q: textlint が動作しない**
