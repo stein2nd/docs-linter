@@ -122,27 +122,7 @@ npm run publish:whoami           # 手動 publish 時
 | tarball artifact (GHA) | workflow の **Artifacts** タブ |
 | dry-run (推奨) | `workflow_dispatch` + `dry_run=true` |
 
-## 6. トラブルシュート
-
-| 症状 | 対処 |
-| --- | --- |
-| `404 Not Found` on `npm publish` (ローカル) | `npm logout` → `npm login` → `npm whoami` で再認証 ([Troubleshooting](#troubleshooting) 参照) |
-| `Tag/version mismatch` | tag (`v1.0.13`) と `package.json` `version` (`1.0.13`) を一致させる |
-| `You cannot publish over the previously published versions` | version を上げるか、dry-run 用に未公開 version を用意 |
-| GHA publish 403 / OIDC 失敗 | npm Trusted Publisher の owner/repo/workflow 名が一致するか確認 |
-| `NPM_TOKEN secret is not configured` | OIDC 運用では不要。ワークフローが `id-token: write` になっているか確認 |
-
-## 7. 検証 (2026-05-24)
-
-手動 publish および Trusted Publisher 登録を確認済みです。
-
-* `npm view @s2j/docs-linter version` → **`1.0.12`**
-* `@s2j/docs-linter` が npm organization **`s2j`** に表示
-* Trusted Publisher: GitHub Actions / `stein2nd` / `docs-linter` / `npm-publish.yml`
-
-**残**: tag push による **GHA OIDC publish** の初回成功 (次バージョン `1.0.13` 以降)。
-
-## Trusted Publishing リリースフロー
+## 6. Trusted Publishing リリースフロー
 
 ### 設計意図 (ゴール)
 
@@ -193,7 +173,15 @@ git push origin v1.0.0
 npm view @s2j/docs-linter version
 ```
 
-## Troubleshooting
+## 7. トラブルシュート
+
+| 症状 | 対処 |
+| --- | --- |
+| `404 Not Found` on `npm publish` (ローカル) | `npm logout` → `npm login` → `npm whoami` で再認証 ([Troubleshooting](#troubleshooting) 参照) |
+| `Tag/version mismatch` | tag (`v1.0.13`) と `package.json` `version` (`1.0.13`) を一致させる |
+| `You cannot publish over the previously published versions` | version を上げるか、dry-run 用に未公開 version を用意 |
+| GHA publish 403 / OIDC 失敗 | npm Trusted Publisher の owner/repo/workflow 名が一致するか確認 |
+| `NPM_TOKEN secret is not configured` | OIDC 運用では不要。ワークフローが `id-token: write` になっているか確認 |
 
 ### `npm publish` で `E404 Not Found` が出る
 
@@ -210,3 +198,14 @@ npm view @s2j/docs-linter version
 * `npm whoami` を実行すると、`ユーザー名`
 * `npm publish --dry-run --access public` が、エラーなく成功
 * `npm publish --access public` が、エラーなく成功
+
+## 8. 検証 (2026-05-25)
+
+フェーズ2 GHA OIDC publish を確認済みです。
+
+* `npm view @s2j/docs-linter version` → **`1.0.13`**
+* tag `v1.0.13` push → run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088) 成功
+* artifact `s2j-docs-linter-v1.0.13` 保存確認
+* Trusted Publisher: GitHub Actions / `stein2nd` / `docs-linter` / `npm-publish.yml`
+
+**ワークフロー注意**: OIDC では `setup-node` に `registry-url` を設定しないこと (placeholder `NODE_AUTH_TOKEN` が OIDC を阻害し 404 になる)。Node 24 + npm 11.6+ を使用。
