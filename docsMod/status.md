@@ -7,7 +7,8 @@
 最終更新…**2026-05-26**
 * フェーズ1–4 **クローズ**。npm **`@s2j/docs-linter@1.0.13`**。
 * フェーズ4 **100%** (必須 **5/5** + 推奨 **5/5**、**クローズ** 2026-05-26)
-    * 推奨 **#1 済** — [semantic_release_evaluation.md](./semantic_release_evaluation.md) — 結論: **現時点では非採用**
+    * 推奨 **#1 済** — [semantic_release_evaluation.md](./semantic_release_evaluation.md)
+        * 結論は、**現時点では非採用**。
     * CI: [ci.yml](../.github/workflows/ci.yml) · [dependabot.yml](../.github/dependabot.yml) · [npm-publish.yml](../.github/workflows/npm-publish.yml) OIDC + GitHub Release。
     * 推奨 **#2–#5 済** — リリースノート自動化 / Issue テンプレ / [CONTRIBUTING.md](../CONTRIBUTING.md) / ロードマップ。
 
@@ -472,7 +473,8 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * **必須 #3**: [`.github/dependabot.yml`](../.github/dependabot.yml) — npm / github-actions 依存関係の weekly レビュー
 * **必須 #4**: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) — Node 20/22/24 matrix、`pack:check` / `verify:tarball`
 * **必須 #5**: [maintenance_policy.md](./maintenance_policy.md) — npm パッケージのメンテナンス方針 (リリース、CI、依存関係、セキュリティ、ドキュメント保守)
-* **推奨 #1**: [semantic_release_evaluation.md](./semantic_release_evaluation.md) — セマンティック・リリース採用可否評価。結論: **現時点では非採用** (手動 SemVer + GHA OIDC publish を継続)
+* **推奨 #1**: [semantic_release_evaluation.md](./semantic_release_evaluation.md) — セマンティック・リリース採用可否評価
+    * 結論は、**現時点では非採用** (手動 SemVer + GHA OIDC publish を継続)
 * **推奨 #2**: [npm-publish.yml](../.github/workflows/npm-publish.yml) — tag publish 後 `Create GitHub Release` (`generate_release_notes: true`)。[release.md](./release.md) §8 GitHub リリースノート
 * **推奨 #3**: [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/) — [bug_report.md](../.github/ISSUE_TEMPLATE/bug_report.md) (環境・再現手順・設定・期待/実際)、[feature_request.md](../.github/ISSUE_TEMPLATE/feature_request.md) (問題・提案・互換影響・スコープ)、[config.yml](../.github/ISSUE_TEMPLATE/config.yml) (`blank_issues_enabled: false`、README / CONTRIBUTING contact_links)。[CONTRIBUTING.md](../CONTRIBUTING.md) Issue Reports と整合
 * **推奨 #4**: [CONTRIBUTING.md](../CONTRIBUTING.md) — 貢献ガイド (Goals / Setup / Workflow / Verification / Versioning / Docs / Compatibility / CI / PR scope / Issues 等、日英 ~341 行)。[README.md](../README.md) Contributing から導線
@@ -677,7 +679,8 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
     * フェーズ3 … **クローズ** — 必須 **100%** (#1–6) + 推奨 **100%** (#1–3), 2026-05-25
     * フェーズ3 推奨 #2–3 … migration guide / VSCode canonical 設定 — 利用側 **9 リポ** 定着済
     * フェーズ4 … **クローズ** — 必須 **100%** (5/5 済) + 推奨 **100%** (5/5 済) / 全体 **100%** (1000/1000), 2026-05-26
-    * フェーズ4 推奨 #1 … [semantic_release_evaluation.md](./semantic_release_evaluation.md) — 結論: **現時点では非採用** **済**
+    * フェーズ4 推奨 #1 … [semantic_release_evaluation.md](./semantic_release_evaluation.md) **済**
+        * 結論は、**現時点では非採用**
     * フェーズ4 推奨 #2 … GitHub Release 自動作成 (`generate_release_notes: true`) **済**
     * フェーズ4 推奨 #3 … [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/) (bug / feature / config) **済**
     * フェーズ4 推奨 #4 … [CONTRIBUTING.md](../CONTRIBUTING.md) + [README.md](../README.md) Contributing 導線 **済**
