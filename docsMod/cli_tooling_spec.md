@@ -322,3 +322,32 @@ doctor コマンドの結果は、`PASS`、`WARN`、`FAIL` に区分されます
 ⚠ GitHub Actions workflow missing
 ✖ preset config not found
 ```
+
+### 実装方針の補足 (init)
+
+設計検討で確定した、init および CLI エントリポイントに関する方針です。
+
+#### プリセット `base` の位置づけ
+
+`base` は、WordPress プラグイン/テーマや Swift アプリ/ツール向けではない、**一般的な Markdown 文書** 向けのプリセットとします。`init` のデフォルトプリセットは `base` です。
+
+#### `package.json` の `lint:docs` 追加
+
+`init` は、上記 3 ファイルに加え、利用側 `package.json` の `scripts.lint:docs` を追加します。
+
+* 追加する値は、`"s2j-docs-linter ./README.md ./docs/**/*.md"` となる。
+* 生成される `.textlintrc.json` の `extends` がプリセットを決めるため、`--profile` は付けない。
+* `package.json` が存在しない場合は、スクリプト追加をスキップし、警告を表示する。
+* `scripts.lint:docs` が既にある場合は、他ファイルと同様に上書きしない (`--force` 指定時のみ上書き)。
+
+#### init の終了コード
+
+既存ファイルがあり `--force` もない場合、対象ファイルがすべてスキップされても **exit code は 0** とします。あわせて、作成・更新が 1 件もなかった旨を警告メッセージで明示します (CI / 自動化との互換性のため)。
+
+#### CLI エントリポイント (`bin`) の切り替え
+
+`init` 完成時に、`package.json` の `bin` を `dist/bin/run-textlint.js` から **`dist/bin/cli.js`** に切り替えます。
+
+* `cli.ts` をサブコマンドルーターとし、`init` / `doctor` / lint (デフォルト) を振り分ける。
+* 引数なし、またはサブコマンド以外の実行は、従来どおり lint として扱う (下位互換)。
+* `doctor` 未実装時はルーターにスタブを置き、`doctor.ts` 完成後に差し替える。
