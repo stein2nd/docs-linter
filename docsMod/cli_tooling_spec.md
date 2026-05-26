@@ -168,13 +168,13 @@ CLI の役割は、docs lint エコシステムに限定され、下記を対象
 
 ```text
 ├┬─ src/
-│└┬─ bin/
-│　├─ init.ts
-│　├─ doctor.ts
-│　└┬─ templates/
-│　　├─ textlintrc.base.json
-│　　├─ vscode.settings.json
-│　　└─ docs-lint.yml
+│├┬─ bin/
+││├─ init.ts
+││└─ doctor.ts
+│└┬─ templates/
+│　├─ textlintrc.base.json
+│　├─ vscode.settings.json
+│　└─ docs-lint.yml
 ```
 
 ### CLI コマンドの範囲
