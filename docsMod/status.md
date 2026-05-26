@@ -2,13 +2,13 @@
 
 本ページは、[npm パッケージ仕様](./npm_package_spec.md) にもとづく実装修正の進捗を一覧化します。仕様書の [フェーズ1実装状況](./npm_package_spec.md#フェーズ1実装状況-2026-05) と相互参照します。publish 認証・シークレット方針は [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) を参照してください。
 
-**移行フェーズ**は [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) に従い、**フェーズ1 完了**、**フェーズ2 完了**、**フェーズ3 完了**、**フェーズ4 必須完了** (推奨 **80%** / 全体 **90%**)。
+**移行フェーズ**は [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) に従い、**フェーズ1 完了**、**フェーズ2 完了**、**フェーズ3 完了**、**フェーズ4 完了** (必須 + 推奨 **100%**)。
 
-最終更新…**2026-05-25**
-* フェーズ1–3 **クローズ**。npm **`@s2j/docs-linter@1.0.13`**。
-* フェーズ4 必須 **100%** (**5/5 済**、**必須クローズ**)
-    * 推奨 **80%** (4 済 / 1 未)。
-    * 全体 **90%** (900/1000)。CI: [ci.yml](../.github/workflows/ci.yml) · [dependabot.yml](../.github/dependabot.yml) · [npm-publish.yml](../.github/workflows/npm-publish.yml) OIDC + GitHub Release。
+最終更新…**2026-05-26**
+* フェーズ1–4 **クローズ**。npm **`@s2j/docs-linter@1.0.13`**。
+* フェーズ4 **100%** (必須 **5/5** + 推奨 **5/5**、**クローズ** 2026-05-26)
+    * 推奨 **#1 済** — [semantic_release_evaluation.md](./semantic_release_evaluation.md) — 結論: **現時点では非採用**
+    * CI: [ci.yml](../.github/workflows/ci.yml) · [dependabot.yml](../.github/dependabot.yml) · [npm-publish.yml](../.github/workflows/npm-publish.yml) OIDC + GitHub Release。
     * 推奨 **#2–#5 済** — リリースノート自動化 / Issue テンプレ / [CONTRIBUTING.md](../CONTRIBUTING.md) / ロードマップ。
 
 ### 全体進捗 (サマリー)
@@ -22,10 +22,9 @@
 | フェーズ2 M1–M5 | マイルストーン | **100%** (5/5 済) | **クローズ** (2026-05-25) |
 | フェーズ3 必須 | #1–6 | **100%** (6/6 済) | **クローズ** (2026-05-25) |
 | フェーズ3 推奨 | #1–3 | **100%** (3/3 済) | **クローズ** (2026-05-25) |
-| **次の焦点** | フェーズ4 推奨 | — | semantic-release 評価 |
 | フェーズ4 必須 | #1–5 | **100%** (5/5 済) | **必須クローズ** |
-| フェーズ4 推奨 | #1–5 | **80%** (4 済 / 1 未) | 着手 |
-| フェーズ4 全体 | 必須 + 推奨 | **90%** (900/1000) | **未クローズ** (推奨残) |
+| フェーズ4 推奨 | #1–5 | **100%** (5/5 済) | **クローズ** (2026-05-26) |
+| フェーズ4 全体 | 必須 + 推奨 | **100%** (1000/1000) | **クローズ** (2026-05-26) |
 
 **フェーズ4 必須 #1–5 (内訳)**
 
@@ -41,7 +40,7 @@
 
 | # | 完了条件 | 状態 | 実装％ |
 | ---: | --- | --- | ---: |
-| 1 | セマンティック・リリースの評価 | **未** | 0 |
+| 1 | セマンティック・リリースの評価 | **済** | 100 |
 | 2 | 自動生成されるリリースノート | **済** | 100 |
 | 3 | 課題テンプレート | **済** | 100 |
 | 4 | 貢献ガイド | **済** | 100 |
@@ -58,6 +57,7 @@
 | [CHANGELOG.md](../CHANGELOG.md) | npm 公開版の変更履歴 (`1.0.10`–) — 必須 #2 **済**、Git 管理 |
 | [SemVer 方針](./versioning_policy.md) | MAJOR / MINOR / PATCH、破壊的変更、非推奨、タグ規約 — 必須 #1 **済** |
 | [メンテナンス方針](./maintenance_policy.md) | リリース / CI / 依存 / セキュリティ / ドキュメント保守 — 必須 #5 **済** |
+| [セマンティック・リリース評価](./semantic_release_evaluation.md) | 採用可否評価 — 推奨 #1 **済**、結論: **現時点では非採用** |
 | [`.github/dependabot.yml`](../.github/dependabot.yml) | npm / github-actions 依存関係の weekly レビュー — 必須 #3 **済** |
 | [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | Node 20/22/24 matrix、`pack:check` / `verify:tarball` (push/PR) — 必須 #4 **済** |
 | [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml) | tag `v*` / OIDC publish、Node 24、`Create GitHub Release` (`generate_release_notes: true`) — フェーズ2 **済** / 推奨 #2 **済** |
@@ -72,7 +72,7 @@
 
 | 項目 | 状態 |
 | --- | --- |
-| 移行フェーズ | **フェーズ1 完了** **16/16 済**。**フェーズ2 完了** **5/5 済**。**フェーズ3 完了** **必須 6/6 + 推奨 3/3 済**。**フェーズ4** 必須 **5/5 済** + 推奨 **80%** |
+| 移行フェーズ | **フェーズ1 完了** **16/16 済**。**フェーズ2 完了** **5/5 済**。**フェーズ3 完了** **必須 6/6 + 推奨 3/3 済**。**フェーズ4 完了** 必須 **5/5** + 推奨 **5/5 済** (2026-05-26) |
 | **本リポジトリ 実装％** | **100%** — 本リポジトリ責務の完了条件 (#1–10, #13–16) はすべて **済** |
 | **フェーズ1全体 実装％** | **100%** — 完了条件 16 項目中 **16 済** |
 | npm パッケージ名 | `@s2j/docs-linter` (`package.json` 反映済み) |
@@ -90,9 +90,9 @@
 | 区分 (仕様書) | フェーズ1の状態 |
 | --- | --- |
 | 実装済み | メタデータ、CLI、`scripts` 整理、tarball 検証 (22 entries)、**`pack:artifact` / `artifacts/`**、root 互換レイアウト、`examples/`・[npm_usage.md](./npm_usage.md) 整合、**GHA publish ワークフロー** (OIDC 運用)、**npmjs publish** (`1.0.10`–`1.0.12` 手動 / **`1.0.13`** GHA OIDC)、**利用側受け入れ試験** (**9** リポジトリ) |
-| 実装済み (フェーズ4) | 必須 #1–5 **済** — [versioning_policy.md](./versioning_policy.md)、[CHANGELOG.md](../CHANGELOG.md)、[`.github/dependabot.yml`](../.github/dependabot.yml)、[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)、[maintenance_policy.md](./maintenance_policy.md)。推奨 #2 **済** — [npm-publish.yml](../.github/workflows/npm-publish.yml) GitHub Release (`generate_release_notes: true`) + [release.md](./release.md) §8。推奨 #3 **済** — [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/)。推奨 #4 **済** — [CONTRIBUTING.md](../CONTRIBUTING.md) + [README.md](../README.md) 導線。推奨 #5 **済** — 本ページ + [specs.md](./specs.md) ロードマップ + [README.md](../README.md) ロードマップ / ガバナンス |
+| 実装済み (フェーズ4) | 必須 #1–5 **済** — [versioning_policy.md](./versioning_policy.md)、[CHANGELOG.md](../CHANGELOG.md)、[`.github/dependabot.yml`](../.github/dependabot.yml)、[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)、[maintenance_policy.md](./maintenance_policy.md)。推奨 #1 **済** — [semantic_release_evaluation.md](./semantic_release_evaluation.md) (結論: **現時点では非採用**)。推奨 #2 **済** — [npm-publish.yml](../.github/workflows/npm-publish.yml) GitHub Release (`generate_release_notes: true`) + [release.md](./release.md) §8。推奨 #3 **済** — [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/)。推奨 #4 **済** — [CONTRIBUTING.md](../CONTRIBUTING.md) + [README.md](../README.md) 導線。推奨 #5 **済** — 本ページ + [specs.md](./specs.md) ロードマップ + [README.md](../README.md) ロードマップ / ガバナンス |
 | 部分実施 (フェーズ4) | **なし** |
-| 未実施 (フェーズ4) | 推奨 #1 (semantic-release 評価) |
+| 未実施 (フェーズ4) | **なし** |
 
 **実装％の算出**
 
@@ -382,8 +382,8 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | 項目 | 状態 |
 | --- | --- |
 | **フェーズ4 必須完了条件** | **100%** — 5 項目中 **5 済** |
-| **フェーズ4 推奨完了条件** | **80%** — 5 項目中 **4 済** / **1 未** |
-| **本リポジトリ実装 (フェーズ4)** | **100%** (必須) / **80%** (推奨) |
+| **フェーズ4 推奨完了条件** | **100%** — 5 項目中 **5 済** |
+| **本リポジトリ実装 (フェーズ4)** | **100%** (必須 + 推奨) |
 | **CHANGELOG** | **済** — `1.0.10`–`1.0.13` 記載、リリース手順に組み込み (必須 #2) |
 | **SemVer / メンテナンス方針** | **済** — [versioning_policy.md](./versioning_policy.md) (必須 #1)、[maintenance_policy.md](./maintenance_policy.md) (必須 #5) |
 | **Dependabot** | **済** — npm + github-actions、weekly (必須 #3) |
@@ -392,6 +392,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | **CONTRIBUTING** | **済** — setup / workflow / 検証 / 互換 / CI 等 (~341 行、日英)。[README.md](../README.md) Contributing から導線 (推奨 #4) |
 | **ロードマップ** | **済** — 本ページ (フェーズ1–4 進捗) + [specs.md](./specs.md#プロジェクトのロードマップ) + [README.md](../README.md#ロードマップ) (推奨 #5) |
 | **GitHub リリースノート** | **済** — [npm-publish.yml](../.github/workflows/npm-publish.yml) `Create GitHub Release` + [release.md](./release.md) §8 (推奨 #2) |
+| **セマンティック・リリース評価** | **済** — [semantic_release_evaluation.md](./semantic_release_evaluation.md) — 結論: **現時点では非採用** (推奨 #1) |
 | 前提 | フェーズ3 **済** (2026-05-25) |
 
 * 対象
@@ -408,11 +409,13 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | スコープ | 分子 / 分母 | 実装％ |
 | --- | --- | ---: |
 | 必須完了条件 | #1–5 の実装％合計 **500** / 500 | **100%** |
-| 推奨完了条件 | #1–5 の実装％合計 **400** / 500 | **80%** |
-| フェーズ4 全体 (必須 + 推奨) | **900** / 1000 | **90%** |
+| 推奨完了条件 | #1–5 の実装％合計 **500** / 500 | **100%** |
+| フェーズ4 全体 (必須 + 推奨) | **1000** / 1000 | **100%** |
 | 優先タスク P0–P2 | (100 + 100 + 100 + 100 + 0) / 5 | **80%** |
 
-**フェーズ4 必須クローズ**: **済** (2026-05-25) — 推奨 **80%** 未完了のためフェーズ4全体は **未クローズ**。
+**フェーズ4 必須クローズ**: **済** (2026-05-25)。
+
+**フェーズ4クローズ**: **達成** (2026-05-26) — 必須 **5/5** + 推奨 **5/5** **済**。
 
 ### フェーズ4: 優先タスクと完了条件の対比
 
@@ -444,13 +447,13 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | # | 完了条件 | 状態 | 実装％ | 検証方法 |
 | ---: | --- | --- | ---: | --- |
-| 1 | セマンティック・リリースの評価 | **未** | 0 | フェーズ2「将来拡張」候補として未評価 |
+| 1 | セマンティック・リリースの評価 | **済** | 100 | [semantic_release_evaluation.md](./semantic_release_evaluation.md) — 結論: **現時点では非採用** |
 | 2 | 自動生成されるリリースノート | **済** | 100 | [npm-publish.yml](../.github/workflows/npm-publish.yml) — `Create GitHub Release` (`softprops/action-gh-release@v2`、`generate_release_notes: true`)。[release.md](./release.md) §8 GitHub リリースノート ※次回 tag push で GHA 運用検証 |
 | 3 | 課題テンプレート | **済** | 100 | [bug_report.md](../.github/ISSUE_TEMPLATE/bug_report.md)、[feature_request.md](../.github/ISSUE_TEMPLATE/feature_request.md)、[config.yml](../.github/ISSUE_TEMPLATE/config.yml) — `blank_issues_enabled: false`、README / CONTRIBUTING への contact_links |
 | 4 | 貢献ガイド | **済** | 100 | [CONTRIBUTING.md](../CONTRIBUTING.md) — Goals / Setup / Workflow / Verification / Versioning / Docs / Compatibility / CI / PR scope / Issues 等 (日英)。[README.md](../README.md) Contributing セクションから導線 |
 | 5 | ロードマップの可視化 | **済** | 100 | 本ページ ([status.md](./status.md)) — フェーズ1–4 進捗・完了条件。[specs.md](./specs.md#プロジェクトのロードマップ) — ロードマップ導線・フェーズ概要。[README.md](../README.md#ロードマップ) — status / ガバナンス ([maintenance_policy.md](./maintenance_policy.md)、[versioning_policy.md](./versioning_policy.md)) 導線 |
 
-**集計**: 推奨 **400 / 500 → 80%** (4 済 / 1 未)。
+**集計**: 推奨 **500 / 500 → 100%** (5 済)。
 
 #### 対象外
 
@@ -460,15 +463,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 ### フェーズ4の残タスク
 
-**必須**: **なし** (2026-05-25 クローズ)
-
-**推奨**:
-
-| # | タスク | 優先度 | 実装％ | 完了条件 (#) |
-| ---: | --- | --- | ---: | ---: |
-| 1 | セマンティック・リリースの評価 | P2 | **0** | 推奨 #1 |
-
-**前提**: フェーズ3 **済** (2026-05-25)。フェーズ4 **必須 #1–5 済** (2026-05-25)。推奨 **#2–#5 済** (2026-05-25)。
+**なし** — フェーズ4必須条件 #1–5 および推奨条件 #1–5 はすべて **済** (2026-05-26)。
 
 ### フェーズ4で完了した項目
 
@@ -477,6 +472,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * **必須 #3**: [`.github/dependabot.yml`](../.github/dependabot.yml) — npm / github-actions 依存関係の weekly レビュー
 * **必須 #4**: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) — Node 20/22/24 matrix、`pack:check` / `verify:tarball`
 * **必須 #5**: [maintenance_policy.md](./maintenance_policy.md) — npm パッケージのメンテナンス方針 (リリース、CI、依存関係、セキュリティ、ドキュメント保守)
+* **推奨 #1**: [semantic_release_evaluation.md](./semantic_release_evaluation.md) — セマンティック・リリース採用可否評価。結論: **現時点では非採用** (手動 SemVer + GHA OIDC publish を継続)
 * **推奨 #2**: [npm-publish.yml](../.github/workflows/npm-publish.yml) — tag publish 後 `Create GitHub Release` (`generate_release_notes: true`)。[release.md](./release.md) §8 GitHub リリースノート
 * **推奨 #3**: [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/) — [bug_report.md](../.github/ISSUE_TEMPLATE/bug_report.md) (環境・再現手順・設定・期待/実際)、[feature_request.md](../.github/ISSUE_TEMPLATE/feature_request.md) (問題・提案・互換影響・スコープ)、[config.yml](../.github/ISSUE_TEMPLATE/config.yml) (`blank_issues_enabled: false`、README / CONTRIBUTING contact_links)。[CONTRIBUTING.md](../CONTRIBUTING.md) Issue Reports と整合
 * **推奨 #4**: [CONTRIBUTING.md](../CONTRIBUTING.md) — 貢献ガイド (Goals / Setup / Workflow / Verification / Versioning / Docs / Compatibility / CI / PR scope / Issues 等、日英 ~341 行)。[README.md](../README.md) Contributing から導線
@@ -500,6 +496,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [`.github/ISSUE_TEMPLATE/config.yml`](../.github/ISSUE_TEMPLATE/config.yml) | テンプレ選択 UI — contact_links、blank issue 無効 | 推奨 #3 |
 | [specs.md](./specs.md) | 「プロジェクトのロードマップ」— status 導線・フェーズ1–4 概要 | 推奨 #5 |
 | [README.md](../README.md) | 「ロードマップ」— status / ガバナンス (maintenance / versioning) 導線 | 推奨 #5 |
+| [semantic_release_evaluation.md](./semantic_release_evaluation.md) | セマンティック・リリース採用可否評価 — 結論: **現時点では非採用** | 推奨 #1 |
 
 ### 機能一覧 (実装状況サマリー)
 
@@ -534,8 +531,9 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | Issue テンプレート (フェーズ4) | **済** | 100 | Bug / Feature テンプレ + config | [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/) (推奨 #3 **済**) |
 | ロードマップ可視化 (フェーズ4) | **済** | 100 | status + specs + README 導線 | [status.md](./status.md) · [specs.md](./specs.md) · [README.md](../README.md) (推奨 #5 **済**) |
 | GitHub リリースノート (フェーズ4) | **済** | 100 | tag publish 連動 Release 自動作成 | [npm-publish.yml](../.github/workflows/npm-publish.yml) `generate_release_notes: true` + [release.md](./release.md) §8 (推奨 #2 **済**) |
+| セマンティック・リリース評価 (フェーズ4) | **済** | 100 | 採用可否評価の文書化 | [semantic_release_evaluation.md](./semantic_release_evaluation.md) — 結論: **現時点では非採用** (推奨 #1 **済**) |
 | [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ3 | **済** | 100 | Submodule 非推奨化・利用側 cutover | 必須 #1–6 + 推奨 #1–3 **済** (2026-05-25) |
-| [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ4 | 必須クローズ | 100 | レガシー機能削除・OSS 成熟化 | 必須 **5/5 済** (100%)、推奨 **80%**、全体 **90%** (900/1000) |
+| [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ4 | **クローズ** | 100 | レガシー機能削除・OSS 成熟化 | 必須 **5/5 済** + 推奨 **5/5 済** (2026-05-26) |
 
 ### フェーズ1で完了した項目
 
@@ -678,12 +676,12 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * **フェーズ3 / 4**:
     * フェーズ3 … **クローズ** — 必須 **100%** (#1–6) + 推奨 **100%** (#1–3), 2026-05-25
     * フェーズ3 推奨 #2–3 … migration guide / VSCode canonical 設定 — 利用側 **9 リポ** 定着済
-    * フェーズ4 … 必須 **100%** (5/5 済) / 推奨 **80%** (4 済 / 1 未) / 全体 **90%** (900/1000)
+    * フェーズ4 … **クローズ** — 必須 **100%** (5/5 済) + 推奨 **100%** (5/5 済) / 全体 **100%** (1000/1000), 2026-05-26
+    * フェーズ4 推奨 #1 … [semantic_release_evaluation.md](./semantic_release_evaluation.md) — 結論: **現時点では非採用** **済**
     * フェーズ4 推奨 #2 … GitHub Release 自動作成 (`generate_release_notes: true`) **済**
     * フェーズ4 推奨 #3 … [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/) (bug / feature / config) **済**
     * フェーズ4 推奨 #4 … [CONTRIBUTING.md](../CONTRIBUTING.md) + [README.md](../README.md) Contributing 導線 **済**
     * フェーズ4 推奨 #5 … ロードマップ **済** — [status.md](./status.md) · [specs.md](./specs.md#プロジェクトのロードマップ) · [README.md](../README.md#ロードマップ)
-    * フェーズ4 残 (推奨) … #1 semantic-release 評価
 * **ローカル検証の一式**:
     * 下記コマンドを利用する。
 
