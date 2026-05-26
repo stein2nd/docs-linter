@@ -193,6 +193,24 @@ npx s2j-docs-linter upgrade
 npx s2j-docs-linter migrate
 ```
 
+### CLI Entrypoint ポリシー
+
+S2J Docs Linter CLI は、下記の様な、サブコマンドルーターを採用します。
+
+```bash
+npx s2j-docs-linter <command>
+```
+
+これにより、下記の様なコマンドとなります。
+
+```bash
+npx s2j-docs-linter init
+npx s2j-docs-linter doctor
+npx s2j-docs-linter lint
+```
+
+尚、引数なしの実行は、下位互換性のため、lint として扱います。
+
 ### CLI コマンド - init コマンド
 
 「プロジェクトの骨組み生成」を目的とし、下記を責務とします。
