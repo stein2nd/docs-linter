@@ -35,14 +35,14 @@
     "README.md",
     "LICENSE"
   ],
-  "main": "dist/bin/run-textlint.js",
+  "main": "dist/bin/cli.js",
   "bin": {
-    "s2j-docs-linter": "dist/bin/run-textlint.js",
-    "docs-lint": "dist/bin/run-textlint.js"
+    "s2j-docs-linter": "dist/bin/cli.js",
+    "docs-lint": "dist/bin/cli.js"
   },
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "tsc -p tsconfig.build.json && node dist/scripts/setup-npmignore.js && node dist/scripts/link-preset-layout-compat.js",
+    "build": "tsc -p tsconfig.build.json && node dist/scripts/copy-templates.js && node dist/scripts/setup-npmignore.js && node dist/scripts/link-preset-layout-compat.js",
     "prepare": "npm run build",
     "pack:check": "npm pack --dry-run",
     "pack:artifact": "mkdir -p artifacts && npm pack --pack-destination ./artifacts",
@@ -54,9 +54,9 @@
     "verify:artifact": "npm run pack:artifact && node ./scripts/verify-tarball.cjs --from-artifacts",
     "verify:release-tag": "node ./scripts/verify-release-tag.cjs",
     "dev": "npx vite build --watch",
-    "lint": "node dist/bin/run-textlint.js './README.md' '**/*.md'",
-    "lint:wp": "node dist/bin/run-textlint.js --profile wordpress './README.md' '**/*.md'",
-    "lint:swift": "node dist/bin/run-textlint.js --profile swift './README.md' '**/*.md'",
+    "lint": "node dist/bin/cli.js './README.md' '**/*.md'",
+    "lint:wp": "node dist/bin/cli.js --profile wordpress './README.md' '**/*.md'",
+    "lint:swift": "node dist/bin/cli.js --profile swift './README.md' '**/*.md'",
     "postinstall": "node ./dist/scripts/setup-npmignore.js || true && node ./scripts/patch-wp-prh-colon-quote.cjs",
     "install:compat": "npx -y npm@11.11.0 install"
   },
