@@ -211,33 +211,155 @@ npx s2j-docs-linter lint
 
 尚、引数なしの実行は、下位互換性のため、lint として扱います。
 
-### CLI コマンド - init コマンド
+### 一時ワークスペースに関するポリシー
 
-「プロジェクトの骨組み生成」を目的とし、下記を責務とします。
+CLI が一時ワークスペースを必要とする場合、OS 固有のパスをハードコードしてはなりません。
 
-* 基本設定の生成
-* プリセットを考慮したセットアップ
-* ワークフローテンプレートの生成
+下記の様な、「Node.js runtime API」の利用を標準とします。
 
-本コマンドにより、下記ファイルが生成されます。
+```ts
+os.tmpdir()
+fs.mkdtemp()
+```
 
-* `.textlintrc.json`
-* `.vscode/settings.json`
-* `.github/workflows/docs-lint.yml`
+つまり、下記の様な「固定パス」の使用を禁止します。
 
-#### init 上書きポリシー
+```text
+/tmp
+C:\Temp
+```
 
-プロジェクトルートに下記の既存ファイルがある場合、明示的に `--force` が付与された場合のみ、上書きを許可します (つまり、デフォルト設定は「上書きしない」)。
+### CLI コマンド - init
 
-* `.textlintrc.json`
-* `.vscode/settings.json`
-* `.github/workflows/docs-lint.yml`
+#### 1. 設計意図 (ゴール)
 
-#### 1. init デフォルト動作
+`init` コマンドは、S2J Docs Linter を利用するプロジェクトに対して、下記を目的として、推奨される初期設定ファイル群を生成するための骨組みコマンドです。
 
-`npx s2j-docs-linter init` で生成されるプリセットは、「base」となります。
+* textlint 導入時の初期設定を簡略化する
+* VSCode との連携設定を標準化する
+* GitHub Actions との連携設定を標準化する
+* 設定ファイルの記述ミスを削減する
+* npm パッケージとしての推奨構成を提供する
+* 導入・検証・移行コストを低減する
 
-生成される `.textlintrc.json` の `extends` 配列の内容は、下記の通りです。
+#### 2.1. 実行モード - 通常モード
+
+指定されたディレクトリ (未指定時は、カレントディレクトリ) に対して、設定ファイルを生成します。
+
+コマンド例…`npx s2j-docs-linter init`
+
+#### 2.2. 実行モード - Dry Run モード
+
+Dry Run モードでは、設定ファイルは生成せず、生成予定の内容のみを表示します。つまり、ファイルシステムの変更を伴いません。
+
+コマンド例…`npx s2j-docs-linter init --dry-run`
+
+出力例は、下記の様になります。
+
+```text
+[Dry Run]
+
+Preset:
+  swift
+
+Would create:
+  .textlintrc.json
+  .vscode/settings.json
+  .github/workflows/docs-lint.yml
+
+Would skip:
+  (none)
+```
+
+#### 2.3. 実行モード - ディレクトリ出力モード
+
+下記の用途で、指定されたディレクトリ配下に、設定ファイルを生成します。
+
+* テンプレート検証
+* CI スモークテスト
+* プリセットごとの比較
+* ドキュメント作成用サンプル生成
+
+コマンド例…`npx s2j-docs-linter init --output .sandbox/swift`
+
+生成先は、下記の様に、`.sandbox/` 配下を利用することを、ユーザーに推奨してください。
+
+```text
+docs-linter/
+└┬─ .sandbox/
+　├─ base/
+　├─ swift/
+　└─ wordpress/
+```
+
+#### 3.1. 引数 - --preset
+
+下記の中から、利用するプリセットを指定します (デフォルトは、`base`)。
+
+* base
+* swift
+* wordpress
+
+コマンド例…`npx s2j-docs-linter init --preset swift`
+
+#### 3.2. 引数 - --output
+
+出力先ディレクトリを指定します (未指定時は、カレントディレクトリ)。
+
+コマンド例…`npx s2j-docs-linter init --output .sandbox/swift`
+
+#### 3.3. 引数 - --dry-run
+
+生成予定の内容を表示し、ファイル生成は行いません。
+
+コマンド例…`npx s2j-docs-linter init --dry-run`
+
+#### 3.4. 引数 - --force
+
+既存ファイルの上書きを許可します。
+
+コマンド例…`npx s2j-docs-linter init --force`、または、`npx s2j-docs-linter init --output .sandbox/swift --force`
+
+#### 3.5. 引数の組み合わせ制約
+
+`--dry-run` は、ファイルシステムを変更しないため、`--output` および `--force` と意味的に両立できません。
+
+下記に挙げる「引数の組み合わせ」は、許可します。
+
+* `npx s2j-docs-linter init`
+* `npx s2j-docs-linter init --preset swift`
+* `npx s2j-docs-linter init --output .sandbox/swift`
+* `npx s2j-docs-linter init --output .sandbox/swift --force`
+* `npx s2j-docs-linter init --force`
+* `npx s2j-docs-linter init --dry-run`
+
+一方で、下記に挙げる「引数の組み合わせ」は、禁止します。不正な組み合わせが指定されたと見做し、エラー終了とする (その際の exit コードは、`1`)。
+
+* `npx s2j-docs-linter init --dry-run --force`
+* `npx s2j-docs-linter init --dry-run --output .sandbox/swift`
+* `npx s2j-docs-linter init --dry-run --output .sandbox/swift --force`
+
+#### 4. 上書きポリシー
+
+標準動作では、既存ファイルを上書きしません。
+
+既存ファイルを検出した場合は、スキップとします。
+
+```text
+⚠ Skipped .textlintrc.json (already exists)
+```
+
+`--force` 指定時のみ、上書きとします。
+
+```text
+✔ Overwrite .textlintrc.json
+```
+
+#### 5.1. 生成ファイル - `.textlintrc.json`
+
+textlint の設定ファイルのテンプレートです。プリセット指定に応じて、適切な設定を生成します。
+
+プリセット内容例は、下記の通りです。
 
 ```json
 {
@@ -247,7 +369,7 @@ npx s2j-docs-linter lint
 }
 ```
 
-#### 1.1. init プリセットの選択
+#### 5.1.1. init プリセットの選択
 
 * `npx s2j-docs-linter init --preset base` 指定時
     * 対応するプリセットファイルは、`presets/base/.textlintrc.base.json`
@@ -259,9 +381,9 @@ npx s2j-docs-linter lint
     * 対応するプリセットファイルは、`presets/swift/.textlintrc.swift.json`
     * 生成される `.textlintrc.json` の `extends` 配列の内容は、`"./node_modules/@s2j/docs-linter/presets/swift/.textlintrc.swift.json"`
 
-#### 2. init VSCode テンプレート
+#### 5.2. 生成ファイル - `.vscode/settings.json`
 
-`.vscode/settings.json` に生成される「VSCode テンプレート」の標準内容は、下記とします。
+VSCode 用 textlint 設定のテンプレートです。標準設定は、下記の通りです。
 
 ```json
 {
@@ -278,14 +400,193 @@ npx s2j-docs-linter lint
 }
 ```
 
-#### 3. init ワークフローテンプレート
+#### 5.3. 生成ファイル - `.github/workflows/docs-lint.yml`
 
-`.github/workflows/docs-lint.yml` に生成される「ワークフローテンプレート」の標準内容は、下記に関するものとします。
+下記を目的とする、GitHub Actions 用ワークフローのテンプレートです。
 
-* checkout
-* setup-node
+* GitHub Actions 上での textlint 実行
+* npm パッケージ版 S2J Docs Linter の利用例提供
+* CI 導入の簡略化
+
+標準構成は、下記の通りです。
+
+* actions/checkout
+* actions/setup-node
 * npm ci
 * npm run lint:docs
+
+### CLI コマンド - init テスト仕様
+
+#### 設計意図 (ゴール)
+
+下記を対象に、`init` コマンドが仕様通りに設定ファイルを生成し、安全に利用できることを検証します。
+
+* プリセットの選択
+* 出力先の制御
+* Dry Run の動作
+* 上書きの制御
+* 引数の組み合わせ制約
+* 生成ファイルの内容
+
+#### 設計原則
+
+* Dry Run を除き、実際にファイルを生成して検証する。
+* テスト時は `.sandbox/` 配下を利用する。
+* 可能な限り tarball (`npm pack`) または npm install 後の状態で検証する。
+
+```text
+docs-linter/
+└┬─ .sandbox/
+　├─ base/
+　├─ swift/
+　└─ wordpress/
+```
+
+#### 自動テスト - 方針
+
+`scripts/test-init.sh` を用意し、GitHub Actions から実行する。
+
+#### 自動テスト - 完了条件
+
+以下を満たした場合、`init` コマンド実装完了とする。
+
+* Dry Run モードが全テスト成功
+* ディレクトリ出力モードが全テスト成功
+* 上書き制御テスト成功
+* 不正引数のテスト成功
+* GitHub Actions 上で再現可能
+* `.sandbox/` を利用した検証が可能
+
+#### テスト対象 - 実行モード
+
+* 通常モード
+* Dry Run モード
+* ディレクトリ出力モード
+
+#### テスト対象 - 引数
+
+* `--preset`
+* `--output`
+* `--dry-run`
+* `--force`
+
+#### テストケース一覧
+
+| ID | モード | 引数 | 期待結果 |
+| ---- | --- | --- | --- |
+| INIT-001 | Dry Run | なし | 生成予定ファイル一覧を表示 |
+| INIT-002 | Dry Run | `--preset swift` | swift preset が表示される |
+| INIT-003 | Dry Run | `--preset wordpress` | wordpress preset が表示される |
+| INIT-004 | Output | `--output .sandbox/base` | base 用設定ファイル生成 |
+| INIT-005 | Output | `--preset swift --output .sandbox/swift` | swift 用設定ファイル生成 |
+| INIT-006 | Output | `--preset wordpress --output .sandbox/wordpress` | wordpress 用設定ファイル生成 |
+| INIT-007 | Output | `--output .sandbox/base` 再実行 | `⚠ Skipped` 表示 |
+| INIT-008 | Output | `--output .sandbox/base --force` | `✔ Overwrite` 表示 |
+| INIT-009 | Dry Run | `--dry-run --force` | エラー終了 |
+| INIT-010 | Dry Run | `--dry-run --output .sandbox/base` | エラー終了 |
+| INIT-011 | Dry Run | `--dry-run --output .sandbox/base --force` | エラー終了 |
+| INIT-012 | Output | `--preset invalid` | エラー終了 |
+
+#### Dry Run モード検証 - INIT-001
+
+* 実行…`npx s2j-docs-linter init --dry-run`
+* 実行結果は、下記が全て成立すること
+  * exit code が0である
+  * ファイル生成なし
+  * Would create が表示される
+
+#### Dry Run モード検証 - INIT-002
+
+* 実行…`npx s2j-docs-linter init --dry-run --preset swift`
+* 実行結果は、下記が全て成立すること
+  * exit code が0である
+  * `Preset: swift` が表示される
+
+#### Dry Run モード検証 - INIT-003
+
+* 実行…`npx s2j-docs-linter init --dry-run --preset wordpress`
+* 実行結果は、下記が全て成立すること
+  * exit code が0である
+  * `Preset: wordpress` が表示される
+
+#### ディレクトリ出力モード検証 - INIT-004
+
+* 実行…`npx s2j-docs-linter init --output .sandbox/base`
+* 実行結果は、下記が全て成立すること
+  * `.sandbox/base/.textlintrc.json` が生成される
+  * `.sandbox/base/.vscode/settings.json` が生成される
+  * `.sandbox/base/.github/workflows/docs-lint.yml` が生成される
+
+#### ディレクトリ出力モード検証 - INIT-005
+
+* 実行…`npx s2j-docs-linter init --preset swift --output .sandbox/swift`
+* 実行結果は、下記が全て成立すること
+  * `.textlintrc.json` が生成される
+  * その内容は、下記である
+
+```json
+{
+  "extends": [
+    "./node_modules/@s2j/docs-linter/presets/swift/.textlintrc.swift.json"
+  ]
+}
+```
+
+#### ディレクトリ出力モード検証 - INIT-006
+
+* 実行…`npx s2j-docs-linter init --preset wordpress --output .sandbox/wordpress`
+* 実行結果は、下記が全て成立すること
+  * `.textlintrc.json` が生成される
+  * その内容は、下記である
+
+```json
+{
+  "extends": [
+    "./node_modules/@s2j/docs-linter/presets/wordpress/.textlintrc.wp.json"
+  ]
+}
+```
+
+#### 上書き制御検証 - INIT-007
+
+* 前提…`.sandbox/base` が生成済みである
+* 実行…`npx s2j-docs-linter init --output .sandbox/base`
+* 実行結果は、下記が全て成立すること
+  * exit code が0である
+  * `⚠ Skipped` が表示される
+
+#### 上書き制御検証 - INIT-008
+
+* 前提…`.sandbox/base` が生成済みである
+* 実行…`npx s2j-docs-linter init --output .sandbox/base --force`
+* 実行結果は、下記が全て成立すること
+  * exit code が0である
+  * `✔ Overwrite` が表示される
+
+#### 不正引数の検証 - INIT-009
+
+* 実行…`npx s2j-docs-linter init --dry-run --force`
+* 実行結果は、下記が成立すること
+  * exit code が0以外である
+
+#### 不正引数の検証 - INIT-010
+
+* 実行…`npx s2j-docs-linter init --dry-run --output .sandbox/base`
+* 実行結果は、下記が成立すること
+  * exit code が0以外である
+
+#### 不正引数の検証 - INIT-011
+
+* 実行…`npx s2j-docs-linter init --dry-run --output .sandbox/base --force`
+* 実行結果は、下記が成立すること
+  * exit code が0以外である
+
+#### 不正引数の検証 - INIT-012
+
+* 実行…`npx s2j-docs-linter init --preset invalid`
+* 実行結果は、下記が全て成立すること
+  * exit code が0以外である
+  * Invalid preset が表示される
 
 ### CLI コマンド - doctor コマンド
 
