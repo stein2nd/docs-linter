@@ -98,7 +98,7 @@ gh run watch
 
 ## 4. バージョン更新と tag push (本番 publish)
 
-1. [CHANGELOG.md](../CHANGELOG.md) を更新 (§3)
+1. [CHANGELOG.md](../CHANGELOG.md) を更新 ([CHANGELOG 更新](#3-changelog-更新))
 2. `package.json` の `version` を更新 (semver)
 3. 変更を main に merge
 4. tag を作成して push:
