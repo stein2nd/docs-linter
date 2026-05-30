@@ -2,7 +2,7 @@
 
 本ページは、[npm パッケージ仕様](./npm_package_spec.md) にもとづく実装修正の進捗を一覧化します。仕様書の [フェーズ1実装状況](./npm_package_spec.md#フェーズ1実装状況-2026-05) と相互参照します。publish 認証・シークレット方針は [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) を参照してください。
 
-**移行フェーズ**は [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) に従い、**フェーズ1 完了**、**フェーズ2 完了**、**フェーズ3 完了**、**フェーズ4 完了** (必須 + 推奨 **100%**)。
+**移行フェーズ** は [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) に従い、**フェーズ1 完了**、**フェーズ2 完了**、**フェーズ3 完了**、**フェーズ4 完了** (必須 + 推奨 **100%**)。
 
 最終更新…**2026-05-26**
 * フェーズ1–4 **クローズ**。npm **`@s2j/docs-linter@1.0.13`**。
@@ -66,6 +66,43 @@
 | [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/) | Bug / Feature テンプレ + `config.yml` — 推奨 #3 **済** |
 | [仕様書の起点](./specs.md) | 仕様導線 + [プロジェクトのロードマップ](./specs.md#プロジェクトのロードマップ) → [status.md](./status.md) — 推奨 #5 **済** |
 | [README.md](../README.md) | [ロードマップ](../README.md#ロードマップ) — status / ガバナンス導線 · Contributing → [CONTRIBUTING.md](../CONTRIBUTING.md) — 推奨 #4–#5 |
+
+### 機能一覧 (実装状況サマリー)
+
+| 機能名 (仕様セクション) | 実装済み/未実装 | 実装％ | 完了条件 (要約) | 備考 |
+| --- | --- | ---: | --- | --- |
+| [Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク) | 実装済み | 100 | pack / dry-run / tarball / registry / 受け入れ (#1–2, #4–9, #11–12) | 最新 **`@s2j/docs-linter@1.0.13`** |
+| [Publishing (パッケージ構成) - フェーズ1優先](./npm_package_spec.md#publishing-パッケージ構成---フェーズ1優先タスク) | 実装済み | 100 | `pack:artifact`、`artifacts/`、再現可能な検証 (#1–2, #4, #7, #16) | GHA artifact 名 `s2j-docs-linter-<tag>` |
+| [npm パッケージ仕様](./npm_package_spec.md) (文書) | 実装済み | 100 | コードと仕様の同期 | パッケージ構成セクション反映済み |
+| [`package.json` メタデータ更新](./npm_package_spec.md#packagejson-メタデータ更新) | 実装済み | 100 | `@s2j/docs-linter`、semver、`LICENSE` 等 | **`1.0.13`** (#5–6) |
+| [CLI Entrypoint 公開](./npm_package_spec.md#cli-entrypoint-公開) | 実装済み | 100 | `bin` / `--profile` / 設定解決 / `--help` / `--version` | textlint を `node` 直実行 (#3) |
+| [ファイルスコープの最適化 (Publish)](./npm_package_spec.md#ファイルスコープの最適化を-publish) | 実装済み | 100 | `files` + `verify:tarball` | `presets/` + root ミラー (#4, #9) |
+| [CLI 互換レイヤ](./npm_package_spec.md#cli-互換レイヤ) / [互換性に関する要件](./npm_package_spec.md#互換性に関する要件) | 実装済み | 100 | パッケージ root 基準の preset 解決、互換 `docs-lint` | |
+| [互換性に関する、移行戦略 - フェーズ1優先](./npm_package_spec.md#互換性に関する移行戦略---フェーズ1優先タスク) | 実装済み | 100 | tarball に `base/` `swift/` `wordpress/` 同梱 | `npm_usage.md` に VSCode / `extends` (#13–14) |
+| [依存関係レビュー](./npm_package_spec.md#依存関係レビュー) | 実装済み | 100 | 実行時 → `dependencies`；Dependabot weekly | [`.github/dependabot.yml`](../.github/dependabot.yml) (必須 #3 **済**) |
+| [Publishing](./npm_package_spec.md#publishing) (全体) | 実装済み | 100 | フェーズ1 **16/16** + フェーズ2 **5/5** + フェーズ3 **9/9** 済 | フェーズ3 **クローズ** (2026-05-25) |
+| [本リポジトリ `package.json` の `scripts` - フェーズ1優先](./npm_package_spec.md#本リポジトリ-packagejson-の-scripts---フェーズ1優先タスク) | 実装済み | 100 | `clean` / `build` / `prepare` / publish 検証群 / CLI 経由 `lint*` | `postinstall` はフェーズ1非対象で現状維持 (#8) |
+| [移行のワークフロー例](./npm_package_spec.md#移行のワークフロー例) | 実装済み | 100 | `examples/lint-docs*.yml` で `npx s2j-docs-linter` | フェーズ3 #5 **済**。legacy Submodule ステップは reference |
+| [移行のワークフロー例 - フェーズ1優先](./npm_package_spec.md#移行のワークフロー例---フェーズ1優先タスク) | 実装済み | 100 | migration examples + `lint:docs` before/after | [npm_usage.md](./npm_usage.md) + `examples/` (#10, #15) |
+| [互換性に関する、移行戦略](./npm_package_spec.md#互換性に関する移行戦略) (フェーズ1) | 実装済み | 100 | 併存基盤 + root 互換レイアウト + 移行ドキュメント | **9 リポジトリ**で Submodule → npm 移行完了 (#12) |
+| [README 移行](./npm_package_spec.md#readme-移行) | **済** | 100 | migration guide + legacy 非推奨 + VSCode 定着 | フェーズ3 推奨 #2–3 **済** (#6 **済**) |
+| [GitHub Actions Publish ワークフロー](./npm_package_spec.md#github-actions-publish-ワークフロー) | 運用中 | 100 | OIDC tag publish + artifact | run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088) |
+| [GitHub Actions Publish - フェーズ1優先](./npm_package_spec.md#github-actions-publish-ワークフロー---フェーズ1優先タスク) | 運用中 | 100 | tag `v*` / `npm ci` / 検証 / artifact / publish | OIDC 運用 (2026-05-25) |
+| [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) | 実装済み | 100 | Trusted Publishing 登録 + ワークフロー OIDC | `NPM_TOKEN` Secret 不使用 |
+| [npm 使い方ガイド との整合 - フェーズ1優先](./npm_package_spec.md#npm-使い方ガイド-との整合---フェーズ1優先タスク) / [npm_usage.md](./npm_usage.md) | 実装済み | 100 | README のコマンドが実際に動く | `lint:docs` / VSCode / `extends` / CI (#10, #14) |
+| [VSCode 互換戦略](./npm_package_spec.md#vscode-互換戦略) | ガイド済み | 100 | [npm_usage.md](./npm_usage.md) に移行例 | 利用側 **9 リポ** canonical 設定 (フェーズ3 推奨 #3 **済**) |
+| [CI 互換戦略](./npm_package_spec.md#ci-互換戦略) | ガイド済み | 100 | `npm_usage.md` / `examples/` に CI 例 | 利用側 **9 リポ** GHA docs lint 成功 (フェーズ3 #5 **済**) |
+| Node matrix CI (フェーズ4) | **済** | 100 | Node 20/22/24 互換検証 | [ci.yml](../.github/workflows/ci.yml) (必須 #4 **済**) |
+| [バージョン管理ポリシー](./npm_package_spec.md#バージョン管理ポリシー) | **済** | 100 | semver 運用 + CHANGELOG | [versioning_policy.md](./versioning_policy.md) (必須 #1 **済**) |
+| CHANGELOG / リリース履歴 (フェーズ4) | **済** | 100 | `CHANGELOG.md` 運用 + [release.md](./release.md) 連携 | 必須 #2 **済** |
+| メンテナンス方針 (フェーズ4) | **済** | 100 | 保守・更新方針の文書化 | [maintenance_policy.md](./maintenance_policy.md) (必須 #5 **済**) |
+| CONTRIBUTING (フェーズ4) | **済** | 100 | 貢献ガイド (setup / workflow / 検証 / 互換 / CI 等) | [CONTRIBUTING.md](../CONTRIBUTING.md) + [README.md](../README.md) 導線 (推奨 #4 **済**) |
+| Issue テンプレート (フェーズ4) | **済** | 100 | Bug / Feature テンプレ + config | [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/) (推奨 #3 **済**) |
+| ロードマップ可視化 (フェーズ4) | **済** | 100 | status + specs + README 導線 | [status.md](./status.md) · [specs.md](./specs.md) · [README.md](../README.md) (推奨 #5 **済**) |
+| GitHub リリースノート (フェーズ4) | **済** | 100 | tag publish 連動 Release 自動作成 | [npm-publish.yml](../.github/workflows/npm-publish.yml) `generate_release_notes: true` + [release.md](./release.md) §8 (推奨 #2 **済**) |
+| セマンティック・リリース評価 (フェーズ4) | **済** | 100 | 採用可否評価の文書化 | [semantic_release_evaluation.md](./semantic_release_evaluation.md) — 結論: **現時点では非採用** (推奨 #1 **済**) |
+| [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ3 | **済** | 100 | Submodule 非推奨化・利用側 cutover | 必須 #1–6 + 推奨 #1–3 **済** (2026-05-25) |
+| [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ4 | **クローズ** | 100 | レガシー機能削除・OSS 成熟化 | 必須 **5/5 済** + 推奨 **5/5 済** (2026-05-26) |
 
 ### フェーズ1: サマリー
 
@@ -176,6 +213,63 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | GitHub Actions publish ワークフロー | 運用中 | 100 | OIDC tag publish 成功 (M2)。artifact `s2j-docs-linter-v1.0.13` |
 | npm 認証・シークレット管理 (文書) | 済 | 100 | [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) — Trusted Publishing 登録済 |
 
+### フェーズ1で完了した項目
+
+仕様 [フェーズ1で完了した項目](./npm_package_spec.md#フェーズ1で完了した項目) および各フェーズ1優先タスクの責務と一致します。
+
+* `@s2j/docs-linter` としての `package.json` メタデータ
+* CLI `s2j-docs-linter` (互換 `docs-lint`)、`-h` / `--help`、`-V` / `--version`、`--profile`
+* `presets/` レイアウトの維持と tarball 同梱
+* root 互換ミラー … ビルド時に `base/` `swift/` `wordpress/` を `presets/*` から生成 (`link-preset-layout-compat`)
+* 実行時 `dependencies` への移行
+* README への npm 手順の併記 (Submodule は引き続き主導線) および [npm_usage.md](./npm_usage.md) への導線
+* [npm_usage.md](./npm_usage.md) … install / CLI / **`package.json` `lint:docs` 移行例 (WordPress・Swift)** / GitHub Actions / **VSCode・`extends` 移行例**
+* publish 検証 scripts … 仕様標準の `pack:check` / `pack:artifact` / `publish:dry-run` + `lint:package` + `verify:tarball` + `verify:artifact`
+* tarball 自動検証 (`scripts/verify-tarball.cjs`) — temp 検証と `--from-artifacts` 検証 — **22 entries**
+* **`./artifacts/`** へのバージョン付き tarball (`s2j-docs-linter-<version>.tgz`)、`.gitignore` で root の `*.tgz` 汚染を回避
+* `examples/lint-docs*.yml` の `npx s2j-docs-linter` 化、`@s2j/docs-linter` install 手順コメント
+* `.github/workflows/npm-publish.yml` … tag `v*` / `workflow_dispatch` → `pack:check` → `verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish` → `Create GitHub Release` (OIDC 運用、GHA dry-run 成功)
+* [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) … Trusted Publishing (OIDC) 登録済、`NPM_TOKEN` 非使用
+* 本リポジトリ `scripts` 整理 … `clean` / `build` (`tsc` + ミラー生成) / `prepare`、publish 用 dry-run 群
+* 本リポジトリ `lint` / `lint:wp` / `lint:swift` をビルド済み CLI 経由に統一
+* `files` を runtime 最小構成に整理 (`scripts/patch-wp-prh-colon-quote.cjs` のみ同梱)
+* `package.json` `bin` の互換 CLI を `docs-lint` に統一
+* **`@s2j/docs-linter@1.0.10`** npmjs 初回 publish (2026-05-23)
+* **`@s2j/docs-linter@1.0.11`** — `sudachi-synonyms-dictionary` を dependencies に追加 (peer 依存の利用側エラー解消)
+* **`@s2j/docs-linter@1.0.12`** — 手動 publish (2026-05-24、`npm whoami` → `stein2nd`)
+* **`@s2j/docs-linter@1.0.13`** — GHA OIDC publish (2026-05-25、run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088))
+* **利用側受け入れ試験 (#12)** — **9 リポジトリ** npm 化・`tools/docs-linter` 削除済、`npm run lint:docs` 成功 (2026-05-24 受入 → フェーズ3 cutover 済)
+
+### フェーズ1で完了した主な変更 (コード・文書)
+
+| 対象 | 内容 | 完了条件 |
+| --- | --- | ---: |
+| `src/bin/run-textlint.ts` | preset 解決、`--profile`、`-h`/`--help`、`-V`/`--version`、textlint を `node` 直実行、NODE_PATH 連結 | #3 |
+| `package.json` | publish 用 scripts、`files`、root ミラー、`build`、`bin.docs-lint`；**1.0.11** で `sudachi-synonyms-dictionary` 追加 | #5–8, #11, #16 |
+| `tsconfig.build.json` | 本番ビルド用 (`noEmit: false`、`dist/` 出力) | #8 |
+| `scripts/verify-tarball.cjs` | 必須・禁止パス検証；`--from-artifacts` で `./artifacts/` を検証 | #4, #9, #16 |
+| `.gitignore` | `artifacts/` を追加 (root への tarball 流出防止) | #16 |
+| `src/scripts/link-preset-layout-compat.ts` | ビルド時に `presets/*` → root `base/` `swift/` `wordpress/` をミラー | #13 |
+| `examples/lint-docs*.yml` | lint ステップを `npx s2j-docs-linter` に更新、npm / `npm_usage` 導線コメント | #15 |
+| `README.md` | 方法2 (npm) を `@s2j/docs-linter` / `s2j-docs-linter` に更新、`npm_usage.md` へ導線 | #10 |
+| `docsMod/npm_usage.md` | `lint:docs` before/after、`--profile`、CI、VSCode・`extends` 移行例 | #10, #14, #15 |
+| `docsMod/npm_package_spec.md` | フェーズ1優先タスク・**パッケージ構成**・GHA・残タスクの注記 | 文書 |
+| `docsMod/npm_auth_secret_manage_spec.md` | 認証優先順位 (OIDC > 自動化トークン > 手動)、secret 運用、GHA 例 | 文書 |
+| `docsMod/specs.md` | 認証仕様・実装状況への導線 | 文書 |
+| `.github/workflows/npm-publish.yml` | OIDC 運用: tag `v*` / `workflow_dispatch` → 検証 → artifact → publish → GitHub Release | #16, M2 / 推奨 #2 |
+| (運用) npmjs publish | `@s2j/docs-linter@1.0.10` 初回、`1.0.11`、`1.0.12` (手動)、**`1.0.13`** (GHA OIDC) | #11 |
+| (運用) 利用側受け入れ試験 | 9 リポジトリ (WordPress / Swift / 仕様ドキュメント) — `lint:docs` 成功 | #12 |
+
+### フェーズ1の残タスク
+
+**なし** — フェーズ1完了条件 #1–16 はすべて **済** (2026-05-24)。フェーズ2 **2026-05-25 クローズ**。フェーズ3 **2026-05-25 クローズ**。
+
+| # | タスク | 優先度 | 実装％ | 完了条件 (#) |
+| ---: | --- | --- | ---: | ---: |
+| 1 | npmjs への publish | フェーズ1 | **100** | #11 — 最新 **`@s2j/docs-linter@1.0.13`** (GHA OIDC) |
+| 2 | 利用側プロジェクトでの受け入れ試験 | フェーズ1 | **100** | #12 — 9 リポジトリで `lint:docs` 成功 (下表参照) |
+| 3 | GHA からの tag 連動 publish 運用 | **フェーズ2** | **100** | OIDC tag publish 成功 (`v1.0.13`, run `26381626088`) |
+
 ### フェーズ2: サマリー
 
 フェーズ2では、S2J Docs Linter (`@s2j/docs-linter`) の **GitHub Actions を用いた npm Registry 自動 publish 基盤の構築** を対象とした。**2026-05-25 時点で完了**。
@@ -270,6 +364,54 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * automatic changelog generation
 * dist-tag management
 * prerelease channel
+
+### フェーズ2で完了した項目
+
+* **M3**: `@s2j/docs-linter` npmjs publish — **済** (最新 **`1.0.13`**、GHA OIDC)
+* **受け入れ試験 (フェーズ1 #12 / フェーズ3 #1–2)**: **9 リポジトリ** npm 化・`tools/docs-linter` 削除済
+* **手動 publish (2026-05-24)**: `npm login` (`stein2nd`) → `npm publish --access public` 成功、`npm view` → **`1.0.12`**
+* **npm Trusted Publisher 登録 (2026-05-24)**: GitHub Actions / `stein2nd` / `docs-linter` / `npm-publish.yml` (Allow publish / Allow stage publish)
+* **ワークフロー OIDC 化 (2026-05-24)**: `id-token: write`、`NPM_TOKEN` 参照削除
+* **GHA ワークフロー強化**: `workflow_dispatch` (dry-run)、tag/version 一致検証 (`scripts/verify-release-tag.cjs`)
+* **リリース手順文書**: [release.md](./release.md)
+* **GHA dry-run 検証 (M1)**: run [`26359090580`](https://github.com/stein2nd/docs-linter/actions/runs/26359090580) 成功
+* **GHA OIDC publish (M2 / 必須 #3–4 / OIDC O4)**: `v1.0.13` tag push → run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088) 成功 (2026-05-25)
+* **GHA artifact (M4 / 必須 #5)**: artifact `s2j-docs-linter-v1.0.13` 保存確認
+* **フェーズ2クローズ (M5)**: **達成** (2026-05-25)
+
+#### 運用 (手動)
+
+* npmjs publish … `@s2j/docs-linter@1.0.10` (初回)、`1.0.11`、`1.0.12` (2026-05-24 手動)、**`1.0.13`** (2026-05-25 GHA OIDC)
+* 利用側受け入れ … 上記 **9 リポジトリ** npm 化・`tools/docs-linter` 削除済、`npm run lint:docs` 成功
+
+### フェーズ2で完了した主な変更 (コード・文書)
+
+| 対象 | 内容 | 関連 |
+| --- | --- | --- |
+| `.github/workflows/npm-publish.yml` | OIDC 運用 (Node 24, npm 11.6+, `id-token: write`)。フェーズ4 で GitHub Release 自動作成を追加 | O2, P0, M2 / 推奨 #2 |
+| `docsMod/release.md` | Trusted Publishing 手順、ローカル publish トラブルシュート | 推奨 #2, O1 |
+| `scripts/verify-release-tag.cjs` | tag と `package.json` version 一致検証 | M2 |
+| `package.json` | **`1.0.13`** (GHA OIDC publish) | M2, 必須 #1 |
+| (運用) Trusted Publisher | npmjs package settings 登録 | O1 |
+| (運用) GHA dry-run | run [`26359090580`](https://github.com/stein2nd/docs-linter/actions/runs/26359090580) | M1 |
+| (運用) GHA OIDC publish | run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088) 成功 | M2, 必須 #3–4, O4 |
+| (運用) GHA artifact | `s2j-docs-linter-v1.0.13` | M4, 必須 #5 |
+
+### フェーズ2の残タスク
+
+**なし** — フェーズ2必須条件 #1–5、OIDC O1–O4、マイルストーン M1–M5 はすべて **済** (2026-05-25)。
+
+### フェーズ2のマイルストーン
+
+| # | マイルストーン | 状態 | 実装％ | 検証 |
+| ---: | --- | --- | ---: | --- |
+| M1 | GitHub Actions で `npm publish --dry-run` 成功 | **済** | 100 | run [`26359090580`](https://github.com/stein2nd/docs-linter/actions/runs/26359090580) (2026-05-24) |
+| M2 | test tag push で workflow success (GHA OIDC publish) | **済** | 100 | run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088) (`v1.0.13`, 2026-05-25) |
+| M3 | `@s2j/docs-linter` npmjs publish | **済** | 100 | 最新 **`@s2j/docs-linter@1.0.13`** |
+| M4 | artifact retention 確立 (GHA) | **済** | 100 | artifact `s2j-docs-linter-v1.0.13` |
+| M5 | フェーズ2完了 | **済** | 100 | 2026-05-25 |
+
+**集計**: マイルストーン **5 / 5 → 100%**。
 
 ### フェーズ3: サマリー
 
@@ -499,148 +641,6 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [specs.md](./specs.md) | 「プロジェクトのロードマップ」— status 導線・フェーズ1–4 概要 | 推奨 #5 |
 | [README.md](../README.md) | 「ロードマップ」— status / ガバナンス (maintenance / versioning) 導線 | 推奨 #5 |
 | [semantic_release_evaluation.md](./semantic_release_evaluation.md) | セマンティック・リリース採用可否評価 — 結論: **現時点では非採用** | 推奨 #1 |
-
-### 機能一覧 (実装状況サマリー)
-
-| 機能名 (仕様セクション) | 実装済み/未実装 | 実装％ | 完了条件 (要約) | 備考 |
-| --- | --- | ---: | --- | --- |
-| [Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク) | 実装済み | 100 | pack / dry-run / tarball / registry / 受け入れ (#1–2, #4–9, #11–12) | 最新 **`@s2j/docs-linter@1.0.13`** |
-| [Publishing (パッケージ構成) - フェーズ1優先](./npm_package_spec.md#publishing-パッケージ構成---フェーズ1優先タスク) | 実装済み | 100 | `pack:artifact`、`artifacts/`、再現可能な検証 (#1–2, #4, #7, #16) | GHA artifact 名 `s2j-docs-linter-<tag>` |
-| [npm パッケージ仕様](./npm_package_spec.md) (文書) | 実装済み | 100 | コードと仕様の同期 | パッケージ構成セクション反映済み |
-| [`package.json` メタデータ更新](./npm_package_spec.md#packagejson-メタデータ更新) | 実装済み | 100 | `@s2j/docs-linter`、semver、`LICENSE` 等 | **`1.0.13`** (#5–6) |
-| [CLI Entrypoint 公開](./npm_package_spec.md#cli-entrypoint-公開) | 実装済み | 100 | `bin` / `--profile` / 設定解決 / `--help` / `--version` | textlint を `node` 直実行 (#3) |
-| [ファイルスコープの最適化 (Publish)](./npm_package_spec.md#ファイルスコープの最適化を-publish) | 実装済み | 100 | `files` + `verify:tarball` | `presets/` + root ミラー (#4, #9) |
-| [CLI 互換レイヤ](./npm_package_spec.md#cli-互換レイヤ) / [互換性に関する要件](./npm_package_spec.md#互換性に関する要件) | 実装済み | 100 | パッケージ root 基準の preset 解決、互換 `docs-lint` | |
-| [互換性に関する、移行戦略 - フェーズ1優先](./npm_package_spec.md#互換性に関する移行戦略---フェーズ1優先タスク) | 実装済み | 100 | tarball に `base/` `swift/` `wordpress/` 同梱 | `npm_usage.md` に VSCode / `extends` (#13–14) |
-| [依存関係レビュー](./npm_package_spec.md#依存関係レビュー) | 実装済み | 100 | 実行時 → `dependencies`；Dependabot weekly | [`.github/dependabot.yml`](../.github/dependabot.yml) (必須 #3 **済**) |
-| [Publishing](./npm_package_spec.md#publishing) (全体) | 実装済み | 100 | フェーズ1 **16/16** + フェーズ2 **5/5** + フェーズ3 **9/9** 済 | フェーズ3 **クローズ** (2026-05-25) |
-| [本リポジトリ `package.json` の `scripts` - フェーズ1優先](./npm_package_spec.md#本リポジトリ-packagejson-の-scripts---フェーズ1優先タスク) | 実装済み | 100 | `clean` / `build` / `prepare` / publish 検証群 / CLI 経由 `lint*` | `postinstall` はフェーズ1非対象で現状維持 (#8) |
-| [移行のワークフロー例](./npm_package_spec.md#移行のワークフロー例) | 実装済み | 100 | `examples/lint-docs*.yml` で `npx s2j-docs-linter` | フェーズ3 #5 **済**。legacy Submodule ステップは reference |
-| [移行のワークフロー例 - フェーズ1優先](./npm_package_spec.md#移行のワークフロー例---フェーズ1優先タスク) | 実装済み | 100 | migration examples + `lint:docs` before/after | [npm_usage.md](./npm_usage.md) + `examples/` (#10, #15) |
-| [互換性に関する、移行戦略](./npm_package_spec.md#互換性に関する移行戦略) (フェーズ1) | 実装済み | 100 | 併存基盤 + root 互換レイアウト + 移行ドキュメント | **9 リポジトリ**で Submodule → npm 移行完了 (#12) |
-| [README 移行](./npm_package_spec.md#readme-移行) | **済** | 100 | migration guide + legacy 非推奨 + VSCode 定着 | フェーズ3 推奨 #2–3 **済** (#6 **済**) |
-| [GitHub Actions Publish ワークフロー](./npm_package_spec.md#github-actions-publish-ワークフロー) | 運用中 | 100 | OIDC tag publish + artifact | run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088) |
-| [GitHub Actions Publish - フェーズ1優先](./npm_package_spec.md#github-actions-publish-ワークフロー---フェーズ1優先タスク) | 運用中 | 100 | tag `v*` / `npm ci` / 検証 / artifact / publish | OIDC 運用 (2026-05-25) |
-| [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) | 実装済み | 100 | Trusted Publishing 登録 + ワークフロー OIDC | `NPM_TOKEN` Secret 不使用 |
-| [npm 使い方ガイド との整合 - フェーズ1優先](./npm_package_spec.md#npm-使い方ガイド-との整合---フェーズ1優先タスク) / [npm_usage.md](./npm_usage.md) | 実装済み | 100 | README のコマンドが実際に動く | `lint:docs` / VSCode / `extends` / CI (#10, #14) |
-| [VSCode 互換戦略](./npm_package_spec.md#vscode-互換戦略) | ガイド済み | 100 | [npm_usage.md](./npm_usage.md) に移行例 | 利用側 **9 リポ** canonical 設定 (フェーズ3 推奨 #3 **済**) |
-| [CI 互換戦略](./npm_package_spec.md#ci-互換戦略) | ガイド済み | 100 | `npm_usage.md` / `examples/` に CI 例 | 利用側 **9 リポ** GHA docs lint 成功 (フェーズ3 #5 **済**) |
-| Node matrix CI (フェーズ4) | **済** | 100 | Node 20/22/24 互換検証 | [ci.yml](../.github/workflows/ci.yml) (必須 #4 **済**) |
-| [バージョン管理ポリシー](./npm_package_spec.md#バージョン管理ポリシー) | **済** | 100 | semver 運用 + CHANGELOG | [versioning_policy.md](./versioning_policy.md) (必須 #1 **済**) |
-| CHANGELOG / リリース履歴 (フェーズ4) | **済** | 100 | `CHANGELOG.md` 運用 + [release.md](./release.md) 連携 | 必須 #2 **済** |
-| メンテナンス方針 (フェーズ4) | **済** | 100 | 保守・更新方針の文書化 | [maintenance_policy.md](./maintenance_policy.md) (必須 #5 **済**) |
-| CONTRIBUTING (フェーズ4) | **済** | 100 | 貢献ガイド (setup / workflow / 検証 / 互換 / CI 等) | [CONTRIBUTING.md](../CONTRIBUTING.md) + [README.md](../README.md) 導線 (推奨 #4 **済**) |
-| Issue テンプレート (フェーズ4) | **済** | 100 | Bug / Feature テンプレ + config | [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/) (推奨 #3 **済**) |
-| ロードマップ可視化 (フェーズ4) | **済** | 100 | status + specs + README 導線 | [status.md](./status.md) · [specs.md](./specs.md) · [README.md](../README.md) (推奨 #5 **済**) |
-| GitHub リリースノート (フェーズ4) | **済** | 100 | tag publish 連動 Release 自動作成 | [npm-publish.yml](../.github/workflows/npm-publish.yml) `generate_release_notes: true` + [release.md](./release.md) §8 (推奨 #2 **済**) |
-| セマンティック・リリース評価 (フェーズ4) | **済** | 100 | 採用可否評価の文書化 | [semantic_release_evaluation.md](./semantic_release_evaluation.md) — 結論: **現時点では非採用** (推奨 #1 **済**) |
-| [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ3 | **済** | 100 | Submodule 非推奨化・利用側 cutover | 必須 #1–6 + 推奨 #1–3 **済** (2026-05-25) |
-| [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ4 | **クローズ** | 100 | レガシー機能削除・OSS 成熟化 | 必須 **5/5 済** + 推奨 **5/5 済** (2026-05-26) |
-
-### フェーズ1で完了した項目
-
-仕様 [フェーズ1で完了した項目](./npm_package_spec.md#フェーズ1で完了した項目) および各フェーズ1優先タスクの責務と一致します。
-
-* `@s2j/docs-linter` としての `package.json` メタデータ
-* CLI `s2j-docs-linter` (互換 `docs-lint`)、`-h` / `--help`、`-V` / `--version`、`--profile`
-* `presets/` レイアウトの維持と tarball 同梱
-* root 互換ミラー … ビルド時に `base/` `swift/` `wordpress/` を `presets/*` から生成 (`link-preset-layout-compat`)
-* 実行時 `dependencies` への移行
-* README への npm 手順の併記 (Submodule は引き続き主導線) および [npm_usage.md](./npm_usage.md) への導線
-* [npm_usage.md](./npm_usage.md) … install / CLI / **`package.json` `lint:docs` 移行例 (WordPress・Swift)** / GitHub Actions / **VSCode・`extends` 移行例**
-* publish 検証 scripts … 仕様標準の `pack:check` / `pack:artifact` / `publish:dry-run` + `lint:package` + `verify:tarball` + `verify:artifact`
-* tarball 自動検証 (`scripts/verify-tarball.cjs`) — temp 検証と `--from-artifacts` 検証 — **22 entries**
-* **`./artifacts/`** へのバージョン付き tarball (`s2j-docs-linter-<version>.tgz`)、`.gitignore` で root の `*.tgz` 汚染を回避
-* `examples/lint-docs*.yml` の `npx s2j-docs-linter` 化、`@s2j/docs-linter` install 手順コメント
-* `.github/workflows/npm-publish.yml` … tag `v*` / `workflow_dispatch` → `pack:check` → `verify:tarball` → `pack:artifact` → `upload-artifact` → `npm publish` → `Create GitHub Release` (OIDC 運用、GHA dry-run 成功)
-* [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) … Trusted Publishing (OIDC) 登録済、`NPM_TOKEN` 非使用
-* 本リポジトリ `scripts` 整理 … `clean` / `build` (`tsc` + ミラー生成) / `prepare`、publish 用 dry-run 群
-* 本リポジトリ `lint` / `lint:wp` / `lint:swift` をビルド済み CLI 経由に統一
-* `files` を runtime 最小構成に整理 (`scripts/patch-wp-prh-colon-quote.cjs` のみ同梱)
-* `package.json` `bin` の互換 CLI を `docs-lint` に統一
-* **`@s2j/docs-linter@1.0.10`** npmjs 初回 publish (2026-05-23)
-* **`@s2j/docs-linter@1.0.11`** — `sudachi-synonyms-dictionary` を dependencies に追加 (peer 依存の利用側エラー解消)
-* **`@s2j/docs-linter@1.0.12`** — 手動 publish (2026-05-24、`npm whoami` → `stein2nd`)
-* **`@s2j/docs-linter@1.0.13`** — GHA OIDC publish (2026-05-25、run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088))
-* **利用側受け入れ試験 (#12)** — **9 リポジトリ** npm 化・`tools/docs-linter` 削除済、`npm run lint:docs` 成功 (2026-05-24 受入 → フェーズ3 cutover 済)
-
-### フェーズ1で完了した主な変更 (コード・文書)
-
-| 対象 | 内容 | 完了条件 |
-| --- | --- | ---: |
-| `src/bin/run-textlint.ts` | preset 解決、`--profile`、`-h`/`--help`、`-V`/`--version`、textlint を `node` 直実行、NODE_PATH 連結 | #3 |
-| `package.json` | publish 用 scripts、`files`、root ミラー、`build`、`bin.docs-lint`；**1.0.11** で `sudachi-synonyms-dictionary` 追加 | #5–8, #11, #16 |
-| `tsconfig.build.json` | 本番ビルド用 (`noEmit: false`、`dist/` 出力) | #8 |
-| `scripts/verify-tarball.cjs` | 必須・禁止パス検証；`--from-artifacts` で `./artifacts/` を検証 | #4, #9, #16 |
-| `.gitignore` | `artifacts/` を追加 (root への tarball 流出防止) | #16 |
-| `src/scripts/link-preset-layout-compat.ts` | ビルド時に `presets/*` → root `base/` `swift/` `wordpress/` をミラー | #13 |
-| `examples/lint-docs*.yml` | lint ステップを `npx s2j-docs-linter` に更新、npm / `npm_usage` 導線コメント | #15 |
-| `README.md` | 方法2 (npm) を `@s2j/docs-linter` / `s2j-docs-linter` に更新、`npm_usage.md` へ導線 | #10 |
-| `docsMod/npm_usage.md` | `lint:docs` before/after、`--profile`、CI、VSCode・`extends` 移行例 | #10, #14, #15 |
-| `docsMod/npm_package_spec.md` | フェーズ1優先タスク・**パッケージ構成**・GHA・残タスクの注記 | 文書 |
-| `docsMod/npm_auth_secret_manage_spec.md` | 認証優先順位 (OIDC > 自動化トークン > 手動)、secret 運用、GHA 例 | 文書 |
-| `docsMod/specs.md` | 認証仕様・実装状況への導線 | 文書 |
-| `.github/workflows/npm-publish.yml` | OIDC 運用: tag `v*` / `workflow_dispatch` → 検証 → artifact → publish → GitHub Release | #16, M2 / 推奨 #2 |
-| (運用) npmjs publish | `@s2j/docs-linter@1.0.10` 初回、`1.0.11`、`1.0.12` (手動)、**`1.0.13`** (GHA OIDC) | #11 |
-| (運用) 利用側受け入れ試験 | 9 リポジトリ (WordPress / Swift / 仕様ドキュメント) — `lint:docs` 成功 | #12 |
-
-### フェーズ1の残タスク
-
-**なし** — フェーズ1完了条件 #1–16 はすべて **済** (2026-05-24)。フェーズ2 **2026-05-25 クローズ**。フェーズ3 **2026-05-25 クローズ**。
-
-| # | タスク | 優先度 | 実装％ | 完了条件 (#) |
-| ---: | --- | --- | ---: | ---: |
-| 1 | npmjs への publish | フェーズ1 | **100** | #11 — 最新 **`@s2j/docs-linter@1.0.13`** (GHA OIDC) |
-| 2 | 利用側プロジェクトでの受け入れ試験 | フェーズ1 | **100** | #12 — 9 リポジトリで `lint:docs` 成功 (下表参照) |
-| 3 | GHA からの tag 連動 publish 運用 | **フェーズ2** | **100** | OIDC tag publish 成功 (`v1.0.13`, run `26381626088`) |
-
-### フェーズ2で完了した項目
-
-* **M3**: `@s2j/docs-linter` npmjs publish — **済** (最新 **`1.0.13`**、GHA OIDC)
-* **受け入れ試験 (フェーズ1 #12 / フェーズ3 #1–2)**: **9 リポジトリ** npm 化・`tools/docs-linter` 削除済
-* **手動 publish (2026-05-24)**: `npm login` (`stein2nd`) → `npm publish --access public` 成功、`npm view` → **`1.0.12`**
-* **npm Trusted Publisher 登録 (2026-05-24)**: GitHub Actions / `stein2nd` / `docs-linter` / `npm-publish.yml` (Allow publish / Allow stage publish)
-* **ワークフロー OIDC 化 (2026-05-24)**: `id-token: write`、`NPM_TOKEN` 参照削除
-* **GHA ワークフロー強化**: `workflow_dispatch` (dry-run)、tag/version 一致検証 (`scripts/verify-release-tag.cjs`)
-* **リリース手順文書**: [release.md](./release.md)
-* **GHA dry-run 検証 (M1)**: run [`26359090580`](https://github.com/stein2nd/docs-linter/actions/runs/26359090580) 成功
-* **GHA OIDC publish (M2 / 必須 #3–4 / OIDC O4)**: `v1.0.13` tag push → run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088) 成功 (2026-05-25)
-* **GHA artifact (M4 / 必須 #5)**: artifact `s2j-docs-linter-v1.0.13` 保存確認
-* **フェーズ2クローズ (M5)**: **達成** (2026-05-25)
-
-#### 運用 (手動)
-
-* npmjs publish … `@s2j/docs-linter@1.0.10` (初回)、`1.0.11`、`1.0.12` (2026-05-24 手動)、**`1.0.13`** (2026-05-25 GHA OIDC)
-* 利用側受け入れ … 上記 **9 リポジトリ** npm 化・`tools/docs-linter` 削除済、`npm run lint:docs` 成功
-
-### フェーズ2で完了した主な変更 (コード・文書)
-
-| 対象 | 内容 | 関連 |
-| --- | --- | --- |
-| `.github/workflows/npm-publish.yml` | OIDC 運用 (Node 24, npm 11.6+, `id-token: write`)。フェーズ4 で GitHub Release 自動作成を追加 | O2, P0, M2 / 推奨 #2 |
-| `docsMod/release.md` | Trusted Publishing 手順、ローカル publish トラブルシュート | 推奨 #2, O1 |
-| `scripts/verify-release-tag.cjs` | tag と `package.json` version 一致検証 | M2 |
-| `package.json` | **`1.0.13`** (GHA OIDC publish) | M2, 必須 #1 |
-| (運用) Trusted Publisher | npmjs package settings 登録 | O1 |
-| (運用) GHA dry-run | run [`26359090580`](https://github.com/stein2nd/docs-linter/actions/runs/26359090580) | M1 |
-| (運用) GHA OIDC publish | run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088) 成功 | M2, 必須 #3–4, O4 |
-| (運用) GHA artifact | `s2j-docs-linter-v1.0.13` | M4, 必須 #5 |
-
-### フェーズ2の残タスク
-
-**なし** — フェーズ2必須条件 #1–5、OIDC O1–O4、マイルストーン M1–M5 はすべて **済** (2026-05-25)。
-
-### フェーズ2のマイルストーン
-
-| # | マイルストーン | 状態 | 実装％ | 検証 |
-| ---: | --- | --- | ---: | --- |
-| M1 | GitHub Actions で `npm publish --dry-run` 成功 | **済** | 100 | run [`26359090580`](https://github.com/stein2nd/docs-linter/actions/runs/26359090580) (2026-05-24) |
-| M2 | test tag push で workflow success (GHA OIDC publish) | **済** | 100 | run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088) (`v1.0.13`, 2026-05-25) |
-| M3 | `@s2j/docs-linter` npmjs publish | **済** | 100 | 最新 **`@s2j/docs-linter@1.0.13`** |
-| M4 | artifact retention 確立 (GHA) | **済** | 100 | artifact `s2j-docs-linter-v1.0.13` |
-| M5 | フェーズ2完了 | **済** | 100 | 2026-05-25 |
-
-**集計**: マイルストーン **5 / 5 → 100%**。
 
 ### 補足
 
