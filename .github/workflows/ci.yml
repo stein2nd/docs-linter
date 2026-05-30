@@ -35,3 +35,6 @@ jobs:
 
       - name: Verify tarball contents
         run: npm run verify:tarball
+
+      - name: Test init command
+        run: bash scripts/test-init.sh

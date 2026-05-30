@@ -7,8 +7,8 @@ import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(__dirname, "../..");
-const PACKAGE_VERSION = require(join(packageRoot, "package.json")).version ?? "unknown";
-const HELP_TEXT = `S2J Docs Linter — textlint wrapper for Swift, WordPress, and general docs.
+export const PACKAGE_VERSION = require(join(packageRoot, "package.json")).version ?? "unknown";
+export const LINT_HELP_TEXT = `S2J Docs Linter — textlint wrapper for Swift, WordPress, and general docs.
 
 Usage:
   s2j-docs-linter [options] [files...]
@@ -117,30 +117,39 @@ function resolveTextlintBin() {
     }
     return found;
 }
-const rawArgv = process.argv.slice(2);
-if (rawArgv.some((arg) => arg === "--help" || arg === "-h")) {
-    console.log(HELP_TEXT);
-    process.exit(0);
-}
-if (rawArgv.some((arg) => arg === "--version" || arg === "-V")) {
+export function showLintVersion() {
     console.log(PACKAGE_VERSION);
-    process.exit(0);
 }
-const { profile, lintTargets } = parseArgs(rawArgv);
-const targetConfig = resolveTargetConfig(profile);
-console.log(`🧩 Using config: ${targetConfig}`);
-const textlintBin = resolveTextlintBin();
-const result = spawnSync(process.execPath, [textlintBin, "--config", targetConfig, ...lintTargets], {
-    stdio: "inherit",
-    cwd: process.cwd(),
-    env: {
-        ...process.env,
-        NODE_PATH: buildNodePath()
+export function runLint(argv) {
+    if (argv.some((arg) => arg === "--help" || arg === "-h")) {
+        console.log(LINT_HELP_TEXT);
+        return 0;
     }
-});
-if (result.error) {
-    console.error("❌ Failed to run textlint:", result.error);
-    process.exit(1);
+    if (argv.some((arg) => arg === "--version" || arg === "-V")) {
+        showLintVersion();
+        return 0;
+    }
+    const { profile, lintTargets } = parseArgs(argv);
+    const targetConfig = resolveTargetConfig(profile);
+    console.log(`🧩 Using config: ${targetConfig}`);
+    const textlintBin = resolveTextlintBin();
+    const result = spawnSync(process.execPath, [textlintBin, "--config", targetConfig, ...lintTargets], {
+        stdio: "inherit",
+        cwd: process.cwd(),
+        env: {
+            ...process.env,
+            NODE_PATH: buildNodePath()
+        }
+    });
+    if (result.error) {
+        console.error("❌ Failed to run textlint:", result.error);
+        return 1;
+    }
+    return result.status ?? 0;
 }
-process.exit(result.status ?? 0);
+const isDirectRun = process.argv[1] !== undefined &&
+    fileURLToPath(import.meta.url) === resolve(process.argv[1]);
+if (isDirectRun) {
+    process.exit(runLint(process.argv.slice(2)));
+}
 //# sourceMappingURL=run-textlint.js.map
