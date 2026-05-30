@@ -24,7 +24,7 @@ logs/
 .env.local
 
 # Build / cache
-! dist/
+!dist/
 
 # npm pack artifacts (see npm run pack:artifact)
 artifacts/
@@ -35,6 +35,9 @@ artifacts/
 /wordpress
 .cache/
 coverage/
+
+.sandbox/
+!.sandbox/.gitkeep
 
 # macOS
 .DS_Store
