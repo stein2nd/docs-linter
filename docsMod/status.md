@@ -401,10 +401,6 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | (運用) GHA OIDC publish | run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088) 成功 | M2, 必須 #3–4, O4 |
 | (運用) GHA artifact | `s2j-docs-linter-v1.0.13` | M4, 必須 #5 |
 
-### フェーズ2の残タスク
-
-**なし** — フェーズ2必須条件 #1–5、OIDC O1–O4、マイルストーン M1–M5 はすべて **済** (2026-05-25)。
-
 ### フェーズ2のマイルストーン
 
 | # | マイルストーン | 状態 | 実装％ | 検証 |
@@ -416,6 +412,10 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | M5 | フェーズ2完了 | **済** | 100 | 2026-05-25 |
 
 **集計**: マイルストーン **5 / 5 → 100%**。
+
+### フェーズ2の残タスク
+
+**なし** — フェーズ2必須条件 #1–5、OIDC O1–O4、マイルストーン M1–M5 はすべて **済** (2026-05-25)。
 
 ### フェーズ3: サマリー
 
@@ -497,10 +497,6 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * 自動 codemod
 * マイグレーションツール
 
-### フェーズ3の残タスク
-
-**なし** — フェーズ3必須条件 #1–6 および推奨条件 #1–3 はすべて **済** (2026-05-25)。
-
 ### フェーズ3で完了した項目
 
 * **必須 #1–2**: 利用側 **9 リポジトリ** npm 化・`tools/docs-linter` 削除済 (Swift **3** / WordPress **4** / 仕様ドキュメント **2**)
@@ -519,6 +515,10 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [README.md](../README.md) | 「レガシー移行リファレンス (Git サブモジュール)」追加 — Submodule 非推奨明示 | 必須 #6 |
 | [examples/lint-docs*.yml](../examples/lint-docs.yml) | npm workflow 手順 + legacy Submodule reference 併記 | 必須 #5 |
 | [npm_usage.md](./npm_usage.md) | `lint:docs` / VSCode / CI 移行ガイド | 推奨 #2–3 |
+
+### フェーズ3の残タスク
+
+**なし** — フェーズ3必須条件 #1–6 および推奨条件 #1–3 はすべて **済** (2026-05-25)。
 
 ### フェーズ4: サマリー
 
@@ -648,18 +648,6 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * 有償配布
 * エンタープライズ SLA
 
-### フェーズ4の残タスク
-
-**必須 / 推奨** — フェーズ4必須条件 #1–5 および推奨条件 #1–5 はすべて **済** (2026-05-26)。
-
-**P2 (CLI ツール)** — `init` **済** · `doctor` **未**:
-
-| タスク | 優先度 | 実装％ | 完了条件 |
-| --- | --- | ---: | --- |
-| `doctor` コマンド本実装 | P2 | 0 | [CLI コマンド - doctor](./cli_tooling_spec.md#cli-コマンド---doctor-コマンド) 9 項目 · PASS / WARN / FAIL |
-| `doctor` テスト仕様・自動テスト | P2 | 0 | `init` テスト仕様と同様の構成 (未作成) |
-| README / npm_usage の `init` 導線 | P2 | 0 | [cli_tooling_spec.md](./cli_tooling_spec.md#ドキュメントの同期) |
-
 ### フェーズ4で完了した項目
 
 * **必須 #1**: [versioning_policy.md](./versioning_policy.md) — SemVer ガバナンス (MAJOR/MINOR/PATCH、破壊的変更、非推奨、タグ規約)
@@ -701,6 +689,18 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [scripts/test-init.sh](../scripts/test-init.sh) | INIT-001〜012 自動テスト | P2 / I7 |
 | [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | `Test init command` ステップ追加 | P2 / I8 |
 | `package.json` | `test:init` script · `bin` / `main` → `dist/bin/cli.js` | P2 |
+
+### フェーズ4の残タスク
+
+**必須 / 推奨** — フェーズ4必須条件 #1–5 および推奨条件 #1–5 はすべて **済** (2026-05-26)。
+
+**P2 (CLI ツール)** — `init` **済** · `doctor` **未**:
+
+| タスク | 優先度 | 実装％ | 完了条件 |
+| --- | --- | ---: | --- |
+| `doctor` コマンド本実装 | P2 | 0 | [CLI コマンド - doctor](./cli_tooling_spec.md#cli-コマンド---doctor-コマンド) 9 項目 · PASS / WARN / FAIL |
+| `doctor` テスト仕様・自動テスト | P2 | 0 | `init` テスト仕様と同様の構成 (未作成) |
+| README / npm_usage の `init` 導線 | P2 | 0 | [cli_tooling_spec.md](./cli_tooling_spec.md#ドキュメントの同期) |
 
 ### 補足
 
