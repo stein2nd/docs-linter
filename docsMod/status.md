@@ -528,6 +528,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | 項目 | 状態 |
 | --- | --- |
+| 前提 | フェーズ3 **済** (2026-05-25) |
 | **フェーズ4 必須完了条件** | **100%** — 5 項目中 **5 済** |
 | **フェーズ4 推奨完了条件** | **100%** — 5 項目中 **5 済** |
 | **本リポジトリ実装 (フェーズ4)** | **100%** (必須 + 推奨) |
@@ -542,7 +543,6 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | **セマンティック・リリース評価** | **済** — [semantic_release_evaluation.md](./semantic_release_evaluation.md) — 結論: **現時点では非採用** (推奨 #1) |
 | **CLI `init` コマンド (P2)** | **済** — [cli_tooling_spec.md](./cli_tooling_spec.md) · `dist/bin/cli.js` · `npm run test:init` (INIT-001〜012) · GHA [ci.yml](../.github/workflows/ci.yml) |
 | **CLI `doctor` コマンド (P2)** | **未** — 仕様 **済** · 実装スタブ · テスト仕様 **未** |
-| 前提 | フェーズ3 **済** (2026-05-25) |
 
 * 対象
     * リリースガバナンス
