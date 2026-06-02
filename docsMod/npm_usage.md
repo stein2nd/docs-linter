@@ -57,7 +57,7 @@ npx @s2j/docs-linter init
 npx @s2j/docs-linter doctor
 ```
 
-下記の様に `--path` を介して診断対象ディレクトリを指定指定できます。
+下記の様に `--path` を介して診断対象ディレクトリを指定できます。
 
 ```bash
 npx @s2j/docs-linter doctor --path ./project
