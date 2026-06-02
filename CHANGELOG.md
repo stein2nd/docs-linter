@@ -2,6 +2,10 @@
 
 `@s2j/docs-linter` の npm 公開版における主な変更を記録します。
 
+## [1.0.15] - 2026-06-02
+
+- ドキュメント: `postinstall` (`patch-wp-prh-colon-quote.cjs`) の説明を追記 — 変更対象は `node_modules/textlint-rule-preset-wp-docs-ja/prh-rules/wordpress.yml` のみ (利用者プロジェクトの設定ファイルは変更しない)
+
 ## [1.0.14] - 2026-06-02
 
 - CLI サブコマンド `init` — プロジェクト初期化 (`.textlintrc.json` / VSCode 設定 / GitHub Actions ワークフロー / `lint:docs` 生成)

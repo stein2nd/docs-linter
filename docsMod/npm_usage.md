@@ -93,6 +93,41 @@ npx @s2j/docs-linter doctor
 * WARN は注意喚起であり、終了コードは `0`。
 * FAIL が含まれる場合のみ、終了コード `1`。
 
+## postinstall について
+
+S2J Docs Linter は、インストール時に `package.json` の `postinstall` から `./scripts/patch-wp-prh-colon-quote.cjs` を実行します。
+
+### 実行目的
+
+`textlint-rule-preset-wp-docs-ja` (WordPress 向け textlint プリセット) の PRH ルール定義に含まれる、コロン直後スペースと鉤括弧前スペース禁止の往復衝突を避けるためです。
+
+### 実行内容
+
+* **変更するファイル (1 件のみ)** … 利用側プロジェクトの `./node_modules/textlint-rule-preset-wp-docs-ja/prh-rules/wordpress.yml`
+* **変更しないもの** … 利用側リポジトリ直下の設定 (`.textlintrc.json`、`.vscode/settings.json`、`package.json` など)
+* `wordpress.yml` 内の「コロンの後に半角スペースを入れる」PRH ルールの `pattern` を書き換え (既に同一パッチ済み、またはファイルが無い場合はスキップ)
+
+### 実行しない内容
+
+本スクリプトは以下を行いません。
+
+* 外部サービスへのデータ送信
+* 利用側ドキュメントの変更
+* 利用側プロジェクト設定ファイルの変更 (`node_modules` 内の上記 YAML のみ)
+* Git 設定の変更
+* システム設定の変更
+* 任意コードのダウンロード
+
+### npm の警告について
+
+一部環境では、インストール時に下記の警告表示を受ける可能性があります。
+
+```text
+npm warn allow-scripts
+```
+
+これは npm がライフサイクルスクリプト (`postinstall`) の存在を通知しているものであり、インストール失敗を意味するものではありません。スクリプトの内容は公開されており、必要に応じて実行前に確認できます。
+
 ## CLI の使い方
 
 ### 設計方針 (規約)

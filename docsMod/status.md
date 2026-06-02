@@ -747,7 +747,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
     * エントリポイント … `dist/bin/cli.js` (`init` / `doctor` / lint)。
     * `init` … `npm run test:init` (INIT-001〜012)。GHA [ci.yml](../.github/workflows/ci.yml) で再現。
     * `doctor` … `npm run test:doctor` (DOCTOR-001〜015)。GHA [ci.yml](../.github/workflows/ci.yml) で再現。
-    * 利用者向け導線 … [README.md](../README.md) · [npm_usage.md](./npm_usage.md) に `init` / `doctor` 手順 **済**。
+    * ユーザー向け導線 … [README.md](../README.md) · [npm_usage.md](./npm_usage.md) に `init` / `doctor` 手順 **済**。
 * **root ミラー**:
     * `base/` `swift/` `wordpress/` は `.gitignore` 対象 (生成物)。
     * publish tarball にのみ同梱。

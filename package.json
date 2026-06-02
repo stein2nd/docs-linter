@@ -1,6 +1,6 @@
 {
   "name": "@s2j/docs-linter",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Reusable textlint toolkit for Swift, WordPress, and general documentation projects.",
   "type": "module",
   "author": "Koutarou ISHIKAWA",

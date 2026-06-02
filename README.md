@@ -732,6 +732,17 @@ npm update -g @s2j/docs-linter
 npm update @s2j/docs-linter
 ```
 
+## Postinstall Script
+
+S2J Docs Linter は、インストール時に `postinstall` スクリプトを実行します。`./scripts/patch-wp-prh-colon-quote.cjs` が、**利用側プロジェクトの `node_modules` 内** にある依存パッケージ `textlint-rule-preset-wp-docs-ja` の PRH 設定 (`prh-rules/wordpress.yml`) だけを書き換えます。利用側リポジトリの `.textlintrc.json` や VSCode 設定などは変更しません。WordPress プリセット向け textlint ルールの安定動作を目的とし、実行内容はリポジトリ内で公開されており、外部サービスへの送信やネットワーク通信は行いません。
+
+対象スクリプトは、下記の通りです。
+
+* `./scripts/patch-wp-prh-colon-quote.cjs` — 上記 `wordpress.yml` の「コロンの後に半角スペースを入れる」ルールを idempotent に調整 (未インストール時はスキップ)
+
+一部の環境では `npm warn allow-scripts` が表示される場合がありますが、これは npm のセキュリティ機能による通知です。
+
+
 ## ⚡ Practical Points
 
 実務での使い方ヒント (CI 連携、PR チェックなど) について。
