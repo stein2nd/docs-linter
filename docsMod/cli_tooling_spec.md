@@ -742,7 +742,6 @@ npm run test:init
 下記を対象とします。
 
 * Node.js バージョン
-* npm 利用可否
 * textlint インストール
 * `.textlintrc.json`
 * プリセットの解決
@@ -789,7 +788,7 @@ doctor コマンドの結果は、`PASS`、`WARN`、`FAIL` に区分されます
 ```text
 ✔ PASS Node.js
 ⚠ WARN GitHub Actions
-✖ FAIL preset
+✖ FAIL Preset
 ```
 
 尚、`package.json` が存在しない場合、Node.js チェックは実施せず、診断結果として、下記を出力します。
@@ -956,7 +955,7 @@ scripts/fixtures/doctor/pass/
 期待結果は、下記の通りです。
 
 * `✔ PASS` である。
-  * `✔ PASS Config`、`✔ PASS Preset`、`✔ PASS VSCode`、`✔ PASS GitHub Actions`、`✔ PASS Node.js`、`✔ PASS textlint` を網羅し、`⚠ WARN`、`✖ FAIL` ではないことを示す。
+  * `✔ PASS package.json`、`✔ PASS Config`、`✔ PASS Preset`、`✔ PASS VSCode`、`✔ PASS GitHub Actions`、`✔ PASS Node.js`、`✔ PASS textlint` を網羅し、`⚠ WARN`、`✖ FAIL` ではないことを示す。
 * 終了コードが `0` である。
 
 #### Node.js 検証 - DOCTOR-002「Node.js バージョン適合」

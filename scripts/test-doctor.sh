@@ -170,7 +170,10 @@ pass_test "DOCTOR-012"
 
 log_test "DOCTOR-015"
 prepare_pass_fixture
+set +e
 OUTPUT="$(${CLI} doctor --help)"
+STATUS=$?
+set -e
 assert_exit_code "${STATUS}" 0
 assert_contains "${OUTPUT}" "Usage:"
 pass_test "DOCTOR-015"
@@ -178,7 +181,10 @@ pass_test "DOCTOR-015"
 
 log_test "DOCTOR-014"
 prepare_pass_fixture
+set +e
 OUTPUT="$(${CLI} doctor --unknown)"
+STATUS=$?
+set -e
 assert_exit_code "${STATUS}" 1
 assert_contains "${OUTPUT}" "Invalid option"
 pass_test "DOCTOR-014"
