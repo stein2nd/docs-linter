@@ -309,6 +309,26 @@ cp node_modules/@s2j/docs-linter/presets/swift/.textlintrc.swift.json .textlintr
 }
 ```
 
+#### 2.5. セットアップ
+
+初めて利用する場合は、下記の様に、`init` コマンドで設定ファイルを生成します。
+
+```bash
+npx @s2j/docs-linter init
+```
+
+これにより生成される主なファイルは、下記の通りです。
+
+* `.textlintrc.json`
+* `.vscode/settings.json`
+* `.github/workflows/docs-lint.yml`
+
+生成後は、下記の様に対象ドキュメントに対して、lint を実行できます。
+
+```bash
+npx textlint docs/**/*.md
+```
+
 ## 📋 Configuration Files
 
 設定ファイルを、3つ用意してます。
@@ -520,6 +540,30 @@ s2j-docs-linter ./README.md ./docs/**/*.md
 
 ```zsh
 npm run lint:docs
+```
+
+#### 環境チェック
+
+設定内容や依存関係を確認したい場合は、下記の様に、`doctor` コマンドを利用します。`doctor` は設定ファイルを変更せず、診断のみを実施します。
+
+```bash
+npx @s2j/docs-linter doctor
+```
+
+特定ディレクトリを診断する場合は、下記の様に `--path` 引数で指定します。
+
+```bash
+npx @s2j/docs-linter doctor --path ./my-project
+```
+
+診断結果は、下記の形式で表示されます。
+
+```text
+✔ PASS Config
+✔ PASS Preset
+✔ PASS textlint
+⚠ WARN VSCode
+✖ FAIL Node.js
 ```
 
 ## 🛠️ Custom Rules

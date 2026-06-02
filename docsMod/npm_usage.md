@@ -35,6 +35,64 @@ npm install -g @s2j/docs-linter
 
 パッケージのインストールを提供すること。
 
+### 初回セットアップ
+
+プロジェクトに Docs Linter を導入する場合は、まず `init` を実行します。
+
+```bash
+npx @s2j/docs-linter init
+```
+
+生成された設定ファイルをコミットしてください。
+
+* `.textlintrc.json`
+* `.vscode/settings.json`
+* `.github/workflows/docs-lint.yml`
+
+### 設定確認
+
+セットアップ完了後は、下記の様に、`doctor` を利用して環境診断を実施できます。
+
+```bash
+npx @s2j/docs-linter doctor
+```
+
+下記の様に `--path` を介して診断対象ディレクトリを指定指定できます。
+
+```bash
+npx @s2j/docs-linter doctor --path ./project
+```
+
+`doctor` は、下記項目を確認します。
+
+* Node.js
+* package.json
+* textlint
+* Config (`.textlintrc.json`)
+* Preset
+* VSCode
+* GitHub Actions
+
+#### CI 導入後の確認
+
+GitHub Actions 設定が正しく配置されているか確認する場合、下記コマンドを実行します。
+
+```bash
+npx @s2j/docs-linter doctor
+```
+
+下記は、実行後の出力例です。
+
+```text
+✔ PASS GitHub Actions
+✔ PASS Config
+✔ PASS textlint
+✔ PASS
+```
+
+* WARN は注意喚起であり、終了コードは `0`。
+* FAIL が含まれる場合のみ、終了コード `1`。
+
 ## CLI の使い方
 
 ### 設計方針 (規約)
