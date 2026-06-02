@@ -11,7 +11,11 @@
         * 結論は、**現時点では非採用**。
     * CI: [ci.yml](../.github/workflows/ci.yml) · [dependabot.yml](../.github/dependabot.yml) · [npm-publish.yml](../.github/workflows/npm-publish.yml) OIDC + GitHub Release。
     * 推奨 **#2–#5 済** — リリースノート自動化 / Issue テンプレ / [CONTRIBUTING.md](../CONTRIBUTING.md) / ロードマップ。
-* フェーズ4 **P2 (CLI ツール)** — [cli_tooling_spec.md](./cli_tooling_spec.md) **`init` 済** (`npm run test:init` · INIT-001〜012 · GHA)、**`doctor` 未** (仕様のみ・スタブ)。
+* フェーズ4 **P2 (CLI ツール)** — [cli_tooling_spec.md](./cli_tooling_spec.md)
+    * **`init` 済** — `src/bin/init.ts` · `npm run test:init` (INIT-001〜012) · GHA `Test init command`
+    * **`doctor` 済** — `src/bin/doctor.ts` · `npm run test:doctor` (DOCTOR-001〜015) · GHA `Test doctor command`
+    * **P2 実装 (コード・テスト・GHA) … 100%** (400 / 400)
+    * **P2 ドキュメント同期 … 0%** — README / [npm_usage.md](./npm_usage.md) への `init` / `doctor` 導線 (仕様 [ドキュメントの同期](./cli_tooling_spec.md#ドキュメントの同期))
 
 ### 全体進捗 (サマリー)
 
@@ -56,13 +60,13 @@
 | [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) | Trusted Publishing (OIDC) 登録済、`NPM_TOKEN` 非使用方針 |
 | [npm リリース手順](./release.md) | GHA tag publish、[CHANGELOG 更新](./release.md#3-changelog-更新)、Trusted Publishing (OIDC)、[GitHub リリースノート](./release.md#8-github-リリースノート) — 推奨 #2 **済** |
 | [npm 使い方ガイド](./npm_usage.md) | install / CLI / `package.json` `lint:docs` 移行 / VSCode・`extends` / CI |
-| [CLI ツール仕様](./cli_tooling_spec.md) | `init` / `doctor` コマンド、`init` テスト仕様 (INIT-001〜012)、CLI エントリポイント方針 |
+| [CLI ツール仕様](./cli_tooling_spec.md) | `init` / `doctor` コマンド、`init` テスト仕様 (INIT-001〜012)、`doctor` テスト仕様 (DOCTOR-001〜015)、CLI エントリポイント方針 |
 | [CHANGELOG.md](../CHANGELOG.md) | npm 公開版の変更履歴 (`1.0.10`–) — 必須 #2 **済**、Git 管理 |
 | [SemVer 方針](./versioning_policy.md) | MAJOR / MINOR / PATCH、破壊的変更、非推奨、タグ規約 — 必須 #1 **済** |
 | [メンテナンス方針](./maintenance_policy.md) | リリース / CI / 依存 / セキュリティ / ドキュメント保守 — 必須 #5 **済** |
 | [セマンティック・リリース評価](./semantic_release_evaluation.md) | 採用可否評価 — 推奨 #1 **済**、結論: **現時点では非採用** |
 | [`.github/dependabot.yml`](../.github/dependabot.yml) | npm / github-actions 依存関係の weekly レビュー — 必須 #3 **済** |
-| [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | Node 20/22/24 matrix、`pack:check` / `verify:tarball` (push/PR) — 必須 #4 **済** |
+| [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | Node 20/22/24 matrix、`pack:check` / `verify:tarball` / `test:init` / `test:doctor` (push/PR) — 必須 #4 **済** / P2 **済** |
 | [`.github/workflows/npm-publish.yml`](../.github/workflows/npm-publish.yml) | tag `v*` / OIDC publish、Node 24、`Create GitHub Release` (`generate_release_notes: true`) — フェーズ2 **済** / 推奨 #2 **済** |
 | [CONTRIBUTING.md](../CONTRIBUTING.md) | 貢献ガイド (日英) — 推奨 #4 **済**。[README.md](../README.md) Contributing から導線 |
 | [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/) | Bug / Feature テンプレ + `config.yml` — 推奨 #3 **済** |
@@ -94,7 +98,7 @@
 | [npm 使い方ガイド との整合 - フェーズ1優先](./npm_package_spec.md#npm-使い方ガイド-との整合---フェーズ1優先タスク) / [npm_usage.md](./npm_usage.md) | 実装済み | 100 | README のコマンドが実際に動く | `lint:docs` / VSCode / `extends` / CI (#10, #14) |
 | [VSCode 互換戦略](./npm_package_spec.md#vscode-互換戦略) | ガイド済み | 100 | [npm_usage.md](./npm_usage.md) に移行例 | 利用側 **9 リポ** canonical 設定 (フェーズ3 推奨 #3 **済**) |
 | [CI 互換戦略](./npm_package_spec.md#ci-互換戦略) | ガイド済み | 100 | `npm_usage.md` / `examples/` に CI 例 | 利用側 **9 リポ** GHA docs lint 成功 (フェーズ3 #5 **済**) |
-| Node matrix CI (フェーズ4) | **済** | 100 | Node 20/22/24 互換検証 | [ci.yml](../.github/workflows/ci.yml) (必須 #4 **済**) |
+| Node matrix CI (フェーズ4) | **済** | 100 | Node 20/22/24 互換検証 · `test:init` · `test:doctor` | [ci.yml](../.github/workflows/ci.yml) (必須 #4 **済**) |
 | [バージョン管理ポリシー](./npm_package_spec.md#バージョン管理ポリシー) | **済** | 100 | semver 運用 + CHANGELOG | [versioning_policy.md](./versioning_policy.md) (必須 #1 **済**) |
 | CHANGELOG / リリース履歴 (フェーズ4) | **済** | 100 | `CHANGELOG.md` 運用 + [release.md](./release.md) 連携 | 必須 #2 **済** |
 | メンテナンス方針 (フェーズ4) | **済** | 100 | 保守・更新方針の文書化 | [maintenance_policy.md](./maintenance_policy.md) (必須 #5 **済**) |
@@ -105,8 +109,10 @@
 | セマンティック・リリース評価 (フェーズ4) | **済** | 100 | 採用可否評価の文書化 | [semantic_release_evaluation.md](./semantic_release_evaluation.md) — 結論: **現時点では非採用** (推奨 #1 **済**) |
 | [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ3 | **済** | 100 | Submodule 非推奨化・利用側 cutover | 必須 #1–6 + 推奨 #1–3 **済** (2026-05-25) |
 | [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ4 | **クローズ** | 100 | レガシー機能削除・OSS 成熟化 | 必須 **5/5 済** + 推奨 **5/5 済** (2026-05-26) |
-| [CLI コマンド - init](./cli_tooling_spec.md#cli-コマンド---init) | **済** | 100 | 通常 / Dry Run / `--output` モード、プリセット、上書き、`package.json` `lint:docs`、`init` テスト仕様 | [cli_tooling_spec.md](./cli_tooling_spec.md) · `npm run test:init` · [ci.yml](../.github/workflows/ci.yml) |
-| [CLI コマンド - doctor](./cli_tooling_spec.md#cli-コマンド---doctor-コマンド) | **未** | 30 | 環境診断 (PASS / WARN / FAIL)、9 項目チェック | 仕様 **済** · ルータースタブのみ · **テスト仕様未作成** |
+| [CLI コマンド - init](./cli_tooling_spec.md#cli-コマンド---init) | **済** | 100 | 通常 / Dry Run / `--output` モード、プリセット、上書き、`package.json` `lint:docs` | [src/bin/init.ts](../src/bin/init.ts) · `npm run test:init` |
+| [CLI コマンド - init テスト仕様](./cli_tooling_spec.md#cli-コマンド---init-テスト仕様) | **済** | 100 | INIT-001〜012 · `scripts/test-init.sh` · GHA 再現 | [ci.yml](../.github/workflows/ci.yml) |
+| [CLI コマンド - doctor](./cli_tooling_spec.md#cli-コマンド---doctor-コマンド) | **済** | 100 | 環境診断 (PASS / WARN / FAIL)、7 項目チェック、`--path` / `--help` | [src/bin/doctor.ts](../src/bin/doctor.ts) · `npm run test:doctor` |
+| [CLI コマンド - doctor テスト仕様](./cli_tooling_spec.md#cli-コマンド---doctor-テスト仕様) | **済** | 100 | DOCTOR-001〜015 · フィクスチャ · GHA 再現 | [scripts/test-doctor.sh](../scripts/test-doctor.sh) · [ci.yml](../.github/workflows/ci.yml) |
 
 ### フェーズ1: サマリー
 
@@ -132,8 +138,8 @@
 | 区分 (仕様書) | フェーズ1の状態 |
 | --- | --- |
 | 実装済み | メタデータ、CLI、`scripts` 整理、tarball 検証 (22 entries)、**`pack:artifact` / `artifacts/`**、root 互換レイアウト、`examples/`・[npm_usage.md](./npm_usage.md) 整合、**GHA publish ワークフロー** (OIDC 運用)、**npmjs publish** (`1.0.10`–`1.0.12` 手動 / **`1.0.13`** GHA OIDC)、**利用側受け入れ試験** (**9** リポジトリ) |
-| 実装済み (フェーズ4) | 必須 #1–5 **済** — [versioning_policy.md](./versioning_policy.md)、[CHANGELOG.md](../CHANGELOG.md)、[`.github/dependabot.yml`](../.github/dependabot.yml)、[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)、[maintenance_policy.md](./maintenance_policy.md)。推奨 #1 **済** — [semantic_release_evaluation.md](./semantic_release_evaluation.md) (結論: **現時点では非採用**)。推奨 #2 **済** — [npm-publish.yml](../.github/workflows/npm-publish.yml) GitHub Release (`generate_release_notes: true`) + [release.md](./release.md#8-github-リリースノート)。推奨 #3 **済** — [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/)。推奨 #4 **済** — [CONTRIBUTING.md](../CONTRIBUTING.md) + [README.md](../README.md) 導線。推奨 #5 **済** — 本ページ + [specs.md](./specs.md) ロードマップ + [README.md](../README.md) ロードマップ / ガバナンス |
-| 部分実施 (フェーズ4) | **なし** |
+| 実装済み (フェーズ4) | 必須 #1–5 **済** — [versioning_policy.md](./versioning_policy.md)、[CHANGELOG.md](../CHANGELOG.md)、[`.github/dependabot.yml`](../.github/dependabot.yml)、[`.github/workflows/ci.yml`](../.github/workflows/ci.yml)、[maintenance_policy.md](./maintenance_policy.md)。推奨 #1 **済** — [semantic_release_evaluation.md](./semantic_release_evaluation.md) (結論: **現時点では非採用**)。推奨 #2 **済** — [npm-publish.yml](../.github/workflows/npm-publish.yml) GitHub Release (`generate_release_notes: true`) + [release.md](./release.md#8-github-リリースノート)。推奨 #3 **済** — [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/)。推奨 #4 **済** — [CONTRIBUTING.md](../CONTRIBUTING.md) + [README.md](../README.md) 導線。推奨 #5 **済** — 本ページ + [specs.md](./specs.md) ロードマップ + [README.md](../README.md) ロードマップ / ガバナンス。**P2 CLI ツール** — `init` / `doctor` 本実装・自動テスト・GHA 統合 **済** |
+| 部分実施 (フェーズ4) | **P2 ドキュメント同期** — README / [npm_usage.md](./npm_usage.md) への `init` / `doctor` 導線 **未** (P2 実装 80%) |
 | 未実施 (フェーズ4) | **なし** |
 
 **実装％の算出**
@@ -535,14 +541,16 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | **CHANGELOG** | **済** — `1.0.10`–`1.0.13` 記載、リリース手順に組み込み (必須 #2) |
 | **SemVer / メンテナンス方針** | **済** — [versioning_policy.md](./versioning_policy.md) (必須 #1)、[maintenance_policy.md](./maintenance_policy.md) (必須 #5) |
 | **Dependabot** | **済** — npm + github-actions、weekly (必須 #3) |
-| **Node matrix CI** | **済** — [ci.yml](../.github/workflows/ci.yml) Node 20/22/24 (必須 #4) |
+| **Node matrix CI** | **済** — [ci.yml](../.github/workflows/ci.yml) Node 20/22/24 · `test:init` · `test:doctor` (必須 #4) |
 | **Issue テンプレート** | **済** — [bug_report.md](../.github/ISSUE_TEMPLATE/bug_report.md) / [feature_request.md](../.github/ISSUE_TEMPLATE/feature_request.md) / [config.yml](../.github/ISSUE_TEMPLATE/config.yml) (推奨 #3) |
 | **CONTRIBUTING** | **済** — setup / workflow / 検証 / 互換 / CI 等 (~341 行、日英)。[README.md](../README.md) Contributing から導線 (推奨 #4) |
 | **ロードマップ** | **済** — 本ページ (フェーズ1–4 進捗) + [specs.md](./specs.md#プロジェクトのロードマップ) + [README.md](../README.md#ロードマップ) (推奨 #5) |
 | **GitHub リリースノート** | **済** — [npm-publish.yml](../.github/workflows/npm-publish.yml) `Create GitHub Release` + [release.md](./release.md#8-github-リリースノート) (推奨 #2) |
 | **セマンティック・リリース評価** | **済** — [semantic_release_evaluation.md](./semantic_release_evaluation.md) — 結論: **現時点では非採用** (推奨 #1) |
-| **CLI `init` コマンド (P2)** | **済** — [cli_tooling_spec.md](./cli_tooling_spec.md) · `dist/bin/cli.js` · `npm run test:init` (INIT-001〜012) · GHA [ci.yml](../.github/workflows/ci.yml) |
-| **CLI `doctor` コマンド (P2)** | **未** — 仕様 **済** · 実装スタブ · テスト仕様 **未** |
+| **CLI `init` コマンド (P2)** | **済** — [cli_tooling_spec.md](./cli_tooling_spec.md) · [src/bin/init.ts](../src/bin/init.ts) · `npm run test:init` (INIT-001〜012) · GHA [ci.yml](../.github/workflows/ci.yml) |
+| **CLI `doctor` コマンド (P2)** | **済** — [cli_tooling_spec.md](./cli_tooling_spec.md) · [src/bin/doctor.ts](../src/bin/doctor.ts) · `npm run test:doctor` (DOCTOR-001〜015) · GHA [ci.yml](../.github/workflows/ci.yml) |
+| **P2 CLI 実装 (コード・テスト・GHA)** | **100%** — init / doctor 本実装 + 自動テスト + CI 統合 **済** |
+| **P2 ドキュメント同期** | **0%** — README / [npm_usage.md](./npm_usage.md) への `init` / `doctor` 導線 **未** |
 
 * 対象
     * リリースガバナンス
@@ -560,7 +568,9 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | 必須完了条件 | #1–5 の実装％合計 **500** / 500 | **100%** |
 | 推奨完了条件 | #1–5 の実装％合計 **500** / 500 | **100%** |
 | フェーズ4 全体 (必須 + 推奨) | **1000** / 1000 | **100%** |
-| 優先タスク P0–P2 | (100 + 100 + 100 + 100 + 77) / 5 | **95%** |
+| 優先タスク P0–P2 | (100 + 100 + 100 + 100 + 80) / 5 | **96%** |
+| P2 CLI (コード・テスト・GHA) | **400** / 400 | **100%** |
+| P2 ドキュメント同期 | **0** / 100 | **0%** |
 
 **フェーズ4 必須クローズ**: **済** (2026-05-25)。
 
@@ -572,9 +582,9 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 |------|--------|----------|------|------:|
 | P0 | リリースガバナンス | SemVer 準拠の確立 | **済** ([versioning_policy.md](./versioning_policy.md)) | 100 |
 | P0 | 変更履歴の管理 | リリース履歴の可視化 | **済** ([CHANGELOG.md](../CHANGELOG.md) Git 管理 + [release.md](./release.md#3-changelog-更新)) | 100 |
-| P1 | CI の強化 | マトリックス / 互換性の検証 | **済** ([`.github/workflows/ci.yml`](../.github/workflows/ci.yml) Node 20/22/24) | 100 |
+| P1 | CI の強化 | マトリックス / 互換性の検証 | **済** ([`.github/workflows/ci.yml`](../.github/workflows/ci.yml) Node 20/22/24 · `test:init` · `test:doctor`) | 100 |
 | P1 | 依存関係のメンテナンス | 依存関係の健全性維持 | **済** ([`.github/dependabot.yml`](../.github/dependabot.yml)) | 100 |
-| P2 | エコシステムの拡張 | 追加のプリセット / ツール | **部分実施** | 77 |
+| P2 | エコシステムの拡張 | 追加のプリセット / ツール | **部分実施** | 80 |
 
 **P2 内訳 (CLI ツール)** — 仕様 [cli_tooling_spec.md](./cli_tooling_spec.md)
 
@@ -582,9 +592,11 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | --- | --- | --- | ---: |
 | [CLI コマンド - init](./cli_tooling_spec.md#cli-コマンド---init) | 実行モード (通常 / Dry Run / `--output`) · 引数 (`--preset` / `--force` 等) · 3 ファイル + `lint:docs` 生成 · 上書きポリシー · サブコマンドルーター (`cli.js`) | **済** | 100 |
 | [CLI コマンド - init テスト仕様](./cli_tooling_spec.md#cli-コマンド---init-テスト仕様) | INIT-001〜012 · `scripts/test-init.sh` · GHA 再現 · `.sandbox/` 検証 | **済** | 100 |
-| [CLI コマンド - doctor](./cli_tooling_spec.md#cli-コマンド---doctor-コマンド) | 9 項目診断 · PASS / WARN / FAIL 出力 · テスト仕様 · 本実装 | **未** | 30 |
+| [CLI コマンド - doctor](./cli_tooling_spec.md#cli-コマンド---doctor-コマンド) | 7 項目診断 (`package.json` / Node.js / Config / Preset / textlint / VSCode / GitHub Actions) · PASS / WARN / FAIL 出力 · `--path` / `--help` | **済** | 100 |
+| [CLI コマンド - doctor テスト仕様](./cli_tooling_spec.md#cli-コマンド---doctor-テスト仕様) | DOCTOR-001〜015 · `scripts/test-doctor.sh` · フィクスチャ · GHA 再現 | **済** | 100 |
+| P2 ドキュメント同期 | README / [npm_usage.md](./npm_usage.md) への `init` / `doctor` 導線 | **未** | 0 |
 
-**P2 実装％の算出**: `init` (100) + `init` テスト (100) + `doctor` (30) → **230 / 300 ≒ 77%** (CLI ツール 3 区分)。`init` 単体 (仕様 + 実装 + テスト) は **100%**。
+**P2 実装％の算出**: `init` (100) + `init` テスト (100) + `doctor` (100) + `doctor` テスト (100) + ドキュメント同期 (0) → **400 / 500 = 80%** (CLI ツール 5 区分)。**コード・テスト・GHA のみ**は **400 / 400 = 100%**。
 
 #### CLI コマンド - init (完了条件)
 
@@ -595,7 +607,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | I3 | Dry Run モード (`--dry-run`) | **済** | 100 | `[Dry Run]` / `Would create` / `Would skip` · ファイル変更なし |
 | I4 | ディレクトリ出力モード (`--output`) | **済** | 100 | `.sandbox/{base,swift,wordpress}/` 配下生成 |
 | I5 | 引数組み合わせ制約 | **済** | 100 | `--dry-run` + `--output`/`--force` → exit 1 (INIT-009〜011) |
-| I6 | CLI エントリポイント (`bin` → `cli.js`) | **済** | 100 | `init` / lint (デフォルト) ルーティング |
+| I6 | CLI エントリポイント (`bin` → `cli.js`) | **済** | 100 | `init` / `doctor` / lint (デフォルト) ルーティング |
 | I7 | 自動テスト (INIT-001〜012) | **済** | 100 | `npm run test:init` · [scripts/test-init.sh](../scripts/test-init.sh) |
 | I8 | GitHub Actions 統合 | **済** | 100 | [ci.yml](../.github/workflows/ci.yml) `Test init command` ステップ |
 
@@ -606,13 +618,15 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | # | 完了条件 | 状態 | 実装％ | 検証方法 |
 | ---: | --- | --- | ---: | --- |
 | D1 | 仕様書 ([cli_tooling_spec.md](./cli_tooling_spec.md#cli-コマンド---doctor-コマンド)) | **済** | 100 | 診断範囲 · PASS / WARN / FAIL 出力ポリシー |
-| D2 | `doctor` 本実装 (9 項目チェック) | **未** | 0 | Node / npm / textlint / preset / VSCode / GHA 等 |
-| D3 | `doctor` テスト仕様 | **未** | 0 | 仕様書にテストセクション **未作成** |
-| D4 | ルーター統合 | **部分** | 20 | [cli.ts](../src/bin/cli.ts) スタブ (`exit 1`) |
+| D2 | `doctor` 本実装 (7 項目チェック) | **済** | 100 | `package.json` / Node.js / Config / Preset / textlint / VSCode / GitHub Actions |
+| D3 | `doctor` テスト仕様 (DOCTOR-001〜015) | **済** | 100 | [cli_tooling_spec.md](./cli_tooling_spec.md#cli-コマンド---doctor-テスト仕様) · フィクスチャ定義 |
+| D4 | 自動テスト | **済** | 100 | `npm run test:doctor` · [scripts/test-doctor.sh](../scripts/test-doctor.sh) |
+| D5 | ルーター統合 | **済** | 100 | [cli.ts](../src/bin/cli.ts) → [doctor.ts](../src/bin/doctor.ts) |
+| D6 | GitHub Actions 統合 | **済** | 100 | [ci.yml](../.github/workflows/ci.yml) `Test doctor command` ステップ |
 
-**集計**: doctor **120 / 400 → 30%** (仕様 **済** · 実装・テスト **未**)。
+**集計**: doctor **600 / 600 → 100%** (6 済)。
 
-**P2 残タスク**: `doctor` 本実装 · `doctor` テスト仕様 · README / [npm_usage.md](./npm_usage.md) の `init` 導線更新 (仕様 [ドキュメントの同期](./cli_tooling_spec.md#ドキュメントの同期))。
+**P2 残タスク**: README / [npm_usage.md](./npm_usage.md) の `init` / `doctor` 導線更新 (仕様 [ドキュメントの同期](./cli_tooling_spec.md#ドキュメントの同期)) — **実装％ 0%**。
 
 ### フェーズ4: 完了条件
 
@@ -625,7 +639,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | 1 | SemVer ガバナンスの文書化 | **済** | 100 | [versioning_policy.md](./versioning_policy.md) |
 | 2 | CHANGELOG.md 運用開始 | **済** | 100 | [CHANGELOG.md](../CHANGELOG.md) に `1.0.10`–`1.0.13` 記載。Git 管理。[release.md](./release.md#3-changelog-更新) に更新手順 |
 | 3 | 依存関係レビューのワークフロー | **済** | 100 | [`.github/dependabot.yml`](../.github/dependabot.yml) — npm / github-actions、weekly |
-| 4 | Node バージョンの互換性 CI | **済** | 100 | [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) — matrix Node 20/22/24、`pack:check` / `verify:tarball`。publish は [npm-publish.yml](../.github/workflows/npm-publish.yml) Node 24 |
+| 4 | Node バージョンの互換性 CI | **済** | 100 | [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) — matrix Node 20/22/24、`pack:check` / `verify:tarball` / `test:init` / `test:doctor`。publish は [npm-publish.yml](../.github/workflows/npm-publish.yml) Node 24 |
 | 5 | npm パッケージのメンテナンス方針の文書化 | **済** | 100 | [maintenance_policy.md](./maintenance_policy.md) |
 
 **集計**: 必須 **500 / 500 → 100%** (5 済)。
@@ -653,7 +667,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * **必須 #1**: [versioning_policy.md](./versioning_policy.md) — SemVer ガバナンス (MAJOR/MINOR/PATCH、破壊的変更、非推奨、タグ規約)
 * **必須 #2**: [CHANGELOG.md](../CHANGELOG.md) 運用開始 — `1.0.10`–`1.0.13` 履歴記載、Git 管理、[release.md](./release.md#3-changelog-更新)・[バージョン更新と tag push](./release.md#4-バージョン更新と-tag-push-本番-publish) に更新・リリース連携手順
 * **必須 #3**: [`.github/dependabot.yml`](../.github/dependabot.yml) — npm / github-actions 依存関係の weekly レビュー
-* **必須 #4**: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) — Node 20/22/24 matrix、`pack:check` / `verify:tarball`
+* **必須 #4**: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) — Node 20/22/24 matrix、`pack:check` / `verify:tarball` / `test:init` / `test:doctor`
 * **必須 #5**: [maintenance_policy.md](./maintenance_policy.md) — npm パッケージのメンテナンス方針 (リリース、CI、依存関係、セキュリティ、ドキュメント保守)
 * **推奨 #1**: [semantic_release_evaluation.md](./semantic_release_evaluation.md) — セマンティック・リリース採用可否評価
     * 結論は、**現時点では非採用** (手動 SemVer + GHA OIDC publish を継続)
@@ -662,6 +676,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * **推奨 #4**: [CONTRIBUTING.md](../CONTRIBUTING.md) — 貢献ガイド (Goals / Setup / Workflow / Verification / Versioning / Docs / Compatibility / CI / PR scope / Issues 等、日英 ~341 行)。[README.md](../README.md) Contributing から導線
 * **推奨 #5**: ロードマップ可視化 — 本ページ (フェーズ1–4 進捗・完了条件)、[specs.md](./specs.md#プロジェクトのロードマップ) (status 導線・フェーズ概要)、[README.md](../README.md#ロードマップ) (status / ガバナンス導線)
 * **P2 / CLI `init`**: [cli_tooling_spec.md](./cli_tooling_spec.md) 仕様 · [src/bin/init.ts](../src/bin/init.ts) · [src/bin/cli.ts](../src/bin/cli.ts) ルーター · [scripts/test-init.sh](../scripts/test-init.sh) · `npm run test:init` (INIT-001〜012) · [ci.yml](../.github/workflows/ci.yml) GHA 統合
+* **P2 / CLI `doctor`**: [cli_tooling_spec.md](./cli_tooling_spec.md) 仕様 · [src/bin/doctor.ts](../src/bin/doctor.ts) · [scripts/test-doctor.sh](../scripts/test-doctor.sh) · `npm run test:doctor` (DOCTOR-001〜015) · [ci.yml](../.github/workflows/ci.yml) GHA 統合
 
 ### フェーズ4で完了した主な変更 (コード・文書)
 
@@ -673,7 +688,10 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [versioning_policy.md](./versioning_policy.md) | SemVer 方針 (増分基準、破壊的変更、タグ規約) | 必須 #1 |
 | [maintenance_policy.md](./maintenance_policy.md) | メンテナンス方針 (リリース、CI、依存、セキュリティ) | 必須 #5 |
 | [`.github/dependabot.yml`](../.github/dependabot.yml) | npm / github-actions、weekly スケジュール | 必須 #3 |
-| [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | Node 20/22/24 matrix CI | 必須 #4 |
+| [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | Node 20/22/24 matrix CI · `test:init` · `test:doctor` | 必須 #4 / P2 |
+| [scripts/test-doctor.sh](../scripts/test-doctor.sh) | DOCTOR-001〜015 自動テスト | P2 / D4 |
+| [scripts/helpers/setup-doctor-pass.sh](../scripts/helpers/setup-doctor-pass.sh) | DOCTOR-001 基準フィクスチャ (tarball + textlint 一括 install) | P2 / D3 |
+| [scripts/fixtures/doctor/](../scripts/fixtures/doctor/) · [scripts/lib/doctor-fixture.sh](../scripts/lib/doctor-fixture.sh) | doctor テスト用フィクスチャ・ヘルパ | P2 / D3 |
 | [README.md](../README.md) | Contributing セクション → [CONTRIBUTING.md](../CONTRIBUTING.md) 導線 | 推奨 #4 |
 | [CONTRIBUTING.md](../CONTRIBUTING.md) | 貢献ガイド (setup / workflow / 検証 / 互換 / CI) | 推奨 #4 |
 | [`.github/ISSUE_TEMPLATE/bug_report.md`](../.github/ISSUE_TEMPLATE/bug_report.md) | Bug 報告テンプレ (環境・再現・設定・期待/実際) | 推奨 #3 |
@@ -682,25 +700,25 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [specs.md](./specs.md) | 「プロジェクトのロードマップ」— status 導線・フェーズ1–4 概要 | 推奨 #5 |
 | [README.md](../README.md) | 「ロードマップ」— status / ガバナンス (maintenance / versioning) 導線 | 推奨 #5 |
 | [semantic_release_evaluation.md](./semantic_release_evaluation.md) | セマンティック・リリース採用可否評価 — 結論: **現時点では非採用** | 推奨 #1 |
-| [cli_tooling_spec.md](./cli_tooling_spec.md) | CLI ツール仕様 — `init` / `init` テスト仕様 / `doctor` | P2 |
-| [src/bin/cli.ts](../src/bin/cli.ts) | サブコマンドルーター (`init` / `doctor` スタブ / lint) · `bin` → `dist/bin/cli.js` | P2 / I6 |
+| [cli_tooling_spec.md](./cli_tooling_spec.md) | CLI ツール仕様 — `init` / `init` テスト仕様 / `doctor` / `doctor` テスト仕様 | P2 |
+| [src/bin/cli.ts](../src/bin/cli.ts) | サブコマンドルーター (`init` / `doctor` / lint) · `bin` → `dist/bin/cli.js` | P2 / I6 / D5 |
+| [src/bin/doctor.ts](../src/bin/doctor.ts) | `doctor` — 7 項目診断 · PASS / WARN / FAIL · `--path` / `--help` | P2 / D2 |
 | [src/bin/init.ts](../src/bin/init.ts) | `init` — 通常 / Dry Run / `--output` · `--preset` / `--force` · 3 ファイル + `lint:docs` | P2 / I1–I5 |
 | [src/templates/](../src/templates/) · [copy-templates.ts](../src/scripts/copy-templates.ts) | VSCode · GHA テンプレート · ビルド時 `dist/templates/` コピー | P2 |
 | [scripts/test-init.sh](../scripts/test-init.sh) | INIT-001〜012 自動テスト | P2 / I7 |
-| [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) | `Test init command` ステップ追加 | P2 / I8 |
-| `package.json` | `test:init` script · `bin` / `main` → `dist/bin/cli.js` | P2 |
+| `package.json` | `test:init` · `test:doctor` script · `bin` / `main` → `dist/bin/cli.js` | P2 |
 
 ### フェーズ4の残タスク
 
 **必須 / 推奨** — フェーズ4必須条件 #1–5 および推奨条件 #1–5 はすべて **済** (2026-05-26)。
 
-**P2 (CLI ツール)** — `init` **済** · `doctor` **未**:
+**P2 (CLI ツール)** — 実装 **済** · ドキュメント同期 **未**:
 
 | タスク | 優先度 | 実装％ | 完了条件 |
 | --- | --- | ---: | --- |
-| `doctor` コマンド本実装 | P2 | 0 | [CLI コマンド - doctor](./cli_tooling_spec.md#cli-コマンド---doctor-コマンド) 9 項目 · PASS / WARN / FAIL |
-| `doctor` テスト仕様・自動テスト | P2 | 0 | `init` テスト仕様と同様の構成 (未作成) |
-| README / npm_usage の `init` 導線 | P2 | 0 | [cli_tooling_spec.md](./cli_tooling_spec.md#ドキュメントの同期) |
+| `init` / `doctor` 本実装 | P2 | **100** | [CLI コマンド - init](./cli_tooling_spec.md#cli-コマンド---init) · [CLI コマンド - doctor](./cli_tooling_spec.md#cli-コマンド---doctor-コマンド) |
+| `init` / `doctor` 自動テスト | P2 | **100** | INIT-001〜012 · DOCTOR-001〜015 · GHA 統合 |
+| README / npm_usage の `init` / `doctor` 導線 | P2 | **0** | [cli_tooling_spec.md](./cli_tooling_spec.md#ドキュメントの同期) |
 
 ### 補足
 
@@ -711,7 +729,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * **CLI ツール (P2)**:
     * エントリポイント … `dist/bin/cli.js` (`init` / `doctor` / lint)。
     * `init` … `npm run test:init` (INIT-001〜012)。GHA [ci.yml](../.github/workflows/ci.yml) で再現。
-    * `doctor` … スタブのみ。テスト仕様 **未**。
+    * `doctor` … `npm run test:doctor` (DOCTOR-001〜015)。GHA [ci.yml](../.github/workflows/ci.yml) で再現。
 * **root ミラー**:
     * `base/` `swift/` `wordpress/` は `.gitignore` 対象 (生成物)。
     * publish tarball にのみ同梱。
@@ -724,7 +742,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
     * 現状は `setup-npmignore` と `scripts/patch-wp-prh-colon-quote.cjs` を実行。
     * tarball には patch スクリプトのみ同梱。
 * **GHA と認証**:
-    * **CI matrix** ([ci.yml](../.github/workflows/ci.yml)): `push` / `pull_request`、Node 20/22/24、`npm ci` → `pack:check` → `verify:tarball` → `test:init` (フェーズ4 必須 #4 **済** / P2 **init 済**)。
+    * **CI matrix** ([ci.yml](../.github/workflows/ci.yml)): `push` / `pull_request`、Node 20/22/24、`npm ci` → `pack:check` → `verify:tarball` → `test:init` → `test:doctor` (フェーズ4 必須 #4 **済** / P2 **init・doctor 済**)。
     * **Dependabot** ([dependabot.yml](../.github/dependabot.yml)): npm / github-actions、weekly (フェーズ4 必須 #3 **済**)。
     * **Issue テンプレート** ([`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/)): Bug / Feature テンプレ + `config.yml` (`blank_issues_enabled: false`、README / CONTRIBUTING contact_links) — 推奨 #3 **済**。
     * **ロードマップ** ([status.md](./status.md) · [specs.md](./specs.md#プロジェクトのロードマップ) · [README.md](../README.md#ロードマップ)): フェーズ1–4 進捗・完了条件、フェーズ概要、ガバナンス ([maintenance_policy.md](./maintenance_policy.md) / [versioning_policy.md](./versioning_policy.md)) 導線 — 推奨 #5 **済**。
@@ -755,6 +773,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 ```bash
 npm run verify:tarball
 npm run test:init
+npm run test:doctor
 npm view @s2j/docs-linter version  # => 1.0.13
 npm run lint
 ```
