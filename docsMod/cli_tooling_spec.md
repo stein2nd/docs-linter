@@ -915,6 +915,12 @@ scripts/fixtures/doctor/pass/
 　　└─ docs-lint.yml
 ```
 
+#### 依存関係の解決
+
+doctor コマンドは、診断対象ディレクトリ直下の `node_modules` のみを検査対象とします。親ディレクトリの `node_modules` は参照しません。
+
+textlint の存在確認は、Node.js のモジュール解決 (`require.resolve` 等) を利用せず、診断対象ディレクトリ配下を明示的に確認します。
+
 #### テストケース一覧
 
 | ID | 項目 | 期待結果 |
