@@ -797,16 +797,14 @@ doctor コマンドの結果は、`PASS`、`WARN`、`FAIL` に区分されます
 ✔ PASS Node.js (skip)
 ```
 
-プリセットは、`.textlintrc.json` の存在するディレクトリを基準として extends の各エントリを解決します。
-尚、`.textlintrc.json` が解決できない場合は、プリセット解決は、未評価とします。
+`textlint` は、診断対象ディレクトリ配下の `node_modules` から解決できることを確認します。つまり、親ディレクトリの `node_modules` は参照しません。
 
 プリセットの `extends` 解決について、下記の方針とします。
 
-* extends は string または string[] を受け付ける。
-* extends が未指定、空配列、または不正な型の場合は `✖ FAIL Preset` とする。
-* extends に記載された全てのプリセットが解決できた場合のみ `✔ PASS Preset` とする。
-
-`textlint` は、診断対象ディレクトリ配下の `node_modules` から解決できることを確認します。つまり、親ディレクトリの `node_modules` は参照しません。
+* プリセットは、`.textlintrc.json` の存在するディレクトリを基準として `extends` の各エントリを解決する。尚、`.textlintrc.json` が解決できない場合は、プリセット解決は、未評価とする。
+* `extends` は string または string[] を受け付ける。
+* `extends` が未指定、空配列、1件でも解決失敗、または不正な型の場合は `✖ FAIL Preset` とする。
+* `extends` に記載された全てのプリセットが解決できた場合のみ `✔ PASS Preset` とする。
 
 #### doctor 総合結果
 
@@ -1359,3 +1357,19 @@ textlint の存在確認は、診断対象ディレクトリ直下の `node_modu
 Node.js のモジュール解決 (`require.resolve` 等) は利用しません。
 
 Preset の解決は、`.textlintrc.json` の所在ディレクトリを基準に resolve() + existsSync() で判定します。
+
+#### extends の解決
+
+doctor は `.textlintrc.json` の `extends` に対して、`string` または `string[]` を受け付けます。
+実装時は配列に正規化 (`normalizeExtends`) した上で、全てのエントリを `.textlintrc.json` 所在ディレクトリ基準で解決します。
+
+```ts
+const entries = Array.isArray(config.extends) ? config.extends : [config.extends];
+```
+
+```
+resolve(dirname(configPath), entry)
+```
+
+判定規則は「[CLI コマンド - doctor コマンド](#doctor-出力ポリシー) > プリセット判定規則」(803〜807行) に従います。
+Config チェック失敗時は Preset を未評価とします。

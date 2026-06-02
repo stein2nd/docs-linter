@@ -22,9 +22,7 @@ cp -R "${ROOT_DIR}/scripts/fixtures/doctor/pass" "${TARGET_DIR}"
 
 pushd "${TARGET_DIR}" >/dev/null
 
-npm install --no-package-lock --no-save textlint
-
-npm install --no-package-lock --no-save "${ROOT_DIR}/${TARBALL}"
+npm install --no-package-lock --no-save textlint "${ROOT_DIR}/${TARBALL}"
 
 popd >/dev/null
 

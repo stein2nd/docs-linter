@@ -18,7 +18,7 @@ npm run build --silent
 ## @return $STATUS exit code of doctor command
 ## @return $OUTPUT output of doctor command
 prepare_pass_fixture() {
-    "${ROOT_DIR}/scripts/helpers/setup-doctor-pass.sh"
+    bash "${ROOT_DIR}/scripts/helpers/setup-doctor-pass.sh"
 }
 
 ## @return $NO_TEXTLINT_DIR directory to run doctor command with no textlint
@@ -182,7 +182,7 @@ pass_test "DOCTOR-015"
 log_test "DOCTOR-014"
 prepare_pass_fixture
 set +e
-OUTPUT="$(${CLI} doctor --unknown)"
+OUTPUT="$(${CLI} doctor --unknown 2>&1)"
 STATUS=$?
 set -e
 assert_exit_code "${STATUS}" 1

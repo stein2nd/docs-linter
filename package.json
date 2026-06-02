@@ -54,6 +54,7 @@
     "verify:artifact": "npm run pack:artifact && node ./scripts/verify-tarball.cjs --from-artifacts",
     "verify:release-tag": "node ./scripts/verify-release-tag.cjs",
     "test:init": "bash scripts/test-init.sh",
+    "test:doctor": "bash scripts/test-doctor.sh",
     "dev": "npx vite build --watch",
     "lint": "node dist/bin/cli.js './README.md' '**/*.md'",
     "lint:wp": "node dist/bin/cli.js --profile wordpress './README.md' '**/*.md'",

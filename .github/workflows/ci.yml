@@ -38,3 +38,6 @@ jobs:
 
       - name: Test init command
         run: bash scripts/test-init.sh
+
+      - name: Test doctor command
+        run: bash scripts/test-doctor.sh

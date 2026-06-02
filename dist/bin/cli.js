@@ -16,7 +16,7 @@ Usage:
 
 Commands:
   init              Generate project scaffolding
-  doctor            Diagnose setup (not implemented yet)
+  doctor            Diagnose setup
   (default)         Run textlint via bundled wrapper
 
 Run "s2j-docs-linter init --help" or "s2j-docs-linter --help" for details.

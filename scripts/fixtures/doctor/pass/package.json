@@ -9,7 +9,6 @@
         "lint:docs": "textlint \"**/*.md\""
     },
     "devDependencies": {
-        "textlint": "^15.0.0",
-        "@s2j/docs-linter": "0.0.0-test"
+        "textlint": "^15.0.0"
     }
 }
