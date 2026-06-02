@@ -8,59 +8,6 @@ cd "$ROOT"
 CLI=(node dist/bin/cli.js)
 SANDBOX=".sandbox"
 
-pass() { echo "✔ $1"; }
-fail() { echo "✖ $1" >&2; exit 1; }
-
-assert_exit() {
-  local expected="$1"
-  shift
-  set +e
-  "$@" >/tmp/init-test.out 2>/tmp/init-test.err
-  local code=$?
-  set -e
-  local combined="/tmp/init-test.out"
-  cat /tmp/init-test.err >> "$combined"
-  if [[ "$code" -ne "$expected" ]]; then
-    echo "--- output ---" >&2
-    cat "$combined" >&2
-    fail "expected exit $expected, got $code: $*"
-  fi
-}
-
-assert_contains() {
-  local needle="$1"
-  if ! grep -Fq "$needle" /tmp/init-test.out /tmp/init-test.err 2>/dev/null; then
-    echo "--- output ---" >&2
-    cat /tmp/init-test.out /tmp/init-test.err >&2
-    fail "expected output to contain: $needle"
-  fi
-}
-
-assert_not_contains() {
-  local needle="$1"
-  if grep -Fq "$needle" /tmp/init-test.out /tmp/init-test.err 2>/dev/null; then
-    fail "expected output NOT to contain: $needle"
-  fi
-}
-
-assert_file() {
-  [[ -f "$1" ]] || fail "missing file: $1"
-}
-
-assert_json_extends() {
-  local file="$1"
-  local expected="$2"
-  node -e "
-    const fs = require('node:fs');
-    const cfg = JSON.parse(fs.readFileSync('$file', 'utf8'));
-    const ext = cfg.extends && cfg.extends[0];
-    if (ext !== '$expected') {
-      console.error('extends mismatch:', ext);
-      process.exit(1);
-    }
-  " || fail "extends mismatch in $file"
-}
-
 echo "Building..."
 npm run build --silent
 
@@ -136,3 +83,84 @@ pass "INIT-012"
 
 echo ""
 echo "All init tests passed."
+
+## @param $1 test name
+## @return $STATUS exit code of command
+## @return $OUTPUT output of command
+pass() {
+  echo "✔ $1"
+}
+
+## @param $1 test name
+## @return $STATUS exit code of command
+## @return $OUTPUT output of command
+fail() {
+  echo "✖ $1" >&2; exit 1;
+}
+
+## @param $1 expected exit code
+## @param $2 command to run
+## @return $STATUS exit code of command
+## @return $OUTPUT output of command
+assert_exit() {
+  local expected="$1"
+  shift
+  set +e
+  "$@" >/tmp/init-test.out 2>/tmp/init-test.err
+  local code=$?
+  set -e
+  local combined="/tmp/init-test.out"
+  cat /tmp/init-test.err >> "$combined"
+  if [[ "$code" -ne "$expected" ]]; then
+    echo "--- output ---" >&2
+    cat "$combined" >&2
+    fail "expected exit $expected, got $code: $*"
+  fi
+}
+
+## @param $1 expected output to contain
+## @return $STATUS exit code of command
+## @return $OUTPUT output of command
+assert_contains() {
+  local needle="$1"
+  if ! grep -Fq "$needle" /tmp/init-test.out /tmp/init-test.err 2>/dev/null; then
+    echo "--- output ---" >&2
+    cat /tmp/init-test.out /tmp/init-test.err >&2
+    fail "expected output to contain: $needle"
+  fi
+}
+
+## @param $1 expected output to not contain
+## @return $STATUS exit code of command
+## @return $OUTPUT output of command
+assert_not_contains() {
+  local needle="$1"
+  if grep -Fq "$needle" /tmp/init-test.out /tmp/init-test.err 2>/dev/null; then
+    fail "expected output NOT to contain: $needle"
+  fi
+}
+
+## @param $1 expected file to exist
+## @return $STATUS exit code of command
+## @return $OUTPUT output of command
+assert_file() {
+  [[ -f "$1" ]] || fail "missing file: $1"
+}
+
+## @param $1 expected file to exist
+## @param $2 expected extends value
+## @return $STATUS exit code of command
+## @return $OUTPUT output of command
+assert_json_extends() {
+  local file="$1"
+  local expected="$2"
+  node -e "
+    const fs = require('node:fs');
+    const cfg = JSON.parse(fs.readFileSync('$file', 'utf8'));
+    const ext = cfg.extends && cfg.extends[0];
+    if (ext !== '$expected') {
+      console.error('extends mismatch:', ext);
+      process.exit(1);
+    }
+  " || fail "extends mismatch in $file"
+}
