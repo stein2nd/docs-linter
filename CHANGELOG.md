@@ -2,6 +2,12 @@
 
 `@s2j/docs-linter` の npm 公開版における主な変更を記録します。
 
+## [1.0.14] - 2026-06-02
+
+- CLI サブコマンド `init` — プロジェクト初期化 (`.textlintrc.json` / VSCode 設定 / GitHub Actions ワークフロー / `lint:docs` 生成)
+- CLI サブコマンド `doctor` — 環境診断 (PASS / WARN / FAIL、`--path` 対応)
+- CLI エントリポイントをサブコマンドルーター (`init` / `doctor` / lint) に統合
+
 ## [1.0.13] - 2026-05-25
 
 - GitHub Actions (npm Trusted Publishing / OIDC) による初の自動 publish
