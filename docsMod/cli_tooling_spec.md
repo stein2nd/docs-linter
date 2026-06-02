@@ -802,7 +802,7 @@ doctor コマンドの結果は、`PASS`、`WARN`、`FAIL` に区分されます
 プリセットの `extends` 解決について、下記の方針とします。
 
 * プリセットは、`.textlintrc.json` の存在するディレクトリを基準として `extends` の各エントリを解決する。尚、`.textlintrc.json` が解決できない場合は、プリセット解決は、未評価とする。
-* `extends` は string または string[] を受け付ける。
+* `extends` は `string` または `string[]` を受け付ける。
 * `extends` が未指定、空配列、1件でも解決失敗、または不正な型の場合は `✖ FAIL Preset` とする。
 * `extends` に記載された全てのプリセットが解決できた場合のみ `✔ PASS Preset` とする。
 
@@ -1371,5 +1371,5 @@ const entries = Array.isArray(config.extends) ? config.extends : [config.extends
 resolve(dirname(configPath), entry)
 ```
 
-判定規則は「[CLI コマンド - doctor コマンド](#doctor-出力ポリシー) > プリセット判定規則」(803〜807行) に従います。
+判定規則は「[CLI コマンド - doctor コマンド - プリセット判定規則](#doctor-出力ポリシー)」(803〜807行) に従います。
 Config チェック失敗時は Preset を未評価とします。
