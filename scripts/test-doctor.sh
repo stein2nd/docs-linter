@@ -85,8 +85,8 @@ prepare_pass_fixture
 remove_package_json "${PASS_DIR}/package.json"
 run_doctor "${PASS_DIR}"
 assert_exit_code "${STATUS}" 0
-assert_contains "${OUTPUT}" "⚠ WARN package.json"
 assert_contains "${OUTPUT}" "✔ PASS Node.js (skip)"
+assert_contains "${OUTPUT}" "⚠ WARN package.json"
 assert_contains "${OUTPUT}" "⚠ WARN"
 pass_test "DOCTOR-010"
 

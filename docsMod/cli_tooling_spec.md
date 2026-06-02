@@ -800,6 +800,12 @@ doctor コマンドの結果は、`PASS`、`WARN`、`FAIL` に区分されます
 プリセットは、`.textlintrc.json` の存在するディレクトリを基準として extends の各エントリを解決します。
 尚、`.textlintrc.json` が解決できない場合は、プリセット解決は、未評価とします。
 
+プリセットの `extends` 解決について、下記の方針とします。
+
+* extends は string または string[] を受け付ける。
+* extends が未指定、空配列、または不正な型の場合は `✖ FAIL Preset` とする。
+* extends に記載された全てのプリセットが解決できた場合のみ `✔ PASS Preset` とする。
+
 `textlint` は、診断対象ディレクトリ配下の `node_modules` から解決できることを確認します。つまり、親ディレクトリの `node_modules` は参照しません。
 
 #### doctor 総合結果
@@ -1039,8 +1045,8 @@ textlint の存在確認は、Node.js のモジュール解決 (`require.resolve
 
 期待結果は、下記の通りです。
 
-* `⚠ WARN package.json` である。
 * `✔ PASS Node.js (skip)` である。
+* `⚠ WARN package.json` である。
 * `⚠ WARN` である。
 
 #### textlint 検証 - DOCTOR-009「textlint 未導入」
@@ -1345,3 +1351,11 @@ textlint の存在確認は、Node.js のモジュール解決 (`require.resolve
 * `cli.ts` をサブコマンドルーターとし、`init` / `doctor` / lint (デフォルト) を振り分ける。
 * 引数なし、またはサブコマンド以外の実行は、従来どおり lint として扱う (下位互換)。
 * `doctor` 未実装時はルーターにスタブを置き、`doctor.ts` 完成後に差し替える。
+
+#### 実装方針の補足 (doctor)
+
+textlint の存在確認は、診断対象ディレクトリ直下の `node_modules` のみを確認します。
+
+Node.js のモジュール解決 (`require.resolve` 等) は利用しません。
+
+Preset の解決は、`.textlintrc.json` の所在ディレクトリを基準に resolve() + existsSync() で判定します。
