@@ -5,18 +5,52 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 source "${ROOT_DIR}/scripts/lib/assert.sh"
-source "${ROOT_DIR}/scripts/lib/set_invalid_preset.sh"
 source "${ROOT_DIR}/scripts/lib/doctor-fixture.sh"
 
 CLI="node dist/bin/cli.js"
 PASS_DIR="${ROOT_DIR}/.sandbox/doctor/pass"
 NO_TEXTLINT_DIR="${ROOT_DIR}/.sandbox/doctor/no-textlint"
 
+echo "Building..."
+npm run build --silent
+
+## @return $PASS_DIR directory to run doctor command with pass fixture
+## @return $STATUS exit code of doctor command
+## @return $OUTPUT output of doctor command
+prepare_pass_fixture() {
+    "${ROOT_DIR}/scripts/helpers/setup-doctor-pass.sh"
+}
+
+## @return $NO_TEXTLINT_DIR directory to run doctor command with no textlint
+## @return $STATUS exit code of doctor command
+## @return $OUTPUT output of doctor command
+prepare_no_textlint_fixture() {
+    rm -rf "${NO_TEXTLINT_DIR}"
+
+    mkdir -p "${NO_TEXTLINT_DIR}/node_modules"
+
+    cp "${ROOT_DIR}/scripts/fixtures/doctor/pass/package.json" "${NO_TEXTLINT_DIR}/package.json"
+}
+
+## @param $1 target directory to run doctor command
+## @return $STATUS exit code of doctor command
+## @return $OUTPUT output of doctor command
+## @return $STATUS exit code of doctor command
+run_doctor() {
+    local target="$1"
+
+    set +e
+    OUTPUT="$(${CLI} doctor --path "${target}" 2>&1)"
+    STATUS=$?
+    set -e
+}
+
 
 log_test "DOCTOR-001"
 prepare_pass_fixture
 run_doctor "${PASS_DIR}"
 assert_exit_code "${STATUS}" 0
+assert_contains "${OUTPUT}" "✔ PASS package.json"
 assert_contains "${OUTPUT}" "✔ PASS Config"
 assert_contains "${OUTPUT}" "✔ PASS Preset"
 assert_contains "${OUTPUT}" "✔ PASS VSCode"
@@ -48,9 +82,12 @@ pass_test "DOCTOR-013"
 
 log_test "DOCTOR-010"
 prepare_pass_fixture
+remove_package_json "${PASS_DIR}/package.json"
 run_doctor "${PASS_DIR}"
 assert_exit_code "${STATUS}" 0
+assert_contains "${OUTPUT}" "⚠ WARN package.json"
 assert_contains "${OUTPUT}" "✔ PASS Node.js (skip)"
+assert_contains "${OUTPUT}" "⚠ WARN"
 pass_test "DOCTOR-010"
 
 
@@ -150,67 +187,3 @@ echo
 echo "All doctor tests passed."
 
 
-## @return $PASS_DIR directory to run doctor command with pass fixture
-## @return $STATUS exit code of doctor command
-## @return $OUTPUT output of doctor command
-prepare_pass_fixture() {
-    "${ROOT_DIR}/scripts/helpers/setup-doctor-pass.sh"
-}
-
-## @return $NO_TEXTLINT_DIR directory to run doctor command with no textlint
-## @return $STATUS exit code of doctor command
-## @return $OUTPUT output of doctor command
-prepare_no_textlint_fixture() {
-    rm -rf "${NO_TEXTLINT_DIR}"
-
-    mkdir -p "${NO_TEXTLINT_DIR}/node_modules"
-
-    cp "${ROOT_DIR}/scripts/fixtures/doctor/pass/package.json" "${NO_TEXTLINT_DIR}/package.json"
-}
-
-## @param $1 target directory to run doctor command
-## @return $STATUS exit code of doctor command
-## @return $OUTPUT output of doctor command
-## @return $STATUS exit code of doctor command
-run_doctor() {
-    local target="$1"
-
-    set +e
-    OUTPUT="$(${CLI} doctor --path "${target}" 2>&1)"
-    STATUS=$?
-    set -e
-}
-
-## @param $1 test name
-## @return $STATUS exit code of command
-pass() {
-    echo "✔ $1"
-}
-
-## @param $1 test name
-## @return $STATUS exit code of command
-fail() {
-    echo "✖ $1"
-    exit 1
-}
-
-## @param $1 output to check
-## @param $2 expected output to contain
-## @return $STATUS exit code of command
-## @return $OUTPUT output of command
-assert_contains() {
-    local output="$1"
-    local expected="$2"
-
-    if echo "${output}" | grep -Fq "${expected}"; then
-        return 0
-    fi
-
-    echo "Expected:"
-    echo "  ${expected}"
-    echo
-    echo "Actual:"
-    echo "${output}"
-
-    exit 1
-}

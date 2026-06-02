@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
 ## @param $1 .textlintrc.json path
+## @return $STATUS exit code of command
 set_invalid_preset() {
     local config_file="$1"
+
+    if [ ! -f "${config_file}" ]; then
+        echo "ERROR: file not found"
+        echo "  ${config_file}"
+        exit 1
+    fi
 
     jq '
 .extends = [
@@ -26,6 +33,11 @@ set_package_node_engine() {
 
 ## @param $1 .textlintrc.json path
 remove_config() {
+    rm -f "$1"
+}
+
+## @param $1 package.json path
+remove_package_json() {
     rm -f "$1"
 }
 

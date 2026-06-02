@@ -799,6 +799,7 @@ doctor コマンドの結果は、`PASS`、`WARN`、`FAIL` に区分されます
 ```
 
 プリセットは、`.textlintrc.json` の存在するディレクトリを基準として extends の各エントリを解決します。
+尚、`.textlintrc.json` が解決できない場合は、プリセット解決は、未評価とします。
 
 `textlint` は、診断対象ディレクトリ配下の `node_modules` から解決できることを確認します。つまり、親ディレクトリの `node_modules` は参照しません。
 
@@ -1033,8 +1034,8 @@ scripts/fixtures/doctor/pass/
 
 期待結果は、下記の通りです。
 
-* `✔ PASS Node.js (skip)` である。
 * `⚠ WARN package.json` である。
+* `✔ PASS Node.js (skip)` である。
 * `⚠ WARN` である。
 
 #### textlint 検証 - DOCTOR-009「textlint 未導入」

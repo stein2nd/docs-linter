@@ -14,76 +14,6 @@ npm run build --silent
 rm -rf "$SANDBOX/base" "$SANDBOX/swift" "$SANDBOX/wordpress"
 mkdir -p "$SANDBOX"
 
-# INIT-001: Dry Run (default preset)
-assert_exit 0 "${CLI[@]}" init --dry-run
-assert_contains "Would create"
-pass "INIT-001"
-
-# INIT-002: Dry Run + swift preset
-assert_exit 0 "${CLI[@]}" init --dry-run --preset swift
-assert_contains "Preset:"
-assert_contains "swift"
-pass "INIT-002"
-
-# INIT-003: Dry Run + wordpress preset
-assert_exit 0 "${CLI[@]}" init --dry-run --preset wordpress
-assert_contains "Preset:"
-assert_contains "wordpress"
-pass "INIT-003"
-
-# INIT-004: Output base preset files
-assert_exit 0 "${CLI[@]}" init --output "$SANDBOX/base"
-assert_file "$SANDBOX/base/.textlintrc.json"
-assert_file "$SANDBOX/base/.vscode/settings.json"
-assert_file "$SANDBOX/base/.github/workflows/docs-lint.yml"
-assert_json_extends "$SANDBOX/base/.textlintrc.json" \
-  "./node_modules/@s2j/docs-linter/presets/base/.textlintrc.base.json"
-pass "INIT-004"
-
-# INIT-005: Output swift preset
-assert_exit 0 "${CLI[@]}" init --preset swift --output "$SANDBOX/swift"
-assert_file "$SANDBOX/swift/.textlintrc.json"
-assert_json_extends "$SANDBOX/swift/.textlintrc.json" \
-  "./node_modules/@s2j/docs-linter/presets/swift/.textlintrc.swift.json"
-pass "INIT-005"
-
-# INIT-006: Output wordpress preset
-assert_exit 0 "${CLI[@]}" init --preset wordpress --output "$SANDBOX/wordpress"
-assert_file "$SANDBOX/wordpress/.textlintrc.json"
-assert_json_extends "$SANDBOX/wordpress/.textlintrc.json" \
-  "./node_modules/@s2j/docs-linter/presets/wordpress/.textlintrc.wp.json"
-pass "INIT-006"
-
-# INIT-007: Re-run without force → skip
-assert_exit 0 "${CLI[@]}" init --output "$SANDBOX/base"
-assert_contains "⚠ Skipped"
-pass "INIT-007"
-
-# INIT-008: Force overwrite
-assert_exit 0 "${CLI[@]}" init --output "$SANDBOX/base" --force
-assert_contains "✔ Overwrite"
-pass "INIT-008"
-
-# INIT-009: Invalid combo dry-run + force
-assert_exit 1 "${CLI[@]}" init --dry-run --force
-pass "INIT-009"
-
-# INIT-010: Invalid combo dry-run + output
-assert_exit 1 "${CLI[@]}" init --dry-run --output "$SANDBOX/base"
-pass "INIT-010"
-
-# INIT-011: Invalid combo dry-run + output + force
-assert_exit 1 "${CLI[@]}" init --dry-run --output "$SANDBOX/base" --force
-pass "INIT-011"
-
-# INIT-012: Invalid preset
-assert_exit 1 "${CLI[@]}" init --preset invalid
-assert_contains "Invalid preset"
-pass "INIT-012"
-
-echo ""
-echo "All init tests passed."
-
 ## @param $1 test name
 ## @return $STATUS exit code of command
 ## @return $OUTPUT output of command
@@ -164,3 +94,74 @@ assert_json_extends() {
     }
   " || fail "extends mismatch in $file"
 }
+
+
+# INIT-001: Dry Run (default preset)
+assert_exit 0 "${CLI[@]}" init --dry-run
+assert_contains "Would create"
+pass "INIT-001"
+
+# INIT-002: Dry Run + swift preset
+assert_exit 0 "${CLI[@]}" init --dry-run --preset swift
+assert_contains "Preset:"
+assert_contains "swift"
+pass "INIT-002"
+
+# INIT-003: Dry Run + wordpress preset
+assert_exit 0 "${CLI[@]}" init --dry-run --preset wordpress
+assert_contains "Preset:"
+assert_contains "wordpress"
+pass "INIT-003"
+
+# INIT-004: Output base preset files
+assert_exit 0 "${CLI[@]}" init --output "$SANDBOX/base"
+assert_file "$SANDBOX/base/.textlintrc.json"
+assert_file "$SANDBOX/base/.vscode/settings.json"
+assert_file "$SANDBOX/base/.github/workflows/docs-lint.yml"
+assert_json_extends "$SANDBOX/base/.textlintrc.json" \
+  "./node_modules/@s2j/docs-linter/presets/base/.textlintrc.base.json"
+pass "INIT-004"
+
+# INIT-005: Output swift preset
+assert_exit 0 "${CLI[@]}" init --preset swift --output "$SANDBOX/swift"
+assert_file "$SANDBOX/swift/.textlintrc.json"
+assert_json_extends "$SANDBOX/swift/.textlintrc.json" \
+  "./node_modules/@s2j/docs-linter/presets/swift/.textlintrc.swift.json"
+pass "INIT-005"
+
+# INIT-006: Output wordpress preset
+assert_exit 0 "${CLI[@]}" init --preset wordpress --output "$SANDBOX/wordpress"
+assert_file "$SANDBOX/wordpress/.textlintrc.json"
+assert_json_extends "$SANDBOX/wordpress/.textlintrc.json" \
+  "./node_modules/@s2j/docs-linter/presets/wordpress/.textlintrc.wp.json"
+pass "INIT-006"
+
+# INIT-007: Re-run without force → skip
+assert_exit 0 "${CLI[@]}" init --output "$SANDBOX/base"
+assert_contains "⚠ Skipped"
+pass "INIT-007"
+
+# INIT-008: Force overwrite
+assert_exit 0 "${CLI[@]}" init --output "$SANDBOX/base" --force
+assert_contains "✔ Overwrite"
+pass "INIT-008"
+
+# INIT-009: Invalid combo dry-run + force
+assert_exit 1 "${CLI[@]}" init --dry-run --force
+pass "INIT-009"
+
+# INIT-010: Invalid combo dry-run + output
+assert_exit 1 "${CLI[@]}" init --dry-run --output "$SANDBOX/base"
+pass "INIT-010"
+
+# INIT-011: Invalid combo dry-run + output + force
+assert_exit 1 "${CLI[@]}" init --dry-run --output "$SANDBOX/base" --force
+pass "INIT-011"
+
+# INIT-012: Invalid preset
+assert_exit 1 "${CLI[@]}" init --preset invalid
+assert_contains "Invalid preset"
+pass "INIT-012"
+
+echo ""
+echo "All init tests passed."
