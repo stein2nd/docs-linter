@@ -120,7 +120,7 @@ Git タグは、バージョンと一致させます。
 
 形式は `vX.Y.Z` とし、下記の様に利用します。
 
-```bash
+```zsh
 git tag v1.0.13
 git push origin v1.0.13
 ```

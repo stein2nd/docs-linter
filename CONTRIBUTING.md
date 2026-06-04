@@ -88,7 +88,7 @@ These documents below define the project's current direction and governance.
 
 下記の様にして、リポジトリのローカルクローンを作成します。
 
-```bash
+```zsh
 git clone https://github.com/stein2nd/docs-linter.git
 cd docs-linter
 ```
@@ -98,7 +98,7 @@ cd docs-linter
 
 Follow the steps below to create a local clone of the repository.
 
-```bash
+```zsh
 git clone https://github.com/stein2nd/docs-linter.git
 cd docs-linter
 ```
@@ -158,7 +158,7 @@ The recommended workflow is as follows.
 
 Before submitting your changes, please verify the following.
 
-```bash
+```zsh
 npm run build
 npm run pack:check
 npm publish --dry-run --access public
@@ -168,7 +168,7 @@ npm publish --dry-run --access public
 
 If this concerns the documentation, please do the following.
 
-```bash
+```zsh
 npx textlint --config ./presets/base/.textlintrc.base.json README.md
 ```
 

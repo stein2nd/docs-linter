@@ -33,7 +33,7 @@ S2J Docs Linter は、既に下記を備えています。
 
 現在のリリーストリガーは、下記の順番になります。
 
-```bash
+```zsh
 git tag vX.Y.Z
 git push origin vX.Y.Z
 ```
@@ -85,7 +85,7 @@ git push origin vX.Y.Z
         * SemVer ガバナンス
 * コントリビューターの利便性
     * 現在の下記ワークフローは、十分にシンプルであると言える。
-        ```bash
+        ```zsh
         npm version patch
         git push
         git push --tags

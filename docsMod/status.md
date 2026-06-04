@@ -6,7 +6,8 @@
 
 最終更新…**2026-06-02**
 * フェーズ1–4 **クローズ** (必須 + 推奨)。**P2 (CLI ツール) 500/500 クローズ** (2026-06-02)。
-* npm レジストリ最新 … **`@s2j/docs-linter@1.0.13`** (GHA OIDC publish、2026-05-25)。`init` / `doctor` は **main マージ済み** — **次回 semver リリース待ち** (CHANGELOG 未更新)。
+* npm レジストリ最新 … **`@s2j/docs-linter@1.0.15`** (`v1.0.14`–`v1.0.15` GHA OIDC publish、2026-06-02)。
+* **README ドキュメント構成** — npm 主導線は [README.md](../README.md)。Git Submodule 手順は [docs/git_submodule.md](../docs/git_submodule.md) に切り出し (後方互換・非推奨)。
 * フェーズ4 **100%** (必須 **5/5** + 推奨 **5/5**、**クローズ** 2026-05-26)
     * 推奨 **#1 済** — [semantic_release_evaluation.md](./semantic_release_evaluation.md)
         * 結論は、**現時点では非採用**。
@@ -15,7 +16,7 @@
 * フェーズ4 **P2 (CLI ツール)** — [cli_tooling_spec.md](./cli_tooling_spec.md) **100% クローズ** (2026-06-02)
     * **`init` 済** (2026-05-30) — `src/bin/init.ts` · `npm run test:init` (INIT-001〜012) · GHA `Test init command`
     * **`doctor` 済** (2026-06-02 · Fixes [#31](https://github.com/stein2nd/docs-linter/issues/31)) — `src/bin/doctor.ts` · `npm run test:doctor` (DOCTOR-001〜015) · GHA `Test doctor command`
-    * **ドキュメント同期 済** (2026-06-02) — [README.md](../README.md) · [npm_usage.md](./npm_usage.md) への `init` / `doctor` 導線
+    * **ドキュメント同期 済** (2026-06-02) — [README.md](../README.md) · [npm_usage.md](./npm_usage.md) · [docs/git_submodule.md](../docs/git_submodule.md) への `init` / `doctor` / Submodule 導線
     * **ローカル検証 済** (2026-06-02) — `npm run test:init` · `npm run test:doctor` すべて PASS
     * **P2 実装％ … 100%** (500 / 500)
 
@@ -62,6 +63,7 @@
 | [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) | Trusted Publishing (OIDC) 登録済、`NPM_TOKEN` 非使用方針 |
 | [npm リリース手順](./release.md) | GHA tag publish、[CHANGELOG 更新](./release.md#3-changelog-更新)、Trusted Publishing (OIDC)、[GitHub リリースノート](./release.md#8-github-リリースノート) — 推奨 #2 **済** |
 | [npm 使い方ガイド](./npm_usage.md) | install / CLI / `init` / `doctor` / `package.json` `lint:docs` 移行 / VSCode・`extends` / CI |
+| [docs/git_submodule.md](../docs/git_submodule.md) | Git Submodule 利用手順 (後方互換・非推奨)。README から導線 |
 | [CLI ツール仕様](./cli_tooling_spec.md) | `init` / `doctor` コマンド、`init` テスト仕様 (INIT-001〜012)、`doctor` テスト仕様 (DOCTOR-001〜015)、CLI エントリポイント方針 |
 | [CHANGELOG.md](../CHANGELOG.md) | npm 公開版の変更履歴 (`1.0.10`–) — 必須 #2 **済**、Git 管理 |
 | [SemVer 方針](./versioning_policy.md) | MAJOR / MINOR / PATCH、破壊的変更、非推奨、タグ規約 — 必須 #1 **済** |
@@ -73,16 +75,16 @@
 | [CONTRIBUTING.md](../CONTRIBUTING.md) | 貢献ガイド (日英) — 推奨 #4 **済**。[README.md](../README.md) Contributing から導線 |
 | [`.github/ISSUE_TEMPLATE/`](../.github/ISSUE_TEMPLATE/) | Bug / Feature テンプレ + `config.yml` — 推奨 #3 **済** |
 | [仕様書の起点](./specs.md) | 仕様導線 + [プロジェクトのロードマップ](./specs.md#プロジェクトのロードマップ) → [status.md](./status.md) — 推奨 #5 **済** |
-| [README.md](../README.md) | [ロードマップ](../README.md#ロードマップ) — status / ガバナンス導線 · Contributing → [CONTRIBUTING.md](../CONTRIBUTING.md) — 推奨 #4–#5 |
+| [README.md](../README.md) | npm 主導線 · Quick Start · [npm_usage.md](./npm_usage.md) 導線 · [git_submodule.md](../docs/git_submodule.md) (Submodule・非推奨) · ロードマップ / ガバナンス — 推奨 #4–#5 |
 
 ### 機能一覧 (実装状況サマリー)
 
 | 機能名 (仕様セクション) | 実装済み/未実装 | 実装％ | 完了条件 (要約) | 備考 |
 | --- | --- | ---: | --- | --- |
-| [Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク) | 実装済み | 100 | pack / dry-run / tarball / registry / 受け入れ (#1–2, #4–9, #11–12) | npm 最新 **`@s2j/docs-linter@1.0.13`** (2026-05-25) |
+| [Publishing - フェーズ1優先タスク](./npm_package_spec.md#publishing---フェーズ1優先タスク) | 実装済み | 100 | pack / dry-run / tarball / registry / 受け入れ (#1–2, #4–9, #11–12) | npm 最新 **`@s2j/docs-linter@1.0.15`** (2026-06-02) |
 | [Publishing (パッケージ構成) - フェーズ1優先](./npm_package_spec.md#publishing-パッケージ構成---フェーズ1優先タスク) | 実装済み | 100 | `pack:artifact`、`artifacts/`、再現可能な検証 (#1–2, #4, #7, #16) | GHA artifact 名 `s2j-docs-linter-<tag>` |
 | [npm パッケージ仕様](./npm_package_spec.md) (文書) | 実装済み | 100 | コードと仕様の同期 | パッケージ構成セクション反映済み |
-| [`package.json` メタデータ更新](./npm_package_spec.md#packagejson-メタデータ更新) | 実装済み | 100 | `@s2j/docs-linter`、semver、`LICENSE` 等 | **`1.0.13`** (#5–6) |
+| [`package.json` メタデータ更新](./npm_package_spec.md#packagejson-メタデータ更新) | 実装済み | 100 | `@s2j/docs-linter`、semver、`LICENSE` 等 | **`1.0.15`** (#5–6) |
 | [CLI Entrypoint 公開](./npm_package_spec.md#cli-entrypoint-公開) | 実装済み | 100 | `bin` / `--profile` / 設定解決 / `--help` / `--version` | textlint を `node` 直実行 (#3) |
 | [ファイルスコープの最適化 (Publish)](./npm_package_spec.md#ファイルスコープの最適化を-publish) | 実装済み | 100 | `files` + `verify:tarball` | `presets/` + root ミラー (#4, #9) |
 | [CLI 互換レイヤ](./npm_package_spec.md#cli-互換レイヤ) / [互換性に関する要件](./npm_package_spec.md#互換性に関する要件) | 実装済み | 100 | パッケージ root 基準の preset 解決、互換 `docs-lint` | |
@@ -93,12 +95,12 @@
 | [移行のワークフロー例](./npm_package_spec.md#移行のワークフロー例) | 実装済み | 100 | `examples/lint-docs*.yml` で `npx s2j-docs-linter` | フェーズ3 #5 **済**。legacy Submodule ステップは reference |
 | [移行のワークフロー例 - フェーズ1優先](./npm_package_spec.md#移行のワークフロー例---フェーズ1優先タスク) | 実装済み | 100 | migration examples + `lint:docs` before/after | [npm_usage.md](./npm_usage.md) + `examples/` (#10, #15) |
 | [互換性に関する、移行戦略](./npm_package_spec.md#互換性に関する移行戦略) (フェーズ1) | 実装済み | 100 | 併存基盤 + root 互換レイアウト + 移行ドキュメント | **9 リポジトリ**で Submodule → npm 移行完了 (#12) |
-| [README 移行](./npm_package_spec.md#readme-移行) | **済** | 100 | migration guide + legacy 非推奨 + VSCode 定着 | フェーズ3 推奨 #2–3 **済** (#6 **済**) |
+| [README 移行](./npm_package_spec.md#readme-移行) | **済** | 100 | npm 主導線 + [git_submodule.md](../docs/git_submodule.md) (Submodule 非推奨) + VSCode 定着 | フェーズ3 推奨 #2–3 **済** (#6 **済**) |
 | [GitHub Actions Publish ワークフロー](./npm_package_spec.md#github-actions-publish-ワークフロー) | 運用中 | 100 | OIDC tag publish + artifact | run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088) |
 | [GitHub Actions Publish - フェーズ1優先](./npm_package_spec.md#github-actions-publish-ワークフロー---フェーズ1優先タスク) | 運用中 | 100 | tag `v*` / `npm ci` / 検証 / artifact / publish | OIDC 運用 (2026-05-25) |
 | [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md) | 実装済み | 100 | Trusted Publishing 登録 + ワークフロー OIDC | `NPM_TOKEN` Secret 不使用 |
 | [npm 使い方ガイド との整合 - フェーズ1優先](./npm_package_spec.md#npm-使い方ガイド-との整合---フェーズ1優先タスク) / [npm_usage.md](./npm_usage.md) | 実装済み | 100 | README のコマンドが実際に動く · `init` / `doctor` 導線 | `lint:docs` / VSCode / `extends` / CI (#10, #14) · P2 **済** |
-| P2 ドキュメント同期 (CLI) | **済** | 100 | README / [npm_usage.md](./npm_usage.md) への `init` / `doctor` 導線 | 更新 **2026-06-02** · 仕様 [ドキュメントの同期](./cli_tooling_spec.md#ドキュメントの同期) |
+| P2 ドキュメント同期 (CLI) | **済** | 100 | README / [npm_usage.md](./npm_usage.md) / [git_submodule.md](../docs/git_submodule.md) への `init` / `doctor` / Submodule 導線 | 更新 **2026-06-02** · 仕様 [ドキュメントの同期](./cli_tooling_spec.md#ドキュメントの同期) |
 | [VSCode 互換戦略](./npm_package_spec.md#vscode-互換戦略) | ガイド済み | 100 | [npm_usage.md](./npm_usage.md) に移行例 | 利用側 **9 リポ** canonical 設定 (フェーズ3 推奨 #3 **済**) |
 | [CI 互換戦略](./npm_package_spec.md#ci-互換戦略) | ガイド済み | 100 | `npm_usage.md` / `examples/` に CI 例 | 利用側 **9 リポ** GHA docs lint 成功 (フェーズ3 #5 **済**) |
 | Node matrix CI (フェーズ4) | **済** | 100 | Node 20/22/24 互換検証 · `test:init` · `test:doctor` | [ci.yml](../.github/workflows/ci.yml) (必須 #4 **済**) |
@@ -112,9 +114,9 @@
 | セマンティック・リリース評価 (フェーズ4) | **済** | 100 | 採用可否評価の文書化 | [semantic_release_evaluation.md](./semantic_release_evaluation.md) — 結論: **現時点では非採用** (推奨 #1 **済**) |
 | [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ3 | **済** | 100 | Submodule 非推奨化・利用側 cutover | 必須 #1–6 + 推奨 #1–3 **済** (2026-05-25) |
 | [移行戦略 - 非推奨化ポリシー](./npm_package_spec.md#移行戦略---非推奨化ポリシー) フェーズ4 | **クローズ** | 100 | レガシー機能削除・OSS 成熟化 | 必須 **5/5 済** + 推奨 **5/5 済** (2026-05-26) |
-| [CLI コマンド - init](./cli_tooling_spec.md#cli-コマンド---init) | **済** | 100 | 通常 / Dry Run / `--output` モード、プリセット、上書き、`package.json` `lint:docs` | main **2026-05-30** · npm **次回リリース** |
+| [CLI コマンド - init](./cli_tooling_spec.md#cli-コマンド---init) | **済** | 100 | 通常 / Dry Run / `--output` モード、プリセット、上書き、`package.json` `lint:docs` | main **2026-05-30** · npm **`1.0.14`–`1.0.15`** |
 | [CLI コマンド - init テスト仕様](./cli_tooling_spec.md#cli-コマンド---init-テスト仕様) | **済** | 100 | INIT-001〜012 · `scripts/test-init.sh` · GHA 再現 | 検証 **2026-06-02** PASS |
-| [CLI コマンド - doctor](./cli_tooling_spec.md#cli-コマンド---doctor-コマンド) | **済** | 100 | 環境診断 (PASS / WARN / FAIL)、7 項目チェック、`--path` / `--help` | main **2026-06-02** · Fixes [#31](https://github.com/stein2nd/docs-linter/issues/31) |
+| [CLI コマンド - doctor](./cli_tooling_spec.md#cli-コマンド---doctor-コマンド) | **済** | 100 | 環境診断 (PASS / WARN / FAIL)、7 項目チェック、`--path` / `--help` | main **2026-06-02** · npm **`1.0.14`–`1.0.15`** · Fixes [#31](https://github.com/stein2nd/docs-linter/issues/31) |
 | [CLI コマンド - doctor テスト仕様](./cli_tooling_spec.md#cli-コマンド---doctor-テスト仕様) | **済** | 100 | DOCTOR-001〜015 · フィクスチャ · GHA 再現 | 検証 **2026-06-02** PASS |
 
 ### フェーズ1: サマリー
@@ -136,7 +138,7 @@
 | GHA publish ワークフロー | **運用中 (OIDC + GitHub Release)** — tag `v*` push で publish + Release 自動作成 ([run `26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088)) |
 | publish 認証方針 (文書) | **済** — Trusted Publishing (OIDC) 運用中。`NPM_TOKEN` 不使用 |
 | README / npm_usage / examples 整合 | **済** — install・CLI・`lint:docs` 移行例・VSCode/`extends`・CI サンプルを一致 |
-| npm レジストリ公開 | **済** — 最新 **`@s2j/docs-linter@1.0.13`** (2026-05-25)。`init` / `doctor` は main 済・**npm 未同梱** (次回リリース) |
+| npm レジストリ公開 | **済** — 最新 **`@s2j/docs-linter@1.0.15`** (2026-06-02)。`init` / `doctor` 同梱 (**`1.0.14`–`1.0.15`**) |
 
 | 区分 (仕様書) | フェーズ1の状態 |
 | --- | --- |
@@ -182,7 +184,7 @@
 | 7 | publish 用 `scripts` (`pack:check`, `pack:artifact`, `publish:dry-run`, `lint:package`, `verify:tarball`, `verify:artifact`) | **済** | 100 | [仕様の標準 scripts](./npm_package_spec.md#publishing-パッケージ構成---フェーズ1優先タスク) + `verify:*` |
 | 8 | ビルド entrypoint (`clean` / `build` / `prepare`) | **済** | 100 | `npm run build` — `tsc` + `setup-npmignore` + `link-preset-layout-compat` |
 | 9 | `files` に runtime のみ同梱 (`scripts/patch-…` のみ) | **済** | 100 | `verify:tarball` (禁止: `src/`, `examples/`, `docs/`) |
-| 10 | README / [npm_usage.md](./npm_usage.md) / install examples の整合 | **済** | 100 | install・CLI・`--profile`・`lint:docs` before/after；README 方法2 ↔ `npm_usage.md` |
+| 10 | README / [npm_usage.md](./npm_usage.md) / install examples の整合 | **済** | 100 | npm 主導線 ([README](../README.md)) · Submodule ([git_submodule.md](../docs/git_submodule.md)) · [npm_usage.md](./npm_usage.md) |
 | 11 | npmjs への `npm publish` | **済** | 100 | `1.0.10` 初回 (2026-05-23)、`1.0.11`–`1.0.12` (手動)、**`1.0.13`** (GHA OIDC, 2026-05-25)。`npm view @s2j/docs-linter version` → **`1.0.13`** |
 | 12 | 利用側プロジェクトでの受け入れ試験 | **済** | 100 | 2026-05-24: **9 リポジトリ** — 下表「#12 受け入れ試験」参照。npm 化・`tools/docs-linter` 削除済 (フェーズ3 #1–2, #6) |
 | 13 | root 互換レイアウト (`base/` `swift/` `wordpress/` を tarball 同梱) | **済** | 100 | ビルド時ミラー + `verify:tarball` の `package/swift/.textlintrc.swift.json` 等 |
@@ -220,7 +222,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | レイアウト互換 (`base/` `swift/` `wordpress/`) | 済 | 100 | ビルド時 `presets/*` ミラー、VSCode パス差し替えのみで移行可 (#13) |
 | publish 用 `scripts` | 済 | 100 | 仕様標準 3 種 + `lint:package` + `verify:tarball` + `verify:artifact` (#7) |
 | 本リポジトリ `scripts` 整理 | 済 | 100 | `clean` / `build` / `prepare`、CLI 経由 `lint*` (#8) |
-| README の更新 (フェーズ1範囲) | 済 | 100 | Submodule 主導線 + 方法2 (npm) 併記、`npm_usage.md` 導線 (#10) |
+| README の更新 (フェーズ1範囲) | 済 | 100 | フェーズ1時点: Submodule 主導線 + npm 併記。現在: npm 主導線 + [git_submodule.md](../docs/git_submodule.md) (#10) |
 | [npm 使い方ガイド](./npm_usage.md) との整合 | 済 | 100 | install / CLI / `lint:docs` / CI / VSCode・`extends` が README・仕様と一致 (#10, #14) |
 | `examples/` の npm 版 | 済 | 100 | `npx s2j-docs-linter`、`@s2j/docs-linter` install コメント (#15) |
 | GitHub Actions publish ワークフロー | 運用中 | 100 | OIDC tag publish 成功 (M2)。artifact `s2j-docs-linter-v1.0.13` |
@@ -235,7 +237,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * `presets/` レイアウトの維持と tarball 同梱
 * root 互換ミラー … ビルド時に `base/` `swift/` `wordpress/` を `presets/*` から生成 (`link-preset-layout-compat`)
 * 実行時 `dependencies` への移行
-* README への npm 手順の併記 (Submodule は引き続き主導線) および [npm_usage.md](./npm_usage.md) への導線
+* README への npm 手順の併記 (フェーズ1時点は Submodule 主導線) および [npm_usage.md](./npm_usage.md) への導線 — 現在は npm 主導線、Submodule 手順は [docs/git_submodule.md](../docs/git_submodule.md)
 * [npm_usage.md](./npm_usage.md) … install / CLI / **`package.json` `lint:docs` 移行例 (WordPress・Swift)** / GitHub Actions / **VSCode・`extends` 移行例**
 * publish 検証 scripts … 仕様標準の `pack:check` / `pack:artifact` / `publish:dry-run` + `lint:package` + `verify:tarball` + `verify:artifact`
 * tarball 自動検証 (`scripts/verify-tarball.cjs`) — temp 検証と `--from-artifacts` 検証 — **22 entries**
@@ -264,7 +266,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | `.gitignore` | `artifacts/` を追加 (root への tarball 流出防止) | #16 |
 | `src/scripts/link-preset-layout-compat.ts` | ビルド時に `presets/*` → root `base/` `swift/` `wordpress/` をミラー | #13 |
 | `examples/lint-docs*.yml` | lint ステップを `npx s2j-docs-linter` に更新、npm / `npm_usage` 導線コメント | #15 |
-| `README.md` | 方法2 (npm) を `@s2j/docs-linter` / `s2j-docs-linter` に更新、`npm_usage.md` へ導線 | #10 |
+| `README.md` | npm 主導線を `@s2j/docs-linter` / `s2j-docs-linter` に更新、Submodule は [git_submodule.md](../docs/git_submodule.md)、`npm_usage.md` へ導線 | #10 |
 | `docsMod/npm_usage.md` | `lint:docs` before/after、`--profile`、CI、VSCode・`extends` 移行例 | #10, #14, #15 |
 | `docsMod/npm_package_spec.md` | フェーズ1優先タスク・**パッケージ構成**・GHA・残タスクの注記 | 文書 |
 | `docsMod/npm_auth_secret_manage_spec.md` | 認証優先順位 (OIDC > 自動化トークン > 手動)、secret 運用、GHA 例 | 文書 |
@@ -438,8 +440,8 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | **フェーズ3 推奨完了条件** | **100%** — 3 項目中 **3 済** |
 | **本リポジトリ実装 (フェーズ3)** | **100%** |
 | **利用側マイグレーション** | **100%** — **9 リポジトリ** npm 化・`tools/docs-linter` 削除済 |
-| npm レジストリ (公開済) | **済** — 最新 **`@s2j/docs-linter@1.0.13`** (GHA OIDC) |
-| README トップ導線 (UX) | 方法1/2 併記 — npm 主導線 flip は UX 向上項目 (完了条件外) |
+| npm レジストリ (公開済) | **済** — 最新 **`@s2j/docs-linter@1.0.15`** (2026-06-02) |
+| README トップ導線 (UX) | **済** — npm 主導線。Submodule は [git_submodule.md](../docs/git_submodule.md) (非推奨) |
 
 * 対象
     * Git Submodule (`tools/docs-linter`) 廃止
@@ -496,7 +498,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | 2 | マイグレーションガイドの完成 | **済** | 100 | [npm_usage.md](./npm_usage.md) に migration guide 記載 (`lint:docs` / VSCode / GitHub Actions)。利用側 **9 リポ** で migration 実施済。Git Submodule → npm 置換実績あり |
 | 3 | VSCode 設定例の完成 | **済** | 100 | [npm_usage.md](./npm_usage.md) に VSCode migration before/after。利用側 **9 リポ** で npm package ベース設定へ移行済。canonical: `.vscode/settings.json` — `textlint.configPath=./.textlintrc.json`, `textlint.nodePath=./node_modules`, `textlint.autoFixOnSave`, `source.fixAll.textlint`。`.textlintrc.json` — `@s2j/docs-linter` preset `extends` |
 
-**備考 (推奨 #2–3)**: README トップの npm 主導線 flip は UX 向上項目 (完了条件外)。VSCode 設定は実利用ベースで標準設定として定着。
+**備考 (推奨 #2–3)**: README は npm 主導線。Git Submodule 手順は [docs/git_submodule.md](../docs/git_submodule.md) に切り出し (非推奨)。VSCode 設定は実利用ベースで標準設定として定着。
 
 **集計**: 推奨 **300 / 300 → 100%** (3 済)。
 
@@ -521,7 +523,8 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | 対象 | 内容 | 関連 |
 | --- | --- | --- |
 | (運用) 利用側 **9 リポジトリ** | npm 化・`tools/docs-linter` 削除・GHA docs lint 成功・canonical VSCode / `.textlintrc.json` 定着 | 必須 #1–2, #5–6 / 推奨 #3 |
-| [README.md](../README.md) | 「レガシー移行リファレンス (Git サブモジュール)」追加 — Submodule 非推奨明示 | 必須 #6 |
+| [README.md](../README.md) | npm 主導線 · 「レガシー移行リファレンス」— Submodule 非推奨 · 詳細は [git_submodule.md](../docs/git_submodule.md) | 必須 #6 |
+| [docs/git_submodule.md](../docs/git_submodule.md) | Git Submodule 利用手順 (後方互換・非推奨) — README から切り出し | ドキュメント構成 **2026-06-02** |
 | [examples/lint-docs*.yml](../examples/lint-docs.yml) | npm workflow 手順 + legacy Submodule reference 併記 | 必須 #5 |
 | [npm_usage.md](./npm_usage.md) | `lint:docs` / VSCode / CI 移行ガイド | 推奨 #2–3 |
 
@@ -553,9 +556,9 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | **CLI `init` コマンド (P2)** | **済** — main **2026-05-30** · [src/bin/init.ts](../src/bin/init.ts) · `npm run test:init` (INIT-001〜012) · GHA [ci.yml](../.github/workflows/ci.yml) |
 | **CLI `doctor` コマンド (P2)** | **済** — main **2026-06-02** (Fixes [#31](https://github.com/stein2nd/docs-linter/issues/31)) · [src/bin/doctor.ts](../src/bin/doctor.ts) · `npm run test:doctor` (DOCTOR-001〜015) · GHA [ci.yml](../.github/workflows/ci.yml) |
 | **P2 CLI 実装 (コード・テスト・GHA)** | **100%** — init / doctor 本実装 + 自動テスト + CI 統合 **済** (検証 **2026-06-02**) |
-| **P2 ドキュメント同期** | **100%** — [README.md](../README.md) · [npm_usage.md](./npm_usage.md) への `init` / `doctor` 導線 **済** (更新 **2026-06-02**) |
+| **P2 ドキュメント同期** | **100%** — [README.md](../README.md) · [npm_usage.md](./npm_usage.md) · [git_submodule.md](../docs/git_submodule.md) への `init` / `doctor` / Submodule 導線 **済** (更新 **2026-06-02**) |
 | **P2 (CLI ツール) 全体** | **100%** (500 / 500) · **クローズ 2026-06-02** |
-| **npm 公開 (P2 機能同梱)** | **未** — レジストリ **`1.0.13`** (2026-05-25) · 次回 semver リリース待ち |
+| **npm 公開 (P2 機能同梱)** | **済** — **`@s2j/docs-linter@1.0.14`–`1.0.15`** (2026-06-02) |
 
 * 対象
     * リリースガバナンス
@@ -637,7 +640,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 | # | 完了条件 | 状態 | 実装％ | 検証方法 |
 | ---: | --- | --- | ---: | --- |
-| S1 | [README.md](../README.md) — `init` 導線 (§2.5 セットアップ) | **済** | 100 | `npx @s2j/docs-linter init` · 生成ファイル一覧 — 更新 **2026-06-02** |
+| S1 | [README.md](../README.md) — `init` 導線 (セットアップ) | **済** | 100 | `npx @s2j/docs-linter init` · 生成ファイル一覧 — 更新 **2026-06-02** |
 | S2 | [README.md](../README.md) — `doctor` 導線 (環境チェック) | **済** | 100 | `npx @s2j/docs-linter doctor` · `--path` · 出力例 — 更新 **2026-06-02** |
 | S3 | [npm_usage.md](./npm_usage.md) — 初回セットアップ (`init`) | **済** | 100 | `npx @s2j/docs-linter init` · 生成ファイル — 更新 **2026-06-02** |
 | S4 | [npm_usage.md](./npm_usage.md) — 設定確認 (`doctor`) | **済** | 100 | `doctor` コマンド · 診断項目 · CI 導入後の確認例 — 更新 **2026-06-02** |
@@ -693,7 +696,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 * **推奨 #5**: ロードマップ可視化 — 本ページ (フェーズ1–4 進捗・完了条件)、[specs.md](./specs.md#プロジェクトのロードマップ) (status 導線・フェーズ概要)、[README.md](../README.md#ロードマップ) (status / ガバナンス導線)
 * **P2 / CLI `init`**: main **2026-05-30** — [cli_tooling_spec.md](./cli_tooling_spec.md) 仕様 · [src/bin/init.ts](../src/bin/init.ts) · [scripts/test-init.sh](../scripts/test-init.sh) · `npm run test:init` (INIT-001〜012) · [ci.yml](../.github/workflows/ci.yml) GHA 統合
 * **P2 / CLI `doctor`**: main **2026-06-02** (Fixes [#31](https://github.com/stein2nd/docs-linter/issues/31)) — [src/bin/doctor.ts](../src/bin/doctor.ts) · [scripts/test-doctor.sh](../scripts/test-doctor.sh) · `npm run test:doctor` (DOCTOR-001〜015) · [ci.yml](../.github/workflows/ci.yml) GHA 統合
-* **P2 / ドキュメント同期**: **2026-06-02** — [README.md](../README.md) · [npm_usage.md](./npm_usage.md) — `init` / `doctor` 導線
+* **P2 / ドキュメント同期**: **2026-06-02** — [README.md](../README.md) · [npm_usage.md](./npm_usage.md) · [docs/git_submodule.md](../docs/git_submodule.md) — `init` / `doctor` / Submodule 導線
 
 ### フェーズ4で完了した主な変更 (コード・文書)
 
@@ -709,7 +712,8 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [scripts/test-doctor.sh](../scripts/test-doctor.sh) | DOCTOR-001〜015 自動テスト | P2 / D4 |
 | [scripts/helpers/setup-doctor-pass.sh](../scripts/helpers/setup-doctor-pass.sh) | DOCTOR-001 基準フィクスチャ (tarball + textlint 一括 install) | P2 / D3 |
 | [scripts/fixtures/doctor/](../scripts/fixtures/doctor/) · [scripts/lib/doctor-fixture.sh](../scripts/lib/doctor-fixture.sh) | doctor テスト用フィクスチャ・ヘルパ | P2 / D3 |
-| [README.md](../README.md) | `init` (§2.5) · `doctor` (環境チェック) 導線 · npm 使い方ガイドへの導線 | P2 / S1–S2 · **2026-06-02** |
+| [README.md](../README.md) | `init` (セットアップ) · `doctor` (環境チェック) · [npm_usage.md](./npm_usage.md) 導線 | P2 / S1–S2 · **2026-06-02** |
+| [docs/git_submodule.md](../docs/git_submodule.md) | Git Submodule 利用手順 (非推奨) — README から切り出し | ドキュメント構成 · **2026-06-02** |
 | [npm_usage.md](./npm_usage.md) | 初回セットアップ (`init`) · 設定確認 (`doctor`) · 診断項目 · CI 導入後の確認例 | P2 / S3–S4 · **2026-06-02** |
 | [CONTRIBUTING.md](../CONTRIBUTING.md) | 貢献ガイド (setup / workflow / 検証 / 互換 / CI) | 推奨 #4 |
 | [`.github/ISSUE_TEMPLATE/bug_report.md`](../.github/ISSUE_TEMPLATE/bug_report.md) | Bug 報告テンプレ (環境・再現・設定・期待/実際) | 推奨 #3 |
@@ -728,14 +732,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 ### フェーズ4の残タスク
 
-**完了条件** — フェーズ4必須条件 #1–5、推奨条件 #1–5、および **P2 (CLI ツール) 500/500** はすべて **済** (P2 クローズ **2026-06-02**)。
-
-**運用 follow-up** 完了条件外。次回リリース。
-
-| タスク | 優先度 | 状態 | 完了条件 |
-| --- | --- | --- | --- |
-| `init` / `doctor` の npm 公開 | 運用 | **未** | [CHANGELOG.md](../CHANGELOG.md) 更新 · `package.json` version bump · tag push ([release.md](./release.md)) |
-| npm レジストリ | 運用 | **`1.0.13`** | `@s2j/docs-linter@1.0.13` (2026-05-25) — P2 機能 **未同梱** |
+**なし** — フェーズ4必須条件 #1–5、推奨条件 #1–5、**P2 (CLI ツール) 500/500**、および P2 機能の npm 公開 (**`1.0.14`–`1.0.15`**, 2026-06-02) はすべて **済**。
 
 ### 補足
 
@@ -747,7 +744,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
     * エントリポイント … `dist/bin/cli.js` (`init` / `doctor` / lint)。
     * `init` … `npm run test:init` (INIT-001〜012)。GHA [ci.yml](../.github/workflows/ci.yml) で再現。
     * `doctor` … `npm run test:doctor` (DOCTOR-001〜015)。GHA [ci.yml](../.github/workflows/ci.yml) で再現。
-    * ユーザー向け導線 … [README.md](../README.md) · [npm_usage.md](./npm_usage.md) に `init` / `doctor` 手順 **済**。
+    * ユーザー向け導線 … [README.md](../README.md) · [npm_usage.md](./npm_usage.md) · [docs/git_submodule.md](../docs/git_submodule.md) に `init` / `doctor` / Submodule 手順 **済**。
 * **root ミラー**:
     * `base/` `swift/` `wordpress/` は `.gitignore` 対象 (生成物)。
     * publish tarball にのみ同梱。
@@ -770,17 +767,17 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
     * GitHub Secret `NPM_TOKEN` … **未登録・不使用**。
     * 初回 GHA OIDC publish: `v1.0.13` → run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088) (2026-05-25)。
 * **npm publish / 受け入れ試験**:
-    * レジストリ最新 … **`@s2j/docs-linter@1.0.13`** (GHA OIDC、2026-05-25)
-    * **main (2026-06-02)** … `init` / `doctor` マージ済み。**npm 未公開** — 次回 semver リリースで同梱予定
-    * GHA OIDC publish … **`1.0.13`** / 手動 publish … **`1.0.10`–`1.0.12`**
+    * レジストリ最新 … **`@s2j/docs-linter@1.0.15`** (GHA OIDC、2026-06-02)
+    * **`init` / `doctor`** … npm **`1.0.14`–`1.0.15`** に同梱済
+    * GHA OIDC publish … **`1.0.13`** 初回 · 以降 **`1.0.14`–`1.0.15`** / 手動 publish … **`1.0.10`–`1.0.12`**
     * 受け入れ (#12) / フェーズ3 #1–2 … **9 リポジトリ** npm 化・`tools/docs-linter` 削除済
     * フェーズ3 #5 … GHA docs lint **済** (npm workflow + 利用側 **9 リポ** 実績)
-    * フェーズ3 #6 … Submodule 依存削除 **済** ([README](../README.md) legacy 非推奨 + 利用側 **9 リポ**)
+    * フェーズ3 #6 … Submodule 依存削除 **済** ([README](../README.md) legacy 非推奨 + [git_submodule.md](../docs/git_submodule.md) + 利用側 **9 リポ**)
 * **フェーズ3 / 4**:
     * フェーズ3 … **クローズ** — 必須 **100%** (#1–6) + 推奨 **100%** (#1–3), 2026-05-25
     * フェーズ3 推奨 #2–3 … migration guide / VSCode canonical 設定 — 利用側 **9 リポ** 定着済
     * フェーズ4 … **クローズ** — 必須 **100%** (5/5 済) + 推奨 **100%** (5/5 済) / 全体 **100%** (1000/1000), 2026-05-26
-    * フェーズ4 **P2 (CLI ツール)** … **クローズ** (2026-06-02) — `init` (2026-05-30) / `doctor` (2026-06-02) 本実装 + 自動テスト + GHA + [README.md](../README.md) / [npm_usage.md](./npm_usage.md) ドキュメント同期 **500/500**
+    * フェーズ4 **P2 (CLI ツール)** … **クローズ** (2026-06-02) — `init` (2026-05-30) / `doctor` (2026-06-02) 本実装 + 自動テスト + GHA + [README.md](../README.md) / [npm_usage.md](./npm_usage.md) / [git_submodule.md](../docs/git_submodule.md) ドキュメント同期 **500/500**
     * P2 ローカル検証 … **2026-06-02** — `npm run test:init` · `npm run test:doctor` すべて PASS
     * フェーズ4 推奨 #1 … [semantic_release_evaluation.md](./semantic_release_evaluation.md) **済**
         * 結論は、**現時点では非採用**
@@ -790,17 +787,17 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
     * フェーズ4 推奨 #5 … ロードマップ **済** — [status.md](./status.md) · [specs.md](./specs.md#プロジェクトのロードマップ) · [README.md](../README.md#ロードマップ)
 * **ローカル検証の一式** (2026-06-02 確認済み):
 
-```bash
+```zsh
 npm run verify:tarball
 npm run test:init      # INIT-001〜012 PASS
 npm run test:doctor    # DOCTOR-001〜015 PASS
-npm view @s2j/docs-linter version  # => 1.0.13 (P2 機能は main のみ · 次回リリース)
+npm view @s2j/docs-linter version  # => 1.0.15
 npm run lint
 ```
 
 * **GHA リリース手順** (以降の semver) — [versioning_policy.md](./versioning_policy.md) / [release.md](./release.md) ([CHANGELOG 更新](./release.md#3-changelog-更新) · [バージョン更新と tag push](./release.md#4-バージョン更新と-tag-push-本番-publish)):
 
-```bash
+```zsh
 # CHANGELOG.md 更新 + package.json version を更新 → main に merge
 git tag vX.Y.Z && git push origin vX.Y.Z
 gh run watch

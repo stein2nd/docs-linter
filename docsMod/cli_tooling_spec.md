@@ -37,13 +37,13 @@ CLI コマンドには、一貫した命名規則を採用します。
 
 下記を標準パターンとします。将来のコマンドも、同様の命名規則に従う必要があります。
 
-```bash
+```zsh
 npx s2j-docs-linter <command>
 ```
 
 コマンド例は、下記が挙げられます。
 
-```bash
+```zsh
 npx s2j-docs-linter init
 npx s2j-docs-linter doctor
 ```
@@ -182,14 +182,14 @@ CLI の役割は、docs lint エコシステムに限定され、下記を対象
 
 標準コマンドは、下記とします。
 
-```bash
+```zsh
 npx s2j-docs-linter init
 npx s2j-docs-linter doctor
 ```
 
 将来的な候補コマンドは、下記が挙げられます。
 
-```bash
+```zsh
 npx s2j-docs-linter upgrade
 npx s2j-docs-linter migrate
 ```
@@ -198,13 +198,13 @@ npx s2j-docs-linter migrate
 
 S2J Docs Linter CLI は、下記の様な、サブコマンドルーターを採用します。
 
-```bash
+```zsh
 npx s2j-docs-linter <command>
 ```
 
 これにより、下記の様なコマンドとなります。
 
-```bash
+```zsh
 npx s2j-docs-linter init
 npx s2j-docs-linter doctor
 npx s2j-docs-linter lint
@@ -548,7 +548,7 @@ docs-linter/
 
 ローカルでは、下記で同等の検証が可能です。
 
-```bash
+```zsh
 npm run test:init
 ```
 
@@ -759,7 +759,7 @@ npm run test:init
 
 下記の様に、本コマンドが診断対象とする「プロジェクトルート」を指定します。
 
-```bash
+```zsh
 npx s2j-docs-linter doctor --path ./my-project
 ```
 

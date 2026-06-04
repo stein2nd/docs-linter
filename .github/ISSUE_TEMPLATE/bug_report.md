@@ -33,7 +33,7 @@ Ubuntu 24.04
 
 Output:
 
-```bash
+```zsh
 node -v
 ```
 
@@ -47,7 +47,7 @@ v24.3.0
 
 Output:
 
-```bash
+```zsh
 npm -v
 ```
 
@@ -55,7 +55,7 @@ npm -v
 
 Output:
 
-```bash
+```zsh
 npm list @s2j/docs-linter
 ```
 
@@ -63,7 +63,7 @@ npm list @s2j/docs-linter
 
 Output:
 
-```bash
+```zsh
 npx textlint --version
 ```
 

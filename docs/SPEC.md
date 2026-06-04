@@ -145,7 +145,7 @@ project-root/
 
 👉 textlint は自動検出に依存すべきではなく、**CI では常に `--config` を明記して、実行することが推奨されます**。
 
-```bash
+```zsh
 npx textlint --config tools/docs-linter/presets/swift/.textlintrc.swift.json ./docs/**/*.md
 ```
 

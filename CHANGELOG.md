@@ -2,9 +2,17 @@
 
 `@s2j/docs-linter` の npm 公開版における主な変更を記録します。
 
+## [1.0.16] - 2026-06-04
+
+- README を npm 主導線に再構成 (Quick Start / Requirements 追加、インストール手順の整理)
+- Git Submodule 利用手順を [docs/git_submodule.md](./docs/git_submodule.md) に切り出し (後方互換・非推奨)。README から導線を追加
+- [docsMod/npm_usage.md](./docsMod/npm_usage.md) · [docsMod/status.md](./docsMod/status.md) · [docsMod/specs.md](./docsMod/specs.md) など、ドキュメント間の導線を同期
+- Bug report テンプレート (`.github/ISSUE_TEMPLATE/bug_report.md`) のコードブロックを `zsh` に統一
+- 開発依存 `rollup` を 4.61.1 に更新
+
 ## [1.0.15] - 2026-06-02
 
-- ドキュメント: `postinstall` (`patch-wp-prh-colon-quote.cjs`) の説明を追記 — 変更対象は `node_modules/textlint-rule-preset-wp-docs-ja/prh-rules/wordpress.yml` のみ (利用者プロジェクトの設定ファイルは変更しない)
+- ドキュメントに `postinstall` (`patch-wp-prh-colon-quote.cjs`) の説明を追記 — 変更対象は `node_modules/textlint-rule-preset-wp-docs-ja/prh-rules/wordpress.yml` のみ (利用者プロジェクトの設定ファイルは変更しない)
 
 ## [1.0.14] - 2026-06-02
 
