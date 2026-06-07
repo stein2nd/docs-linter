@@ -1,6 +1,8 @@
 {
-    "textlint.configPath": ".textlintrc.json",
+    "textlint.configPath": "${workspaceFolder}/.textlintrc.json",
+    "textlint.nodePath": "${workspaceFolder}/node_modules",
+    "textlint.autoFixOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit"
+        "source.fixAll": "always"
     }
 }

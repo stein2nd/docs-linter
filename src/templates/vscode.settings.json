@@ -1,12 +1,8 @@
 {
-  "textlint.configPath": "./.textlintrc.json",
-  "textlint.nodePath": "./node_modules",
-  "textlint.enable": true,
+  "textlint.configPath": "${workspaceFolder}/.textlintrc.json",
+  "textlint.nodePath": "${workspaceFolder}/node_modules",
   "textlint.autoFixOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.textlint": "always"
-  },
-  "[markdown]": {
-    "editor.defaultFormatter": "3w36zj6.textlint"
+    "source.fixAll": "always"
   }
 }

@@ -116,7 +116,11 @@ pass "INIT-003"
 # INIT-004: Output base preset files
 assert_exit 0 "${CLI[@]}" init --output "$SANDBOX/base"
 assert_file "$SANDBOX/base/.textlintrc.json"
+assert_file "$SANDBOX/base/.textlintignore"
 assert_file "$SANDBOX/base/.vscode/settings.json"
+assert_file "$SANDBOX/base/.vscode/extensions.json"
+assert_file "$SANDBOX/base/.vscode/README.md"
+assert_file "$SANDBOX/base/.vscode/textlint.settings.jsonc.example"
 assert_file "$SANDBOX/base/.github/workflows/docs-lint.yml"
 assert_json_extends "$SANDBOX/base/.textlintrc.json" \
   "./node_modules/@s2j/docs-linter/presets/base/.textlintrc.base.json"

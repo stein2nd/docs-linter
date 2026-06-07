@@ -2,6 +2,14 @@
 
 `@s2j/docs-linter` の npm 公開版における主な変更を記録します。
 
+## [1.0.17] - 2026-06-08
+
+- ライセンスを GPL-2.0-or-later から **GPL-3.0-or-later** に変更
+- `init` の生成物を拡張 — `.vscode/extensions.json` / `.vscode/README.md` / `.vscode/textlint.settings.jsonc.example` / `.textlintignore` を追加
+- `init` が生成する `.vscode/settings.json` を更新 (`${workspaceFolder}` 形式、拡張未対応の `textlint.enable` / `defaultFormatter` を削除)
+- リポジトリ用 `.textlintignore` を追加 (init テンプレート README を lint 対象外)
+- `.gitignore` で `.vscode/` 配下の追跡対象ファイルを拡張
+
 ## [1.0.16] - 2026-06-04
 
 - README を npm 主導線に再構成 (Quick Start / Requirements 追加、インストール手順の整理)

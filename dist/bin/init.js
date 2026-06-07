@@ -9,9 +9,18 @@ const PRESET_EXTENDS = {
 const LINT_DOCS_SCRIPT = "s2j-docs-linter ./README.md ./docs/**/*.md";
 const FILE_TARGETS = {
     textlintrc: ".textlintrc.json",
-    vscodeSettings: ".vscode/settings.json",
+    textlintignore: ".textlintignore",
     workflow: ".github/workflows/docs-lint.yml"
 };
+const VSCODE_TEMPLATE_FILES = [
+    { template: "vscode.settings.json", relativePath: ".vscode/settings.json" },
+    { template: "vscode.extensions.json", relativePath: ".vscode/extensions.json" },
+    { template: "vscode.README.md", relativePath: ".vscode/README.md" },
+    {
+        template: "vscode.textlint.settings.jsonc.example",
+        relativePath: ".vscode/textlint.settings.jsonc.example"
+    }
+];
 const PACKAGE_JSON_SCRIPT_LABEL = "package.json scripts.lint:docs";
 const HELP_TEXT = `Initialize S2J Docs Linter project scaffolding.
 
@@ -27,7 +36,11 @@ Options:
 
 Generated files:
   .textlintrc.json
+  .textlintignore
   .vscode/settings.json
+  .vscode/extensions.json
+  .vscode/README.md
+  .vscode/textlint.settings.jsonc.example
   .github/workflows/docs-lint.yml
   package.json scripts.lint:docs (when package.json exists in the output directory)
 
@@ -151,12 +164,20 @@ function buildPlan(options) {
         },
         {
             kind: "file",
-            label: FILE_TARGETS.vscodeSettings,
-            relativePath: FILE_TARGETS.vscodeSettings,
-            absolutePath: join(outputRoot, FILE_TARGETS.vscodeSettings),
-            content: readTemplate("vscode.settings.json"),
-            action: resolveFileAction(join(outputRoot, FILE_TARGETS.vscodeSettings), force)
+            label: FILE_TARGETS.textlintignore,
+            relativePath: FILE_TARGETS.textlintignore,
+            absolutePath: join(outputRoot, FILE_TARGETS.textlintignore),
+            content: readTemplate("textlintignore"),
+            action: resolveFileAction(join(outputRoot, FILE_TARGETS.textlintignore), force)
         },
+        ...VSCODE_TEMPLATE_FILES.map(({ template, relativePath }) => ({
+            kind: "file",
+            label: relativePath,
+            relativePath,
+            absolutePath: join(outputRoot, relativePath),
+            content: readTemplate(template),
+            action: resolveFileAction(join(outputRoot, relativePath), force)
+        })),
         {
             kind: "file",
             label: FILE_TARGETS.workflow,

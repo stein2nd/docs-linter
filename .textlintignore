@@ -1,0 +1,3 @@
+# init テンプレート。リンク先は .vscode/ 配置を前提とするため lint 対象外
+src/templates/vscode.README.md
+dist/templates/vscode.README.md

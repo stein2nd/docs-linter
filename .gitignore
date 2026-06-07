@@ -14,7 +14,10 @@ logs/
 
 # Editor settings
 .vscode/*
+!.vscode/extensions.json
+!.vscode/README.md
 !.vscode/settings.json
+!.vscode/textlint.settings.jsonc.example
 
 .idea/
 *.swp
