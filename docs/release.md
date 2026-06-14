@@ -1,6 +1,6 @@
-# S2J Docs Linter — npm リリース手順 (フェーズ2)
+# 📘 S2J Docs Linter — npm リリース手順 (フェーズ2)
 
-本ドキュメントは、`@s2j/docs-linter` を GitHub Actions 経由で npm に publish する運用手順です。認証方針は [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md)、実装状況は [status.md](./status.md) を参照してください。
+本ドキュメントは、`@s2j/docs-linter` を GitHub Actions 経由で npm に publish する運用手順です。認証方針は [npm 認証およびシークレット管理仕様](./npm_auth_secret_manage_spec.md)、実装状況は [status.md](./archive/mod-npm/status.md) を参照してください。
 
 ## 前提
 
@@ -226,7 +226,7 @@ npm view @s2j/docs-linter version
 * `npm publish --dry-run --access public` が、エラーなく成功
 * `npm publish --access public` が、エラーなく成功
 
-## 9. 検証 (2026-05-25)
+## 10. 検証 (2026-05-25)
 
 フェーズ2 GHA OIDC publish を確認済みです。
 

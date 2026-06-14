@@ -2,6 +2,14 @@
 
 `@s2j/docs-linter` の npm 公開版における主な変更を記録します。
 
+## [Unreleased]
+
+## [1.0.19] - 2026-06-14
+
+* ドキュメント整理 — `docsMod/` を `docs/` に移行、npm モジュール化 initiative を `docs/archive/mod-npm/` にアーカイブ
+* `docs/specs.md` を仕様ハブとして再構成、`docs/archive/README.md` に完了 initiative 導線を追加
+* README、CONTRIBUTING、各仕様書、examples、GHA コメント内のリンクを新パスに更新
+
 ## [1.0.18] - 2026-06-10
 
 * `textlint-rule-preset-swift-docs-ja` を npm 公開 (`^1.0.2`) — 依存を GitHub 参照から registry 取得に切り替え
@@ -19,7 +27,7 @@
 
 * README を npm 主導線に再構成 (Quick Start / Requirements 追加、インストール手順の整理)
 * Git Submodule 利用手順を [docs/git_submodule.md](./docs/git_submodule.md) に切り出し (後方互換・非推奨)。README から導線を追加
-* [docsMod/npm_usage.md](./docsMod/npm_usage.md) · [docsMod/status.md](./docsMod/status.md) · [docsMod/specs.md](./docsMod/specs.md) など、ドキュメント間の導線を同期
+* [docs/npm_usage.md](./docs/npm_usage.md)、[docs/archive/mod-npm/status.md](./docs/archive/mod-npm/status.md)、[docs/specs.md](./docs/specs.md) など、ドキュメント間の導線を同期
 * Bug report テンプレート (`.github/ISSUE_TEMPLATE/bug_report.md`) のコードブロックを `zsh` に統一
 * 開発依存 `rollup` を 4.61.1 に更新
 

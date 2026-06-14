@@ -1,5 +1,5 @@
 # Node.js compatibility CI — matrix lint / pack verification
-# 仕様: docsMod/status.md フェーズ4 必須 #4
+# 仕様: docs/archive/mod-npm/status.md フェーズ4 必須 #4
 
 name: CI
 

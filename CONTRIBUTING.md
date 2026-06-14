@@ -71,18 +71,18 @@ Examples of useful contributions include the following:
 下記のドキュメントには、プロジェクトの現在の方向性とガバナンスが定義されています。
 
 * `README.md`
-* `docsMod/status.md`
-* `docsMod/release.md`
-* `docsMod/maintenance_policy.md`
-* `docsMod/versioning_policy.md`
+* `docs/archive/mod-npm/status.md`
+* `docs/release.md`
+* `docs/maintenance_policy.md`
+* `docs/versioning_policy.md`
 
 These documents below define the project's current direction and governance.
 
 * `README.md`
-* `docsMod/status.md`
-* `docsMod/release.md`
-* `docsMod/maintenance_policy.md`
-* `docsMod/versioning_policy.md`
+* `docs/archive/mod-npm/status.md`
+* `docs/release.md`
+* `docs/maintenance_policy.md`
+* `docs/versioning_policy.md`
 
 ### Development Setup - 開発環境のセットアップ
 
@@ -118,7 +118,7 @@ base/       互換プリセットレイアウト
 swift/      互換プリセットレイアウト
 wordpress/  互換プリセットレイアウト
 examples/   ワークフロー / 使用例
-docsMod/    設計 / ガバナンスに関するドキュメント
+docs/    設計 / ガバナンスに関するドキュメント
 ```
 
 Key directories are listed below.
@@ -131,7 +131,7 @@ base/       compatibility preset layout
 swift/      compatibility preset layout
 wordpress/  compatibility preset layout
 examples/   workflow / usage examples
-docsMod/    design / governance docs
+docs/    design / governance docs
 ```
 
 ### Contribution Workflow - 貢献ワークフロー
@@ -178,7 +178,7 @@ If relates to CI, please review the GitHub Actions workflow syntax.
 
 ### Versioning Expectations - バージョン管理に関する要件
 
-バージョン管理は、下記の様に、セマンティック・バージョニングに従います。[バージョン管理ポリシー](docsMod/versioning_policy.md) をご覧ください。
+バージョン管理は、下記の様に、セマンティック・バージョニングに従います。[バージョン管理ポリシー](docs/versioning_policy.md) をご覧ください。
 
 * バグ修正 → PATCH
 * 互換性のある新機能 → MINOR
@@ -186,7 +186,7 @@ If relates to CI, please review the GitHub Actions workflow syntax.
 
 明示的な要請がない限り、貢献者はバージョン番号を変更する必要はありません。
 
-Versioning follows semantic versioning, as shown below. Please see the [Versioning Policy](docsMod/versioning_policy.md)
+Versioning follows semantic versioning, as shown below. Please see the [Versioning Policy](docs/versioning_policy.md)
 
 * bug fix → PATCH
 * new compatible capability → MINOR
@@ -199,7 +199,7 @@ Contributors do not need to change the version numbers, unless explicitly reques
 下記ドキュメントに対する変更では、一貫性を保つようにしてください。
 
 * README.md
-* docsMod/*
+* docs/*
 * examples/*
 * マイグレーションガイド
 
@@ -208,7 +208,7 @@ Contributors do not need to change the version numbers, unless explicitly reques
 Please ensure consistency when making changes to the following documents.
 
 * README.md
-* docsMod/*
+* docs/*
 * examples/*
 * migration guides
 
@@ -261,13 +261,13 @@ When commiting changes, please take care to avoid unnecessary compatibility regr
 
 ### Breaking Changes - 破壊的変更
 
-下記の様な破壊的変更は認められますが、その理由を明確に説明する必要があります。[バージョン管理ポリシー](docsMod/versioning_policy.md) をご覧ください。
+下記の様な破壊的変更は認められますが、その理由を明確に説明する必要があります。[バージョン管理ポリシー](docs/versioning_policy.md) をご覧ください。
 
 * プリセットパスの変更
 * CLI 仕様の変更
 * Node.js のベースラインの変更
 
-The following breaking changes are permitted, but you must clearly explain the rationale. Please refer to the [Versioning Policy](docsMod/versioning_policy.md).
+The following breaking changes are permitted, but you must clearly explain the rationale. Please refer to the [Versioning Policy](docs/versioning_policy.md).
 
 * preset path changes
 * CLI contract changes

@@ -1,6 +1,6 @@
-# 📘 S2J Docs Linter — Use as a Git submodule
+# 📘 S2J Docs Linter — Git サブモジュールとして利用する
 
-npm パッケージでの導入（推奨）は [README.md](../README.md) と [npm 使い方ガイド](../docsMod/npm_usage.md) を参照してください。
+npm パッケージでの導入（推奨）は [README.md](../README.md) と [npm 使い方ガイド](./npm_usage.md) を参照してください。
 
 ## ⚙️ Installation
 

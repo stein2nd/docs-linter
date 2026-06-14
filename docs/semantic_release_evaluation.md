@@ -1,6 +1,6 @@
-## S2J Docs Linter - セマンティック・リリース評価
+# 📘 S2J Docs Linter - セマンティック・リリース評価
 
-### 設計意図 (ゴール)
+## 設計意図 (ゴール)
 
 下記の目的で、S2J Docs Linter におけるセマンティック・リリース採用可否を評価し、リリース自動化のを明確化します。
 
@@ -9,7 +9,7 @@
 * 自動化導入の可否判断
 * 将来の拡張方針の整理
 
-### 評価対象
+## 評価対象
 
 * 評価対象
     * セマンティック・リリース
@@ -20,7 +20,7 @@
     * 現在のワークフローとの互換性
     * コントリビューターのワークフローへの影響
 
-### 現在のリリース体制
+## 現在のリリース体制
 
 S2J Docs Linter は、既に下記を備えています。
 
@@ -38,7 +38,7 @@ git tag vX.Y.Z
 git push origin vX.Y.Z
 ```
 
-### セマンティック・リリースのメリット
+## セマンティック・リリースのメリット
 
 期待されるメリットには、下記が挙げられます。
 
@@ -52,7 +52,7 @@ git push origin vX.Y.Z
 * 標準的なリリース手順
     * コミット規約に基づいたリリースの判定。
 
-### セマンティック・リリースのコスト
+## セマンティック・リリースのコスト
 
 * 構成ワークフローに、下記が追加されることで、複雑さが増す。
     * セマンティック・リリースの設定
@@ -71,7 +71,7 @@ git push origin vX.Y.Z
     * 現在…意図的なタグによるリリース
     * セマンティック・リリース…自動化によるリリース
 
-### S2J Docs Linter との適合性
+## S2J Docs Linter との適合性
 
 評価は、下記になります。
 
@@ -91,7 +91,7 @@ git push origin vX.Y.Z
         git push --tags
         ```
 
-### 判断
+## 判断
 
 下記の理由から、「現時点では非採用」との結論になります。
 
@@ -100,7 +100,7 @@ git push origin vX.Y.Z
 * 貢献者の負担が増大する
 * メンテナンスコストがメリットを上回る
 
-### 再評価条件
+## 再評価条件
 
 下記の様な状況になった時点には、再評価します。
 
@@ -110,14 +110,14 @@ git push origin vX.Y.Z
 * changelog のメンテナンス負担が増加する
 * リリースガバナンスの複雑さが増す
 
-### 方針
+## 方針
 
 * 現在の標準…手動での SemVer + GitHub Actionsによる OIDC publish
 * セマンティック・リリース…将来的な検討の余地あり
 
-### 関連文書
+## 関連文書
 
-* `docsMod/release.md`
-* `docsMod/versioning_policy.md`
-* `docsMod/maintenance_policy.md`
-* `docsMod/status.md`
+* `docs/release.md`
+* `docs/versioning_policy.md`
+* `docs/maintenance_policy.md`
+* `docs/archive/mod-npm/status.md`
