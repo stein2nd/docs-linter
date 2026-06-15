@@ -1,3 +1,5 @@
+# 📘 S2J Docs Linter - Modification Plan-4
+
 [S2J Docs Linter](https://github.com/stein2nd/docs-linter.git) の今後の展開構想が見えてきたので、`./docsMod` 配下のファイルを `./docs` 配下に移そうと検討しています。
 
 現状は、下記の様になってます。
@@ -23,6 +25,8 @@
 
 尚、`@s2j/docs-linter` でコマンドとして提供してるのは、「init」「doctor」です。
 lint 機能は利用側 package.json の scripts で `"lint:docs": "s2j-docs-linter ./README.md ./docs/**/*.md ./docs_mod/**/*.md"` の形で定義しておいた上で `npm run lint:docs` で実行できる様になってます。
+
+---
 
 かなり整理しやすい段階まで来ていると評価します。
 

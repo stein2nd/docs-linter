@@ -1,4 +1,8 @@
+# 📘 S2J Docs Linter - Modification Plan-3
+
 良い感じに、実現できそうな感じがしてきました。
+
+---
 
 同意見です。
 

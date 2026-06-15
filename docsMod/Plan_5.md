@@ -1,6 +1,10 @@
+# 📘 S2J Docs Linter - Modification Plan-5
+
 改めて確認したい事項は、下記のとおりです。
 
 * ブラウザ内textlint実行は、Chrome以外では実現できない…と言う「ブラウザ依存」か？
+
+---
 
 結論から言うと、**「ブラウザ内で textlint を実行する = Chrome 依存」ではありません。**
 
