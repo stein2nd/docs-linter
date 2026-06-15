@@ -17,6 +17,8 @@
     "prh": {
       "rulePaths": []
     },
-    "no-dead-link": true
+    "no-dead-link": {
+      "ignoreRedirects": true
+    }
   }
 }

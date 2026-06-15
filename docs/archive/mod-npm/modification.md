@@ -7,14 +7,16 @@ npm モジュール化改修の進行管理資料です。
 
 | ファイル | 概要 |
 |----------|------|
-| [npm_package_spec.md](../../npm_package_spec.md) | `@s2j/docs-linter` npm パッケージ仕様 |
-| [npm_usage.md](../../npm_usage.md) | npm 使い方ガイド |
-| [cli_tooling_spec.md](../../cli_tooling_spec.md) | `init` / `doctor` CLI 仕様 |
-| [npm_auth_secret_manage_spec.md](../../npm_auth_secret_manage_spec.md) | Trusted Publishing (OIDC) 認証 |
+| [npm_package_spec.md](../../specifications/npm_package_spec.md) | `@s2j/docs-linter` npm パッケージ仕様 |
+| [npm_usage.md](../../cli/npm_usage.md) | npm 使い方ガイド |
+| [cli_tooling_spec.md](../../specifications/cli_tooling_spec.md) | CLI 共通方針 |
+| [init.md](../../cli/init.md) | `init` コマンド仕様 |
+| [doctor.md](../../cli/doctor.md) | `doctor` コマンド仕様 |
+| [npm_auth_secret_manage_spec.md](../../specifications/npm_auth_secret_manage_spec.md) | Trusted Publishing (OIDC) 認証 |
 | [release.md](../../release.md) | GHA tag publish 手順 |
 | [versioning_policy.md](../../versioning_policy.md) | SemVer 方針 |
 | [maintenance_policy.md](../../maintenance_policy.md) | メンテナンス方針 |
-| [git_submodule.md](../../git_submodule.md) | Git Submodule (非推奨・後方互換) |
+| [git_submodule.md](../git_submodule.md) | Git Submodule (非推奨・後方互換) |
 
 ## 改修概要
 

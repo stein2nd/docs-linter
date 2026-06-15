@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# DOCTOR command smoke tests — docs/cli/doctor.md (doctor テスト仕様)
 
 set -euo pipefail
 

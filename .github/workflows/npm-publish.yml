@@ -1,7 +1,7 @@
 # ============================================================
 # Publish @s2j/docs-linter to npm (tag-triggered + manual dry-run)
 # ------------------------------------------------------------
-# 仕様: docs/npm_package_spec.md / docs/release.md
+# 仕様: docs/specifications/npm_package_spec.md / docs/release.md
 # 認証: npm Trusted Publishing (OIDC) — stein2nd/docs-linter / npm-publish.yml
 #
 # 必須 (tag push で publish する場合):

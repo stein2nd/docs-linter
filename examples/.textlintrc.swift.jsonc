@@ -29,6 +29,7 @@
     "no-todo": true,                // TODO の放置防止
     "no-empty-section": true,       // 空のセクション防止
     "no-dead-link": {
+      "ignoreRedirects": true,
       "ignore": [
         "^https://localhost",
         "^https://example.com",

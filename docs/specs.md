@@ -6,15 +6,17 @@
 
 | ファイル | 概要 |
 |---|---|
-| [npm_usage.md](./npm_usage.md) | 使い方 (`install` / CLI / `init` / `doctor` / CI / VSCode) |
-| [npm_package_spec.md](./npm_package_spec.md) | npm パッケージ仕様 (`@s2j/docs-linter`、CLI、互換、移行) |
-| [cli_tooling_spec.md](./cli_tooling_spec.md) | CLI ツール仕様 (`init` / `doctor`、テスト仕様) |
-| [git_submodule.md](./git_submodule.md) | Git Submodule 利用 (非推奨・後方互換) |
-| [npm_auth_secret_manage_spec.md](./npm_auth_secret_manage_spec.md) | npm 認証・シークレット管理 (OIDC / Trusted Publishing) |
+| [npm_usage.md](./cli/npm_usage.md) | 使い方 (`install` / CLI / `init` / `doctor` / CI / VSCode) |
+| [npm_package_spec.md](./specifications/npm_package_spec.md) | npm パッケージ仕様 (`@s2j/docs-linter`、CLI、互換、移行) |
+| [cli_tooling_spec.md](./specifications/cli_tooling_spec.md) | CLI 共通方針 |
+| [init.md](./cli/init.md) | `init` コマンド仕様、INIT-001〜012テスト仕様・実装方針の補足 |
+| [doctor.md](./cli/doctor.md) | `doctor` コマンド仕様、DOCTOR-001〜015テスト仕様・実装方針の補足 |
+| [git_submodule.md](./archive/git_submodule.md) | Git Submodule 利用 (非推奨・後方互換) |
+| [npm_auth_secret_manage_spec.md](./specifications/npm_auth_secret_manage_spec.md) | npm 認証・シークレット管理 (OIDC / Trusted Publishing) |
 | [release.md](./release.md) | npm リリース手順 (GHA tag publish、CHANGELOG) |
 | [versioning_policy.md](./versioning_policy.md) | SemVer 方針 (MAJOR / MINOR / PATCH) |
 | [maintenance_policy.md](./maintenance_policy.md) | メンテナンス方針 (リリース / CI / 依存 / セキュリティ) |
-| [semantic_release_evaluation.md](./semantic_release_evaluation.md) | semantic-release 採用可否評価 (結論: 非採用) |
+| [semantic_release_evaluation.md](./archive/semantic_release_evaluation.md) | semantic-release 採用可否評価 (結論: 非採用) |
 
 ## ロードマップ
 

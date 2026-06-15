@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 
+## [1.0.20] - 2026-06-15
+
+* ドキュメント再構成 — 仕様書を `docs/specifications/`、CLI ドキュメントを `docs/cli/` に整理。`cli_tooling_spec.md` から `init.md`、`doctor.md` を分割
+* `git_submodule.md`、`semantic_release_evaluation.md` を `docs/archive/` に移動
+* `no-dead-link` に `ignoreRedirects: true` を設定 (root、`presets/base`、examples)。root では npmjs.com 向け `preferGET` も追加
+* README、`specs.md`、archive/mod-npm、examples、GHA ワークフロー内コメントのリンクを新パスに同期
+
 ## [1.0.19] - 2026-06-14
 
 * ドキュメント整理 — `docsMod/` を `docs/` に移行、npm モジュール化 initiative を `docs/archive/mod-npm/` にアーカイブ
@@ -26,8 +33,8 @@
 ## [1.0.16] - 2026-06-04
 
 * README を npm 主導線に再構成 (Quick Start / Requirements 追加、インストール手順の整理)
-* Git Submodule 利用手順を [docs/git_submodule.md](./docs/git_submodule.md) に切り出し (後方互換・非推奨)。README から導線を追加
-* [docs/npm_usage.md](./docs/npm_usage.md)、[docs/archive/mod-npm/status.md](./docs/archive/mod-npm/status.md)、[docs/specs.md](./docs/specs.md) など、ドキュメント間の導線を同期
+* Git Submodule 利用手順を [docs/archive/git_submodule.md](./docs/archive/git_submodule.md) に切り出し (後方互換・非推奨)。README から導線を追加
+* [docs/cli/npm_usage.md](./docs/cli/npm_usage.md)、[docs/archive/mod-npm/status.md](./docs/archive/mod-npm/status.md)、[docs/specs.md](./docs/specs.md) など、ドキュメント間の導線を同期
 * Bug report テンプレート (`.github/ISSUE_TEMPLATE/bug_report.md`) のコードブロックを `zsh` に統一
 * 開発依存 `rollup` を 4.61.1 に更新
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# INIT command smoke tests — docs/cli_tooling_spec.md (init テスト仕様)
+# INIT command smoke tests — docs/cli/init.md (init テスト仕様)
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
