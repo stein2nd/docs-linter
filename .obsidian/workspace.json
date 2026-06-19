@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "cffde122878a2776",
+        "id": "ac5be1c7ea9e589c",
         "type": "tabs",
         "children": [
           {
-            "id": "75ad738ac7c9bf0d",
+            "id": "be3893cdc51192f2",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "docsMod/Plan_4.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Plan_4"
+              "title": "新規タブ"
             }
           }
         ]
@@ -183,8 +179,18 @@
       "bases:新規ベースを作成": false
     }
   },
-  "active": "75ad738ac7c9bf0d",
+  "active": "2344d87c1c9a5d5b",
   "lastOpenFiles": [
+    "docsMod/plan06.md",
+    "docsMod/plan05.md",
+    "docsMod/plan04.md",
+    "docsMod/plan03.md",
+    "docsMod/plan02.md",
+    "docsMod/plan01.md",
+    "docsMod/Plan_6.md",
+    "docsMod/Plan_1.md",
+    "無題のファイル.md",
+    "docsMod/Plan_4.md",
     "package-lock.json",
     "node_modules/es-abstract/eslint.config.mjs",
     "node_modules/es-abstract/README.md",
@@ -197,7 +203,6 @@
     "node_modules/@modelcontextprotocol/sdk/dist/esm/types.d.ts",
     "node_modules/@modelcontextprotocol/sdk/dist/cjs/types.d.ts",
     "node_modules/@modelcontextprotocol/sdk/dist/cjs/validation/types.d.ts",
-    "node_modules/@modelcontextprotocol/sdk/dist/cjs/server/auth/types.d.ts",
     "node_modules/@modelcontextprotocol/sdk/README.md",
     "node_modules/textlint-rule-preset-swift-docs-ja/README.md",
     "node_modules/hono/README.md",
@@ -211,15 +216,6 @@
     "node_modules/typescript/README.md",
     "node_modules/@textlint/kernel/README.md",
     "node_modules/@textlint/kernel/src/task/README.md",
-    "node_modules/@textlint/kernel/src/descriptor/README.md",
-    "node_modules/sudachi-synonyms-dictionary/README.md",
-    "node_modules/micromark/readme.md",
-    "node_modules/diff/release-notes.md",
-    "node_modules/lru-cache/README.md",
-    "node_modules/lru-cache/LICENSE.md",
-    "node_modules/zod-to-json-schema/README.md",
-    "node_modules/zod-to-json-schema/contributing.md",
-    "node_modules/zod-to-json-schema/changelog.md",
-    "node_modules/textlint/README.md"
+    "node_modules/@textlint/kernel/src/descriptor/README.md"
   ]
 }
