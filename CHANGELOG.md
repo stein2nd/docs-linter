@@ -40,7 +40,7 @@
 
 ## [1.0.15] - 2026-06-02
 
-* ドキュメントに `postinstall` (`patch-wp-prh-colon-quote.cjs`) の説明を追記 — 変更対象は `node_modules/textlint-rule-preset-wp-docs-ja/prh-rules/wordpress.yml` のみ (利用者プロジェクトの設定ファイルは変更しない)
+* ドキュメントに `postinstall` (`patch-wp-prh-colon-quote.cjs`) の説明を追記 — 変更対象は `node_modules/textlint-rule-preset-wp-docs-ja/prh-rules/wordpress.yml` のみ (ユーザープロジェクトの設定ファイルは変更しない)
 
 ## [1.0.14] - 2026-06-02
 
