@@ -3,7 +3,7 @@
 ## 概要
 
 `@s2j/docs-linter-core` は、S2J Docs Linter の中核となる、文章の品質診断というドメイン知識を集約するためのコアドメイン・パッケージ (文章の品質検査エンジン) です。
-CLI、REST API、`WordPress`、`Forwarder-PRO` / `配配メール` は、全て Adapter Layer と位置付け、本パッケージを中心に構成します。
+CLI、REST API、`WordPress`、`Forwarder-PRO` / `配配メール` は、全て「アダプター層」と位置付け、本パッケージを中心に構成します。
 
 ## 設計意図 (ゴール)
 
@@ -30,7 +30,7 @@ CLI、REST API、`WordPress`、`Forwarder-PRO` / `配配メール` は、全て 
 
 ```mermaid
 flowchart TD
-    subgraph AdapterLayer ["Adapter Layer"]
+    subgraph AdapterLayer ["アダプター層"]
         direction TB
         c1["docs-linter"]
         c2["docs-linter-rest"]
@@ -73,7 +73,7 @@ flowchart TD
 
 ### インフラストラクチャ・ポート
 
-責務は、下記のインターフェースのみの定義になります。実装は Adapter Layer に委譲します。
+責務は、下記のインターフェースのみの定義になります。実装はアダプター層に委譲します。
 
 * RuleRepository
 * DictionaryRepository
