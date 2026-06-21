@@ -5,26 +5,9 @@
 本ドキュメントは `@s2j/docs-linter-core` の公開 API およびドメインモデルを定義します。
 本パッケージは文章の品質検査エンジンであり、CLI・REST API、`WordPress` / `Forwarder-PRO` / `配配メール` 等のアダプターから利用されることを想定します。
 
-## 2. Future Compatibility
+## 2. 今後の互換性
 
-新しい RuleDefinition が追加されても、`Metadata` や `Schema` が定義されていれば、アダプター側は修正不要で動作することを目標とします。
-
-これを入れると、下記まで含めた **プラットフォーム横断の契約書** になります。
-
-```text
-RuleDefinition
- ├─ Metadata
- ├─ Schema
- └─ Validation
-
-        ↓
-
-WordPress
-Forwarder-Pro
-配配メール
-
-共通UI生成
-```
+新しい RuleDefinition が追加されても、`Metadata` / `Schema` / `UiSchema` が定義されていれば、アダプター側は修正不要で動作することを目標とします。
 
 ## 3. 設計原則
 
@@ -64,18 +47,38 @@ Core API は特定プラットフォームに依存しません。
 * `Forwarder-PRO`
 * `配配メール`
 
-## 4. 非責務
+## 4. UI 契約
+
+Core API は RuleDefinition、Profile、Dictionary に対する UI 契約を提供します。
+
+下記のようなアダプター層は、UI 契約を利用して、設定画面を自動生成できます。
+
+* `WordPress`
+* 将来の CMS
+* `Forwarder-PRO`
+* `配配メール`
+* 将来のメール配信プラットフォーム
+
+### 設計意図 (ゴール)
+
+* アダプターごとの個別実装の削減
+* ルール追加時の UI 修正不要化
+* 動的フォーム生成
+* 動的検証
+* 動的レポート生成
+
+## 5. 非責務
 
 現時点では下記をアダプター層の責務とします。
 
-* Markdown Editor UI
+* Markdown エディター UI
 * WordPress UI
 * REST API 実装
-* Database 実装
-* User Management
-* Authentication
+* データベース実装
+* ユーザー管理
+* 認証
 
-## 5. 汎用言語
+## 6. 汎用言語
 
 | Term | Description |
 | --- | --- |
@@ -87,7 +90,7 @@ Core API は特定プラットフォームに依存しません。
 | Lint Result | Lint 結果 |
 | Violation | 指摘事項 |
 
-## 6. ドメインモデル
+## 7. ドメインモデル
 
 ### RuleDefinition
 
@@ -177,7 +180,7 @@ properNouns:
 }
 ```
 
-## 7. 集約
+## 8. 集約
 
 ### Profile 集約
 
@@ -191,7 +194,7 @@ Profile を集約ルートとします。
 
 RuleConfiguration および Dictionary は Profile 経由で管理します。
 
-## 8. 値オブジェクト
+## 9. 値オブジェクト
 
 ### RuleId
 
@@ -228,7 +231,7 @@ type Severity =
     | "info";
 ```
 
-## 9. ドメインサービス
+## 10. ドメインサービス
 
 ### LintEngine
 
@@ -238,7 +241,7 @@ type Severity =
 
 * ルール評価
 * 辞書評価
-* Result Generation
+* 結果の生成
 
 ### RuleEngine
 
@@ -259,7 +262,18 @@ type Severity =
 * 推奨語の検査
 * 固有名詞の検査
 
-## 10. アプリケーションサービス
+### RuleRegistry
+
+利用可能な RuleDefinition を管理します。
+
+```ts
+interface RuleRegistry {
+    getAll(): RuleDefinition[];
+    get(ruleId: RuleId): RuleDefinition | undefined;
+}
+```
+
+## 11. アプリケーションサービス
 
 ### LintService
 
@@ -285,7 +299,7 @@ loadProfile(profileId)
 validateConfig(config)
 ```
 
-## 11. リポジトリ
+## 12. リポジトリ
 
 ### ProfileRepository
 
@@ -305,7 +319,7 @@ Core API ではインターフェースのみ定義します。実装は Adapter
 
 Core API では実装しません。
 
-## 12. 公開 API
+## 13. 公開 API
 
 ### `lint()`
 
@@ -336,7 +350,7 @@ interface LintResult {
 }
 ```
 
-### lintBatch()
+### `lintBatch()`
 
 複数文書を一括診断します。
 
@@ -387,7 +401,7 @@ validateConfig(config);
 validateDictionary(dictionary);
 ```
 
-### getAvailableRules()
+### `getAvailableRules()`
 
 利用可能な RuleDefinition 一覧を取得します。
 
@@ -409,7 +423,31 @@ const rules =
 ]
 ```
 
-### validateProfile()
+### `getAvailableRule()`
+
+利用可能な RuleDefinition を取得します。
+
+* 応答
+
+```json
+[
+  {
+    "id":
+      "max-kanji-continuous",
+
+    "metadata":
+      {},
+
+    "schema":
+      {},
+
+    "uiSchema":
+      {}
+  }
+]
+```
+
+### `validateProfile()`
 
 Profile の妥当性を検証します。
 
@@ -437,7 +475,7 @@ validateProfile(
 }
 ```
 
-## 13. インフラストラクチャ境界
+## 14. インフラストラクチャ境界
 
 Core API が依存可能なものは、下記になります。
 
@@ -454,7 +492,7 @@ Core API が依存してはならないものは、下記になります。
 * Node.js API
 * Database
 
-## 14. ルール・レジストリ
+## 15. ルール・レジストリ
 
 ルール・レジストリは利用可能な RuleDefinition の一覧を提供します。
 
@@ -464,20 +502,7 @@ Core API が依存してはならないものは、下記になります。
 * `Forwarder-PRO` 設定画面
 * `配配メール` 設定画面
 
-### ドメインサービス
-
-#### RuleRegistry
-
-利用可能な RuleDefinition を管理します。
-
-```ts
-interface RuleRegistry {
-    getAll(): RuleDefinition[];
-    get(ruleId: RuleId): RuleDefinition | undefined;
-}
-```
-
-## 15. ルール・メタデータ
+## 16. ルール・メタデータ
 
 ルール・メタデータは Rule の表示情報を提供します。
 
@@ -499,7 +524,10 @@ interface RuleRegistry {
     "readability",
 
   "defaultSeverity":
-    "warning"
+    "warning",
+
+  "order":
+    100
 }
 ```
 
@@ -517,14 +545,18 @@ interface RuleMetadata {
 
     category: string;
 
+    tags?: string[];
+
     defaultSeverity:
         | "error"
         | "warning"
         | "info";
+
+    order?: number;
 }
 ```
 
-## 16. ルール・スキーマ
+## 17. ルール・スキーマ
 
 ルール・スキーマは RuleConfiguration の構造を定義します。
 
@@ -558,6 +590,49 @@ interface RuleMetadata {
     }
   }
 }
+```
+
+### ルール定義
+
+#### 拡張 RuleDefinition
+
+```ts
+interface RuleDefinition {
+    id: string;
+
+    metadata:
+        RuleMetadata;
+
+    schema:
+        RuleSchema;
+}
+```
+
+### 重大度
+
+利用者は Rule 毎に Severity を変更できます。
+
+下記は、重大度例です。
+
+```json
+{
+  "max-kanji-continuous": {
+    "severity":
+      "warning",
+
+    "max":
+      7
+  }
+}
+```
+
+#### 利用可能な値
+
+```ts
+type Severity =
+    | "error"
+    | "warning"
+    | "info";
 ```
 
 ### エンティティー
@@ -595,57 +670,195 @@ interface SchemaProperty {
     minimum?: number;
 
     maximum?: number;
+
+    enum?: string[];
 }
 ```
 
-### ルール定義
+## 18. UI スキーマ
 
-#### 拡張 RuleDefinition
+UI スキーマは表示方法を定義する。
 
-```ts
-interface RuleDefinition {
-    id: string;
+ルール・スキーマがデータ構造を表し、UI スキーマが描画方法を表す。
 
-    metadata:
-        RuleMetadata;
-
-    schema:
-        RuleSchema;
-}
-```
-
-### 重大度方針
-
-#### 概要
-
-利用者は Rule 毎に Severity を変更できます。
-
-#### 例
+下記は、UI スキーマ例です。
 
 ```json
 {
-  "max-kanji-continuous": {
-    "severity":
-      "warning",
+  "fields": {
+    "max": {
+      "widget": "number",
 
-    "max":
-      7
+      "helpText":
+        "1〜100 を指定してください"
+    }
   }
 }
 ```
 
-#### Available Values
+### エンティティー
+
+#### UiSchema
 
 ```ts
-type Severity =
-    | "error"
-    | "warning"
-    | "info";
+interface UiSchema {
+    fields:
+        Record<
+            string,
+            UiField
+        >;
+}
 ```
 
-### 動的 UI 生成
+#### UiField
 
-アダプター層はルール・レジストリを利用して設定 UI を自動生成できます。
+```ts
+interface UiField {
+    widget:
+        | "text"
+        | "textarea"
+        | "number"
+        | "checkbox"
+        | "select"
+        | "multiselect";
+
+    placeholder?: string;
+
+    helpText?: string;
+}
+```
+
+## 19. プロファイル・メタデータ
+
+Profile の表示情報を定義します。
+
+下記は、プロファイル・メタデータ例です。
+
+```json
+{
+  "id":
+    "wordpress",
+
+  "name":
+    "WordPress",
+
+  "description":
+    "WordPress 向けプロファイル",
+
+  "category":
+    "cms"
+}
+```
+
+### エンティティー
+
+#### ProfileMetadata
+
+```ts
+interface ProfileMetadata {
+    id: string;
+
+    name: string;
+
+    description: string;
+
+    category?: string;
+
+    icon?: string;
+}
+```
+
+## 20. 辞書メタデータ
+
+Dictionary の表示情報を定義します。
+
+下記は、辞書メタデータ例です。
+
+```json
+{
+  "id":
+    "proper-nouns",
+
+  "name":
+    "固有名詞辞書",
+
+  "description":
+    "製品名やサービス名を管理します"
+}
+```
+
+### エンティティー
+
+#### DictionaryMetadata
+
+```ts
+interface DictionaryMetadata {
+    id: string;
+
+    name: string;
+
+    description: string;
+
+    category?: string;
+}
+```
+
+## 21. 検証レポート契約
+
+検証レポートは、一括診断の結果の標準フォーマットです。
+
+### エンティティー
+
+#### ValidationReport
+
+```ts
+interface ValidationReport {
+    summary:
+        ValidationSummary;
+
+    items:
+        ValidationItem[];
+}
+```
+
+#### ValidationSummary
+
+```ts
+interface ValidationSummary {
+    total: number;
+
+    errors: number;
+
+    warnings: number;
+
+    infos: number;
+}
+```
+
+#### ValidationItem
+
+```ts
+interface ValidationItem {
+    id: string;
+
+    title: string;
+
+    result:
+        LintResult;
+}
+```
+
+## 22. 動的 UI 生成
+
+アダプター層は、下記の情報のみを利用して、設定画面を構築します。
+
+```mermaid
+flowchart TD
+  A["ルール・レジストリ"] --> B["ルール・メタデータ"]
+  B --> C["ルール・スキーマ"]
+  C --> D["UI スキーマ"]
+  D --> E["動的フォーム"]
+```
 
 下記は、動的 UI 生成例です。
 
@@ -678,16 +891,31 @@ type Severity =
 [ 7 ]
 ```
 
-#### フロー
+### 推奨
 
 ```mermaid
 flowchart TD
-  A["ルール・レジストリ"] --> B["ルール・メタデータ"]
-  B --> C["ルール・スキーマ"]
-  C --> D["動的フォーム"]
+  A["ルール・レジストリ"] --> B["汎用フォームビルダー"]
+  B --> C["設定画面"]
 ```
 
-## 18. アダプター・ガイドライン
+### 禁止
+
+アダプター層は、ルール ID に依存して画面を実装してはなりません。
+
+下記のような実装は禁止します。
+
+```ts
+if (
+  ruleId ===
+  "max-kanji-continuous"
+)
+{
+    ...
+}
+```
+
+## 23. アダプター・ガイドライン
 
 アダプター層はルール・スキーマを直接解釈します。
 
@@ -708,7 +936,7 @@ flowchart TD
   A["ルール・レジストリ"] --> B["一般設定画面"]
 ```
 
-下記は、禁止されます。
+下記のような実装は、禁止されます。
 
 ```text
 if (
@@ -720,11 +948,11 @@ if (
 }
 ```
 
-## 19. 今後の拡張機能
+## 24. 今後の拡張機能
 
 下記は、今後追加を検討する機能です。これらは Core API の公開インターフェースを破壊しない形で追加します。
 
-* Auto Fix
+* 自動修正
 * ルール・マーケットプレイス
 * プロファイル・マーケットプレイス
 * 多言語対応
