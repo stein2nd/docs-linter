@@ -109,7 +109,7 @@ git tag v1.0.12
 git push origin v1.0.12
 ```
 
-5. Actions で **Publish to npm** が起動し、以下が実行される
+5. Actions で **Publish to npm** が起動し、下記が実行される
 
    * tag / `package.json` version 一致検証 (`scripts/verify-release-tag.cjs`)
    * `npm ci` → `verify:tarball` → `pack:artifact`
