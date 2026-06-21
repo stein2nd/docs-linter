@@ -194,7 +194,38 @@ Profile および Dictionary は移植可能でなければなりません。
 
 アダプター層は「辞書タイプ」を利用して適切な編集 UI を生成します。
 
-## 11. 非責務
+## 11. パッケージ契約
+
+パッケージ契約は、Profile および Dictionary の配布単位を定義します。
+
+パッケージは、エクスポート / インポートの最小単位です。
+
+対象:
+
+* `WordPress`
+* `Forwarder-PRO`
+* `配配メール`
+* 将来のアダプター
+
+## 12. 移行契約
+
+Core API は、パッケージの後方互換性を維持します。
+
+## 13. 後継契約
+
+非推奨ルールは、後継ルールを持てます。
+
+## 14. ルール・ライフサイクル契約
+
+ルールは追加・更新・非推奨化される可能性があります。
+
+アダプター層は、「ルール・ライフサイクル」を認識できなければなりません。
+
+## 15. 辞書ライフサイクル契約
+
+「辞書タイプ」もルールと同様に、ライフサイクルを持ちます。
+
+## 16. 非責務
 
 現時点では下記をアダプター層の責務とします。
 
@@ -205,7 +236,7 @@ Profile および Dictionary は移植可能でなければなりません。
 * ユーザー管理
 * 認証
 
-## 12. 汎用言語
+## 17. 汎用言語
 
 | 用語 | Description |
 | --- | --- |
@@ -217,7 +248,7 @@ Profile および Dictionary は移植可能でなければなりません。
 | Lint Result | Lint 結果 |
 | Violation | 指摘事項 |
 
-## 13. ドメインモデル
+## 18. ドメインモデル
 
 ### RuleDefinition
 
@@ -307,7 +338,7 @@ properNouns:
 }
 ```
 
-## 14. 集約
+## 19. 集約
 
 ### Profile 集約
 
@@ -321,7 +352,7 @@ Profile を集約ルートとします。
 
 RuleConfiguration および Dictionary は Profile 経由で管理します。
 
-## 15. 値オブジェクト
+## 20. 値オブジェクト
 
 ### RuleId
 
@@ -358,7 +389,7 @@ type Severity =
     | "info";
 ```
 
-## 16. ドメインサービス
+## 21. ドメインサービス
 
 ### LintEngine
 
@@ -400,7 +431,7 @@ interface RuleRegistry {
 }
 ```
 
-## 17. アプリケーションサービス
+## 22. アプリケーションサービス
 
 ### LintService
 
@@ -426,7 +457,7 @@ loadProfile(profileId)
 validateConfig(config)
 ```
 
-## 18. リポジトリ
+## 23. リポジトリ
 
 ### ProfileRepository
 
@@ -446,7 +477,7 @@ Core API ではインターフェースのみ定義します。実装は Adapter
 
 Core API では実装しません。
 
-## 19. 公開 API
+## 24. 公開 API
 
 ### `lint()`
 
@@ -602,7 +633,7 @@ validateProfile(
 }
 ```
 
-## 20. インフラストラクチャ境界
+## 25. インフラストラクチャ境界
 
 Core API が依存可能なものは、下記になります。
 
@@ -619,7 +650,7 @@ Core API が依存してはならないものは、下記になります。
 * Node.js API
 * Database
 
-## 21. ルール・レジストリ
+## 26. ルール・レジストリ
 
 ルール・レジストリは利用可能な RuleDefinition の一覧を提供します。
 
@@ -629,7 +660,7 @@ Core API が依存してはならないものは、下記になります。
 * `Forwarder-PRO` 設定画面
 * `配配メール` 設定画面
 
-## 22. ルール・メタデータ
+## 27. ルール・メタデータ
 
 ルール・メタデータはルールの表示情報を提供します。
 
@@ -683,7 +714,7 @@ interface RuleMetadata {
 }
 ```
 
-## 23. ルール・スキーマ
+## 28. ルール・スキーマ
 
 ルール・スキーマは RuleConfiguration の構造を定義します。
 
@@ -828,7 +859,7 @@ interface SchemaVersion {
 }
 ```
 
-## 24. ルール・カテゴリー
+## 29. ルール・カテゴリー
 
 ルール・カテゴリーは、RuleDefinition を論理的に分類するための値オブジェクトです。
 
@@ -947,7 +978,7 @@ terminology
 
 アダプター層は未知のカテゴリーを表示できなければなりません。
 
-## 25. ルール機能
+## 30. ルール機能
 
 ルールが提供する機能を表します。
 
@@ -989,7 +1020,7 @@ interface RuleCapability {
 | autofix | 自動修正対応 |
 | realtime | リアルタイム診断対応 |
 
-## 26. UI スキーマ
+## 31. UI スキーマ
 
 UI スキーマは表示方法を定義する。
 
@@ -1042,7 +1073,7 @@ interface UiField {
 }
 ```
 
-## 27. プロファイル・メタデータ
+## 32. プロファイル・メタデータ
 
 Profile の表示情報を定義します。
 
@@ -1082,7 +1113,7 @@ interface ProfileMetadata {
 }
 ```
 
-## 28. プロファイル・バージョン
+## 33. プロファイル・バージョン
 
 Profile のバージョンを表します。
 
@@ -1106,7 +1137,7 @@ interface ProfileVersion {
 }
 ```
 
-## 29. 辞書メタデータ
+## 34. 辞書メタデータ
 
 Dictionary の表示情報を定義します。
 
@@ -1141,7 +1172,7 @@ interface DictionaryMetadata {
 }
 ```
 
-## 30. 辞書タイプ
+## 35. 辞書タイプ
 
 辞書タイプは Dictionary の役割を定義する値オブジェクトです。
 
@@ -1266,7 +1297,7 @@ flowchart TD
   E["branding"] --> F["表記形式検証"]
 ```
 
-## 31. ランタイム機能
+## 36. ランタイム機能
 
 Core ランタイムが提供する機能を表します。
 
@@ -1296,7 +1327,7 @@ interface RuntimeCapability {
 }
 ```
 
-## 32. イベント種類
+## 37. イベント種類
 
 ### ProfileUpdated
 
@@ -1318,7 +1349,7 @@ Dictionary がエクスポートされたことを示します。
 
 一括診断が完了したことを示します。
 
-## 33. イベント・メタデータ
+## 38. イベント・メタデータ
 
 下記は、イベント・メタデータ例です。
 
@@ -1349,7 +1380,7 @@ interface DomainEvent {
 }
 ```
 
-## 34. 動的 UI 生成
+## 39. 動的 UI 生成
 
 アダプター層は、下記の情報のみを利用して、設定画面を構築します。
 
@@ -1417,7 +1448,310 @@ if (
 }
 ```
 
-## 35. アダプター・ガイドライン
+## 40. パッケージ
+
+パッケージは、Profile および Dictionary の配布単位を定義します。
+
+下記は、パッケージ例です。
+
+```json
+{
+  "schemaVersion": "1.0.0",
+
+  "packageVersion": "1.2.0",
+
+  "exportedAt":
+    "2026-06-21T10:00:00Z",
+
+  "profile": {},
+
+  "dictionaries": []
+}
+```
+
+### 設計意図 (ゴール)
+
+* Profile の移植性向上
+* Dictionary の移植性向上
+* バックアップ
+* バージョン管理
+* マイグレーション
+
+### エンティティー
+
+#### ProfilePackage
+
+```ts
+interface ProfilePackage {
+    schemaVersion: string;
+
+    packageVersion: string;
+
+    profile: Profile;
+
+    dictionaries:
+        Dictionary[];
+
+    exportedAt: string;
+}
+```
+
+## 41. インポート
+
+### `validatePackage()`
+
+Package の整合性を検証します。
+
+```ts
+validatePackage(
+    profilePackage
+);
+```
+
+### 検証対象
+
+* SchemaVersion
+* PackageVersion
+* Profile
+* Dictionary
+
+## 42. エクスポート
+
+### `exportPackage()`
+
+Package を生成します。
+
+```ts
+exportPackage(
+    profile
+);
+```
+
+## 43. 移行
+
+Core API は、パッケージの後方互換性を維持します。
+
+### 移行 Strategy
+
+```text
+Package v1
+      ↓
+移行
+      ↓
+Package v2
+```
+
+### 移行 Result
+
+```ts
+interface MigrationResult {
+    sourceVersion:
+        string;
+
+    targetVersion:
+        string;
+
+    success:
+        boolean;
+
+    warnings:
+        string[];
+}
+```
+
+## 44. ルール・ライフサイクル
+
+ルールは追加・更新・非推奨化される可能性があります。
+
+下記は、ルール・ライフサイクル例です。
+
+```json
+{
+  "id":
+    "old-rule",
+
+  "label":
+    "旧ルール",
+
+  "lifecycle":
+    "deprecated"
+}
+```
+
+### ライフサイクル状態
+
+```ts
+type RuleLifecycleState =
+    | "active"
+    | "deprecated"
+    | "removed";
+```
+
+### エンティティー
+
+#### RuleMetadata
+
+```ts
+interface RuleMetadata {
+    id: string;
+
+    label: string;
+
+    description: string;
+
+    category:
+        RuleCategory;
+
+    lifecycle:
+        RuleLifecycleState;
+}
+```
+
+## 45. アダプター挙動
+
+### active
+
+通常表示します。
+
+### deprecated
+
+利用可能だが警告を表示します。
+
+例:
+
+```text
+このルールは非推奨です。
+後継ルールへの移行を推奨します。
+```
+
+### removed
+
+新規作成時には表示しません。
+
+既存 Profile に存在する場合のみ読み込み可能とします。
+
+## 46. 後継
+
+非推奨ルールは、後継ルールを持てます。
+
+下記は、後継例です。
+
+```json
+{
+  "id":
+    "legacy-rule",
+
+  "lifecycle":
+    "deprecated",
+
+  "successorRuleId":
+    "modern-rule"
+}
+```
+
+### エンティティー
+
+#### RuleMetadata
+
+```ts
+interface RuleMetadata {
+    successorRuleId?:
+        string;
+}
+```
+
+## 47. 辞書ライフサイクル
+
+「辞書タイプ」もルールと同様に、ライフサイクルを持ちます。
+
+### ライフサイクル状態
+
+```ts
+type DictionaryLifecycleState =
+    | "active"
+    | "deprecated"
+    | "removed";
+```
+
+### エンティティー
+
+#### DictionaryMetadata
+
+```ts
+interface DictionaryMetadata {
+    id: string;
+
+    name: string;
+
+    type:
+        DictionaryType;
+
+    lifecycle:
+        DictionaryLifecycleState;
+}
+```
+
+## 48. 互換性方針
+
+### 下位互換性
+
+Core API は、下記を保証する。
+
+* ProfilePackage のロード
+* Deprecated Rule のロード
+* Deprecated Dictionary のロード
+
+### 上位互換性
+
+未知のルールは、下記として扱う。
+
+```json
+{
+  "type":
+    "custom"
+}
+```
+
+未知の DictionaryType は、下記として扱う。
+
+```json
+{
+  "type":
+    "custom"
+}
+```
+
+## 49. 長期メンテナンス方針
+
+### 基本原則
+
+アダプター層は、ルール ID や「辞書タイプ」の固定値に依存してはならない。
+
+許可:
+
+```text
+Registry
+ ↓
+Metadata
+ ↓
+Schema
+ ↓
+Dynamic UI
+```
+
+禁止:
+
+```ts
+if (
+  ruleId ===
+  "max-kanji-continuous"
+)
+{
+    ...
+}
+```
+
+## 50. アダプター・ガイドライン
 
 アダプター層はルール・スキーマを直接解釈します。
 
@@ -1450,7 +1784,7 @@ if (
 }
 ```
 
-## 36. 完了基準
+## 51. 完了基準
 
 Core API は下記を満たした時点で完成とみなします。
 
@@ -1482,7 +1816,18 @@ Core API は下記を満たした時点で完成とみなします。
 * 拡張
   * DomainEvent 契約
 
-## 37. 今後の拡張機能
+Core API は、下記を満たした時点で、長期運用が可能とみなす。
+
+* Export
+* Import
+* パッケージ検証
+* 移行
+* ルール・ライフサイクル
+* 辞書ライフサイクル
+* 下位互換性
+* 上位互換性
+
+## 52. 今後の拡張機能
 
 下記は、今後追加を検討する機能です。これらは Core API の公開インターフェースを破壊しない形で追加します。
 
