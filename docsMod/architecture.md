@@ -250,3 +250,25 @@ REST API ラッパーの責務は、下記のとおりです。
   * `in 配配メール` 成果物は、下記のとおり
     * Mail Editor 連携
     * Bulk Mail 検証
+
+## 完了基準
+
+Core API 仕様は、下記を満たした時点で完成とみなします。
+
+* 必須
+  * Domain
+  * Metadata
+  * Schema
+  * Registry
+  * Services
+  * Compatibility
+  * Classification
+* 推奨
+  * ProfilePackage
+  * Rule Lifecycle
+
+下記は、アダプター責務なので不要です。
+
+* `WordPress` 概念
+* `Forwarder-PRO` 概念
+* `配配メール` 概念
