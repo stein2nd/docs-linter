@@ -108,7 +108,7 @@ Then, run `npm run build` to build the package, then run `npm run pack:check` an
 
 ### Project Structure - プロジェクト構成
 
-主なディレクトリを以下に示します。
+主なディレクトリを下記に示します。
 
 ```text
 src/        TypeScript ソース
@@ -154,7 +154,7 @@ The recommended workflow is as follows.
 
 ### Verification Expectations - 検証に関する要件
 
-変更を送信する前に、以下を確認してください。
+変更を送信する前に、下記を確認してください。
 
 Before submitting your changes, please verify the following.
 
@@ -275,7 +275,7 @@ The following breaking changes are permitted, but you must clearly explain the r
 
 ### Issue Reports - 課題レポート
 
-役立つ課題報告には、以下のものが含まれます。
+役立つ課題報告には、下記のものが含まれます。
 
 * 環境
 * Node.js のバージョン
