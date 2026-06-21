@@ -45,7 +45,7 @@ npm init -y
 ```
 
 続いて、VS Code / Cursor 設定を追加します。
-`.vscode/settings.json` に以下を追記します。
+`.vscode/settings.json` に下記を追記します。
 「既存プロジェクト」が、WordPress 開発の場合は、「textlint.configPath」を `./tools/docs-linter/presets/wordpress/.textlintrc.wp.json` に変更してください。
 
 ```json
