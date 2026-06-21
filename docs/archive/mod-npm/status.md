@@ -301,7 +301,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | GHA publish ワークフロー | **運用中 (OIDC)** — tag push publish 成功 (run [`26381626088`](https://github.com/stein2nd/docs-linter/actions/runs/26381626088)) |
 | 認証 | **Trusted Publishing 運用中** — `NPM_TOKEN` Secret **未使用** |
 
-フェーズ1で package 自体の成立性と利用側移行を確認したうえで、フェーズ2では以下を **達成した**。
+フェーズ1で package 自体の成立性と利用側移行を確認したうえで、フェーズ2では下記を **達成した**。
 
 * GitHub tag push による publish automation — **済** (`v1.0.13`, run `26381626088`)
 * npm organization (`s2j`) への正式 package 登録 — **済**
@@ -337,7 +337,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 ## フェーズ2完了条件
 
-以下をすべて満たした場合、フェーズ2完了とする。
+下記をすべて満たした場合、フェーズ2完了とする。
 
 ### 必須
 
@@ -374,7 +374,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 ### 将来拡張 (フェーズ3候補)
 
-以下はフェーズ2完了条件には含めない。
+下記はフェーズ2完了条件には含めない。
 
 * semantic-release
 * automatic changelog generation
@@ -476,7 +476,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 ## フェーズ3: 完了条件
 
-以下をすべて満たした場合、フェーズ3完了とする。
+下記をすべて満たした場合、フェーズ3完了とする。
 
 ### 必須
 
@@ -650,7 +650,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 ## フェーズ4: 完了条件
 
-以下をすべて満たした場合、フェーズ4完了とする。
+下記をすべて満たした場合、フェーズ4完了とする。
 
 ### 必須
 
