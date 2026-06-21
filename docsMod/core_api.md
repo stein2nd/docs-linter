@@ -11,6 +11,10 @@
 
 新しいルールが追加されても、`Metadata` / `Schema` / `UiSchema` / `権限` が提供されていれば、アダプター側は修正不要で動作することを目標とします。
 
+新しい DictionaryType が追加されても、アダプター層は、`Metadata` / `Type` / `Schema` を利用して動作することを目標とします。
+
+未知のタイプは `custom` として扱います。
+
 ## 3. 設計原則
 
 ### textlint の隠蔽
@@ -150,6 +154,20 @@ Profile および Dictionary は移植可能でなければなりません。
 }
 ```
 
+下記は、辞書エクスポート例です。
+
+```json
+{
+  "type":
+    "proper-noun",
+
+  "terms": [
+    "WordPress",
+    "Gutenberg"
+  ]
+}
+```
+
 ### 互換性ルール
 
 アダプター層は下記を確認します。
@@ -159,7 +177,24 @@ Profile および Dictionary は移植可能でなければなりません。
 
 互換性が無い場合は警告を表示します。
 
-## 9. 非責務
+## 9. ルール・カテゴリー契約
+
+ルール・カテゴリーは、RuleDefinition を論理的に分類するための値オブジェクトです。
+
+下記のようなアダプター層は「ルール・カテゴリー」を利用して設定画面をグループ化できます。
+
+* `WordPress`
+* `Forwarder-PRO`
+* `配配メール`
+* 将来のアダプター
+
+## 10. 辞書タイプ契約
+
+辞書タイプは Dictionary の役割を定義する値オブジェクトです。
+
+アダプター層は「辞書タイプ」を利用して適切な編集 UI を生成します。
+
+## 11. 非責務
 
 現時点では下記をアダプター層の責務とします。
 
@@ -170,7 +205,7 @@ Profile および Dictionary は移植可能でなければなりません。
 * ユーザー管理
 * 認証
 
-## 10. 汎用言語
+## 12. 汎用言語
 
 | 用語 | Description |
 | --- | --- |
@@ -182,7 +217,7 @@ Profile および Dictionary は移植可能でなければなりません。
 | Lint Result | Lint 結果 |
 | Violation | 指摘事項 |
 
-## 11. ドメインモデル
+## 13. ドメインモデル
 
 ### RuleDefinition
 
@@ -272,7 +307,7 @@ properNouns:
 }
 ```
 
-## 12. 集約
+## 14. 集約
 
 ### Profile 集約
 
@@ -286,7 +321,7 @@ Profile を集約ルートとします。
 
 RuleConfiguration および Dictionary は Profile 経由で管理します。
 
-## 13. 値オブジェクト
+## 15. 値オブジェクト
 
 ### RuleId
 
@@ -323,7 +358,7 @@ type Severity =
     | "info";
 ```
 
-## 14. ドメインサービス
+## 16. ドメインサービス
 
 ### LintEngine
 
@@ -365,7 +400,7 @@ interface RuleRegistry {
 }
 ```
 
-## 15. アプリケーションサービス
+## 17. アプリケーションサービス
 
 ### LintService
 
@@ -391,7 +426,7 @@ loadProfile(profileId)
 validateConfig(config)
 ```
 
-## 16. リポジトリ
+## 18. リポジトリ
 
 ### ProfileRepository
 
@@ -411,7 +446,7 @@ Core API ではインターフェースのみ定義します。実装は Adapter
 
 Core API では実装しません。
 
-## 17. 公開 API
+## 19. 公開 API
 
 ### `lint()`
 
@@ -567,7 +602,7 @@ validateProfile(
 }
 ```
 
-## 18. インフラストラクチャ境界
+## 20. インフラストラクチャ境界
 
 Core API が依存可能なものは、下記になります。
 
@@ -584,7 +619,7 @@ Core API が依存してはならないものは、下記になります。
 * Node.js API
 * Database
 
-## 19. ルール・レジストリ
+## 21. ルール・レジストリ
 
 ルール・レジストリは利用可能な RuleDefinition の一覧を提供します。
 
@@ -594,7 +629,7 @@ Core API が依存してはならないものは、下記になります。
 * `Forwarder-PRO` 設定画面
 * `配配メール` 設定画面
 
-## 20. ルール・メタデータ
+## 22. ルール・メタデータ
 
 ルール・メタデータはルールの表示情報を提供します。
 
@@ -648,7 +683,7 @@ interface RuleMetadata {
 }
 ```
 
-## 21. ルール・スキーマ
+## 23. ルール・スキーマ
 
 ルール・スキーマは RuleConfiguration の構造を定義します。
 
@@ -793,7 +828,126 @@ interface SchemaVersion {
 }
 ```
 
-## 22. ルール機能
+## 24. ルール・カテゴリー
+
+ルール・カテゴリーは、RuleDefinition を論理的に分類するための値オブジェクトです。
+
+### 設計意図 (ゴール)
+
+* 設定画面の整理
+* ルールの検索性向上
+* ルールのフィルタリング
+* 動的 UI 生成
+
+### 値オブジェクト
+
+#### RuleCategory
+
+```ts
+type RuleCategory =
+    | "readability"
+    | "style"
+    | "terminology"
+    | "grammar"
+    | "branding"
+    | "accessibility"
+    | "custom";
+```
+
+### ルール・カテゴリー定義
+
+| カテゴリー | Description |
+| --- | --- |
+| readability | 可読性 |
+| style | 文体 |
+| terminology | 用語統一 |
+| grammar | 文法 |
+| branding | ブランド表記 |
+| accessibility | アクセシビリティ |
+| custom | カスタム |
+
+### ルール・メタデータ連携
+
+下記は、ルール・メタデータ連携例です。
+
+```json
+{
+  "id":
+    "max-kanji-continuous",
+
+  "label":
+    "漢字連続数",
+
+  "description":
+    "漢字の連続数を制限します",
+
+  "category":
+    "readability",
+
+  "defaultSeverity":
+    "warning"
+}
+```
+
+### エンティティー
+
+#### RuleMetadata
+
+```ts
+interface RuleMetadata {
+    id: string;
+
+    label: string;
+
+    description: string;
+
+    category:
+        RuleCategory;
+
+    tags?: string[];
+
+    defaultSeverity:
+        Severity;
+}
+```
+
+### ルール・カテゴリー - 動的 UI 例
+
+```text
+readability
+ ├─ max-kanji-continuous
+ ├─ max-sentence-length
+ └─ max-heading-length
+
+terminology
+ ├─ forbidden-word
+ ├─ required-word
+ └─ proper-noun
+```
+
+上記のようなルール・レジストリを元に、下記のような UI が生成されます。
+
+```text
+[可読性]
+
+□ 漢字連続数
+□ 文長
+□ 見出し長
+
+[用語統一]
+
+□ 禁止語
+□ 推奨語
+□ 固有名詞
+```
+
+### 拡張方針
+
+新しいカテゴリーは後方互換性を維持した状態で追加できます。
+
+アダプター層は未知のカテゴリーを表示できなければなりません。
+
+## 25. ルール機能
 
 ルールが提供する機能を表します。
 
@@ -835,7 +989,7 @@ interface RuleCapability {
 | autofix | 自動修正対応 |
 | realtime | リアルタイム診断対応 |
 
-## 23. UI スキーマ
+## 26. UI スキーマ
 
 UI スキーマは表示方法を定義する。
 
@@ -888,7 +1042,7 @@ interface UiField {
 }
 ```
 
-## 24. プロファイル・メタデータ
+## 27. プロファイル・メタデータ
 
 Profile の表示情報を定義します。
 
@@ -928,7 +1082,7 @@ interface ProfileMetadata {
 }
 ```
 
-## 25. プロファイル・バージョン
+## 28. プロファイル・バージョン
 
 Profile のバージョンを表します。
 
@@ -952,7 +1106,7 @@ interface ProfileVersion {
 }
 ```
 
-## 26. 辞書メタデータ
+## 29. 辞書メタデータ
 
 Dictionary の表示情報を定義します。
 
@@ -987,7 +1141,132 @@ interface DictionaryMetadata {
 }
 ```
 
-## 27. ランタイム機能
+## 30. 辞書タイプ
+
+辞書タイプは Dictionary の役割を定義する値オブジェクトです。
+
+下記は、辞書タイプ例です。
+
+```json
+{
+  "id":
+    "wordpress-proper-nouns",
+
+  "name":
+    "WordPress 固有名詞辞書",
+
+  "description":
+    "WordPress 関連用語",
+
+  "type":
+    "proper-noun"
+}
+```
+
+### 設計意図 (ゴール)
+
+* 辞書の役割明確化
+* 動的 UI 生成
+* 動的検証
+* インポート / エクスポートの標準化
+
+### 値オブジェクト
+
+#### DictionaryType
+
+```ts
+type DictionaryType =
+    | "forbidden"
+    | "recommended"
+    | "proper-noun"
+    | "abbreviation"
+    | "branding"
+    | "custom";
+```
+
+### 辞書タイプ定義
+
+| タイプ | Description |
+| --- | --- |
+| forbidden | 禁止語 |
+| recommended | 推奨語 |
+| proper-noun | 固有名詞 |
+| abbreviation | 略語 |
+| branding | ブランド表記 |
+| custom | カスタム |
+
+### 辞書メタデータ連携
+
+### エンティティー
+
+#### DictionaryMetadata
+
+```ts
+interface DictionaryMetadata {
+    id: string;
+
+    name: string;
+
+    description: string;
+
+    type:
+        DictionaryType;
+}
+```
+
+### 辞書タイプ - 動的 UI 例
+
+```text
+forbidden
+ └─ 禁止語辞書
+
+recommended
+ └─ 推奨語辞書
+
+proper-noun
+ └─ 固有名詞辞書
+
+branding
+ └─ ブランド表記辞書
+```
+
+上記のような辞書レジストリを元に、下記のような UI が生成されます。
+
+```text
+[禁止語]
+
++ 追加
+- 削除
+
+────────────────
+
+[固有名詞]
+
++ 追加
+- 削除
+
+────────────────
+
+[ブランド表記]
+
++ 追加
+- 削除
+```
+
+### 検証方針
+
+辞書タイプごとに異なる検証ルールを適用できます。
+
+下記は、検証ルール例です。
+
+```mermaid
+flowchart TD
+  A["forbidden"] --> B["重複禁止"]
+  C["proper-noun"] --> D["空文字禁止"]
+  E["branding"] --> F["表記形式検証"]
+```
+
+## 31. ランタイム機能
 
 Core ランタイムが提供する機能を表します。
 
@@ -1017,7 +1296,7 @@ interface RuntimeCapability {
 }
 ```
 
-## 28. イベント種類
+## 32. イベント種類
 
 ### ProfileUpdated
 
@@ -1039,7 +1318,7 @@ Dictionary がエクスポートされたことを示します。
 
 一括診断が完了したことを示します。
 
-## 29. イベント・メタデータ
+## 33. イベント・メタデータ
 
 下記は、イベント・メタデータ例です。
 
@@ -1070,7 +1349,7 @@ interface DomainEvent {
 }
 ```
 
-## 30. 動的 UI 生成
+## 34. 動的 UI 生成
 
 アダプター層は、下記の情報のみを利用して、設定画面を構築します。
 
@@ -1138,7 +1417,7 @@ if (
 }
 ```
 
-## 31. アダプター・ガイドライン
+## 35. アダプター・ガイドライン
 
 アダプター層はルール・スキーマを直接解釈します。
 
@@ -1171,7 +1450,7 @@ if (
 }
 ```
 
-## 32. 完了基準
+## 36. 完了基準
 
 Core API は下記を満たした時点で完成とみなします。
 
@@ -1203,7 +1482,7 @@ Core API は下記を満たした時点で完成とみなします。
 * 拡張
   * DomainEvent 契約
 
-## 33. 今後の拡張機能
+## 37. 今後の拡張機能
 
 下記は、今後追加を検討する機能です。これらは Core API の公開インターフェースを破壊しない形で追加します。
 
