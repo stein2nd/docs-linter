@@ -57,7 +57,7 @@
     "test:doctor": "bash scripts/test-doctor.sh",
     "dev": "npx vite build --watch",
     "lint": "node dist/bin/cli.js './README.md' '**/*.md'",
-    "lint:wp": "node dist/bin/cli.js --profile wordpress './README.md' '**/*.md'",
+    "lint:wp": "node dist/bin/cli.js --profile wordpress './README.md' '**/**/*.md' '**/*.md'",
     "lint:swift": "node dist/bin/cli.js --profile swift './README.md' '**/*.md'",
     "postinstall": "node ./dist/scripts/setup-npmignore.js || true && node ./scripts/patch-wp-prh-colon-quote.cjs",
     "install:compat": "npx -y npm@11.11.0 install"
