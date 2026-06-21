@@ -396,7 +396,7 @@ validateConfig(config);
 validateDictionary(dictionary);
 ```
 
-## Extension Policy
+## 拡張方針
 
 新しい RuleDefinition は追加可能とします。
 
