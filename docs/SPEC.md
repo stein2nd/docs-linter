@@ -209,7 +209,7 @@ Swift/SwiftUI アプリケーション開発に特化した設定です。
 * `examples/lint-docs.wp.yml` - WordPress プラグインまたはテーマのドキュメント用
 * `examples/lint-docs.swift.yml` - Swift / SwiftUI 開発向け
 
-以下は、Swift 開発用の CI テンプレート例です。
+下記は、Swift 開発用の CI テンプレート例です。
 
 ```yaml
 name: Docs Linter
