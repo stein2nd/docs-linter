@@ -179,8 +179,19 @@
       "bases:新規ベースを作成": false
     }
   },
-  "active": "2344d87c1c9a5d5b",
+  "active": "be3893cdc51192f2",
   "lastOpenFiles": [
+    "docsMod/future/docs-linter-core.md",
+    "docsMod/future/core_api.md",
+    "docsMod/future/architecture.md",
+    "docsMod/future",
+    "docsMod/backup/plan06.md",
+    "docsMod/backup/plan05.md",
+    "docsMod/backup/plan04.md",
+    "docsMod/backup/plan03.md",
+    "docsMod/backup/plan02.md",
+    "docsMod/backup",
+    "docsMod/planning",
     "docsMod/plan06.md",
     "docsMod/plan05.md",
     "docsMod/plan04.md",
@@ -200,22 +211,11 @@
     "node_modules/@modelcontextprotocol/sdk/dist/cjs/server/zod-compat.d.ts",
     "node_modules/@modelcontextprotocol/sdk/dist/cjs/server/webStandardStreamableHttp.d.ts",
     "node_modules/@modelcontextprotocol/sdk/dist/esm/validation/types.d.ts",
-    "node_modules/@modelcontextprotocol/sdk/dist/esm/types.d.ts",
-    "node_modules/@modelcontextprotocol/sdk/dist/cjs/types.d.ts",
-    "node_modules/@modelcontextprotocol/sdk/dist/cjs/validation/types.d.ts",
     "node_modules/@modelcontextprotocol/sdk/README.md",
     "node_modules/textlint-rule-preset-swift-docs-ja/README.md",
     "node_modules/hono/README.md",
     "node_modules/lodash/README.md",
     "node_modules/textlint-tester/node_modules/@textlint/kernel/README.md",
-    "node_modules/textlint-tester/node_modules/@textlint/kernel/src/task/README.md",
-    "node_modules/textlint-tester/node_modules/@textlint/kernel/src/descriptor/README.md",
-    "node_modules/ajv/README.md",
-    "node_modules/zod/README.md",
-    "node_modules/typescript/SECURITY.md",
-    "node_modules/typescript/README.md",
-    "node_modules/@textlint/kernel/README.md",
-    "node_modules/@textlint/kernel/src/task/README.md",
-    "node_modules/@textlint/kernel/src/descriptor/README.md"
+    "node_modules/textlint-tester/node_modules/@textlint/kernel/src/task/README.md"
   ]
 }
