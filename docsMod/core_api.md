@@ -5,7 +5,28 @@
 本ドキュメントは `@s2j/docs-linter-core` の公開 API およびドメインモデルを定義します。
 本パッケージは文章の品質検査エンジンであり、CLI・REST API、`WordPress` / `Forwarder-PRO` / `配配メール` 等のアダプターから利用されることを想定します。
 
-## 2. 設計原則
+## 2. Future Compatibility
+
+新しい RuleDefinition が追加されても、`Metadata` や `Schema` が定義されていれば、アダプター側は修正不要で動作することを目標とします。
+
+これを入れると、下記まで含めた **プラットフォーム横断の契約書** になります。
+
+```text
+RuleDefinition
+ ├─ Metadata
+ ├─ Schema
+ └─ Validation
+
+        ↓
+
+WordPress
+Forwarder-Pro
+配配メール
+
+共通UI生成
+```
+
+## 3. 設計原則
 
 ### textlint の隠蔽
 
@@ -43,9 +64,9 @@ Core API は特定プラットフォームに依存しません。
 * `Forwarder-PRO`
 * `配配メール`
 
-## 3. 非責務
+## 4. 非責務
 
-現時点では下記を Adapter Layer の責務とします。
+現時点では下記をアダプター層の責務とします。
 
 * Markdown Editor UI
 * WordPress UI
@@ -54,7 +75,7 @@ Core API は特定プラットフォームに依存しません。
 * User Management
 * Authentication
 
-## 4. 汎用言語
+## 5. 汎用言語
 
 | Term | Description |
 | --- | --- |
@@ -66,7 +87,7 @@ Core API は特定プラットフォームに依存しません。
 | Lint Result | Lint 結果 |
 | Violation | 指摘事項 |
 
-## 5. ドメインモデル
+## 6. ドメインモデル
 
 ### RuleDefinition
 
@@ -156,7 +177,7 @@ properNouns:
 }
 ```
 
-## 6. 集約
+## 7. 集約
 
 ### Profile 集約
 
@@ -170,7 +191,7 @@ Profile を集約ルートとします。
 
 RuleConfiguration および Dictionary は Profile 経由で管理します。
 
-## 7. 値オブジェクト
+## 8. 値オブジェクト
 
 ### RuleId
 
@@ -207,7 +228,7 @@ type Severity =
     | "info";
 ```
 
-## 8. ドメインサービス
+## 9. ドメインサービス
 
 ### LintEngine
 
@@ -238,7 +259,7 @@ type Severity =
 * 推奨語の検査
 * 固有名詞の検査
 
-## 9. アプリケーションサービス
+## 10. アプリケーションサービス
 
 ### LintService
 
@@ -264,7 +285,7 @@ loadProfile(profileId)
 validateConfig(config)
 ```
 
-## 10. リポジトリ
+## 11. リポジトリ
 
 ### ProfileRepository
 
@@ -284,7 +305,7 @@ Core API ではインターフェースのみ定義します。実装は Adapter
 
 Core API では実装しません。
 
-## 11. 公開 API
+## 12. 公開 API
 
 ### `lint()`
 
@@ -297,7 +318,7 @@ const result = await lint({
 });
 ```
 
-* Request
+* リクエスト
 
 ```ts
 interface LintRequest {
@@ -306,12 +327,47 @@ interface LintRequest {
 }
 ```
 
-* Response
+* 応答
 
 ```ts
 interface LintResult {
     errors: Violation[];
     warnings: Violation[];
+}
+```
+
+### lintBatch()
+
+複数文書を一括診断します。
+
+```ts
+const result =
+    await lintBatch(
+        requests
+    );
+```
+
+* リクエスト
+
+```ts
+interface BatchLintRequest {
+    items:
+        LintRequest[];
+}
+```
+
+* 応答
+
+```ts
+interface BatchLintResult {
+    total: number;
+
+    success: number;
+
+    failed: number;
+
+    results:
+        LintResult[];
 }
 ```
 
@@ -331,7 +387,57 @@ validateConfig(config);
 validateDictionary(dictionary);
 ```
 
-## 12. インフラストラクチャ境界
+### getAvailableRules()
+
+利用可能な RuleDefinition 一覧を取得します。
+
+```ts
+const rules =
+    getAvailableRules();
+```
+
+* 応答
+
+```json
+[
+  {
+    "id": "max-kanji-continuous"
+  },
+  {
+    "id": "max-sentence-length"
+  }
+]
+```
+
+### validateProfile()
+
+Profile の妥当性を検証します。
+
+```ts
+validateProfile(
+    profile
+);
+```
+
+* 検証対象
+  * Rule Existence
+  * Schema Validation
+  * Severity Validation
+  * Dictionary Validation
+
+* エラー例
+
+```json
+{
+  "ruleId":
+    "max-kanji-continuous",
+
+  "message":
+    "max must be greater than zero"
+}
+```
+
+## 13. インフラストラクチャ境界
 
 Core API が依存可能なものは、下記になります。
 
@@ -348,12 +454,278 @@ Core API が依存してはならないものは、下記になります。
 * Node.js API
 * Database
 
-## 13. 今後の拡張機能
+## 14. ルール・レジストリ
+
+ルール・レジストリは利用可能な RuleDefinition の一覧を提供します。
+
+アダプター層はルール・レジストリを利用して、たとえば下記のような UI を構築できます。
+
+* `WordPress` 管理画面
+* `Forwarder-PRO` 設定画面
+* `配配メール` 設定画面
+
+### ドメインサービス
+
+#### RuleRegistry
+
+利用可能な RuleDefinition を管理します。
+
+```ts
+interface RuleRegistry {
+    getAll(): RuleDefinition[];
+    get(ruleId: RuleId): RuleDefinition | undefined;
+}
+```
+
+## 15. ルール・メタデータ
+
+ルール・メタデータは Rule の表示情報を提供します。
+
+アダプター層はルール・メタデータを利用して UI を生成します。
+
+下記は、ルール・メタデータ例です。
+
+```json
+{
+  "id": "max-kanji-continuous",
+
+  "label":
+    "漢字連続数",
+
+  "description":
+    "漢字の連続数を制限します",
+
+  "category":
+    "readability",
+
+  "defaultSeverity":
+    "warning"
+}
+```
+
+### エンティティー
+
+#### RuleMetadata
+
+```ts
+interface RuleMetadata {
+    id: string;
+
+    label: string;
+
+    description: string;
+
+    category: string;
+
+    defaultSeverity:
+        | "error"
+        | "warning"
+        | "info";
+}
+```
+
+## 16. ルール・スキーマ
+
+ルール・スキーマは RuleConfiguration の構造を定義します。
+
+アダプター層はルール・スキーマを利用して設定 UI を生成します。
+
+下記は、ルール・スキーマ例です。
+
+```json
+{
+  "properties": {
+    "max": {
+      "type": "number",
+
+      "label":
+        "最大連続文字数",
+
+      "description":
+        "許容する漢字連続数",
+
+      "required":
+        true,
+
+      "defaultValue":
+        7,
+
+      "minimum":
+        1,
+
+      "maximum":
+        100
+    }
+  }
+}
+```
+
+### エンティティー
+
+#### RuleSchema
+
+```ts
+interface RuleSchema {
+    properties:
+        Record<
+            string,
+            SchemaProperty
+        >;
+}
+```
+
+#### SchemaProperty
+
+```ts
+interface SchemaProperty {
+    type:
+        | "string"
+        | "number"
+        | "boolean"
+        | "array";
+
+    label: string;
+
+    description: string;
+
+    required: boolean;
+
+    defaultValue?: unknown;
+
+    minimum?: number;
+
+    maximum?: number;
+}
+```
+
+### ルール定義
+
+#### 拡張 RuleDefinition
+
+```ts
+interface RuleDefinition {
+    id: string;
+
+    metadata:
+        RuleMetadata;
+
+    schema:
+        RuleSchema;
+}
+```
+
+### 重大度方針
+
+#### 概要
+
+利用者は Rule 毎に Severity を変更できます。
+
+#### 例
+
+```json
+{
+  "max-kanji-continuous": {
+    "severity":
+      "warning",
+
+    "max":
+      7
+  }
+}
+```
+
+#### Available Values
+
+```ts
+type Severity =
+    | "error"
+    | "warning"
+    | "info";
+```
+
+### 動的 UI 生成
+
+アダプター層はルール・レジストリを利用して設定 UI を自動生成できます。
+
+下記は、動的 UI 生成例です。
+
+```json
+{
+  "id":
+    "max-kanji-continuous",
+
+  "metadata": {
+    "label":
+      "漢字連続数"
+  },
+
+  "schema": {
+    "properties": {
+      "max": {
+        "type":
+          "number"
+      }
+    }
+  }
+}
+```
+
+上記のようなルールを元に、下記のような UI を生成します。
+
+```text
+漢字連続数
+
+[ 7 ]
+```
+
+#### フロー
+
+```mermaid
+flowchart TD
+  A["ルール・レジストリ"] --> B["ルール・メタデータ"]
+  B --> C["ルール・スキーマ"]
+  C --> D["動的フォーム"]
+```
+
+## 18. アダプター・ガイドライン
+
+アダプター層はルール・スキーマを直接解釈します。
+
+ルールごとの専用画面を実装してはなりません。
+
+下記は、許可されます。
+
+```mermaid
+flowchart TD
+  A["ルール・メタデータ"] --> B["Schema"]
+  B --> C["フォーム生成"]
+```
+
+下記は、推奨されます。
+
+```mermaid
+flowchart TD
+  A["ルール・レジストリ"] --> B["一般設定画面"]
+```
+
+下記は、禁止されます。
+
+```text
+if (
+  ruleId ===
+  "max-kanji-continuous"
+)
+{
+  ...
+}
+```
+
+## 19. 今後の拡張機能
 
 下記は、今後追加を検討する機能です。これらは Core API の公開インターフェースを破壊しない形で追加します。
 
 * Auto Fix
-* Rule Marketplace
-* Profile Marketplace
-* Multi Language Support
-* AI Assisted Review
+* ルール・マーケットプレイス
+* プロファイル・マーケットプレイス
+* 多言語対応
+* AI 支援レビュー
