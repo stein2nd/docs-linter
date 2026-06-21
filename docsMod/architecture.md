@@ -265,7 +265,7 @@ Core API 仕様は、下記を満たした時点で完成とみなします。
   * Classification
 * 推奨
   * ProfilePackage
-  * Rule Lifecycle
+  * ルール・ライフサイクル
 
 下記は、アダプター責務なので不要です。
 
