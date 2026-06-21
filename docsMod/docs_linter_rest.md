@@ -2,7 +2,7 @@
 
 ## 概要
 
-`@s2j/docs-linter-rest` は `@s2j/docs-linter-core` を REST API として公開するための Adapter Package です。
+`@s2j/docs-linter-rest` は `@s2j/docs-linter-core` を REST API として公開するためのアダプター・パッケージです。
 
 本パッケージは文章品質判定ロジックを保持しません。全ての判定処理を `@s2j/docs-linter-core` に委譲します。
 
