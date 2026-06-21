@@ -1708,7 +1708,7 @@ interface DictionaryMetadata {
 
 ### 下位互換性
 
-Core API は、下記を保証する。
+Core API は、下記を保証します。
 
 * ProfilePackage のロード
 * Deprecated Rule のロード
@@ -1716,7 +1716,7 @@ Core API は、下記を保証する。
 
 ### 上位互換性
 
-未知のルールは、下記として扱う。
+未知のルールは、下記として扱います。
 
 ```json
 {
@@ -1725,7 +1725,7 @@ Core API は、下記を保証する。
 }
 ```
 
-未知の DictionaryType は、下記として扱う。
+未知の DictionaryType は、下記として扱います。
 
 ```json
 {
@@ -2226,12 +2226,12 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-  A["`WordPress` アダプター"] --> B["Core API"]
+  A["WordPress アダプター"] --> B["Core API"]
 ```
 
 ```mermaid
 flowchart TD
-  A["`Forwarder-PRO` アダプター"] --> B["Core API"]
+  A["Forwarder-PRO アダプター"] --> B["Core API"]
 ```
 
 ### 禁止
