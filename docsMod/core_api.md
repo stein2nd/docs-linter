@@ -56,7 +56,7 @@ Core API は特定プラットフォームに依存しません。
 
 ## 4. UI 契約
 
-Core API は RuleDefinition、Profile、Dictionary に対する UI 契約を提供します。
+Core API は、RuleDefinition、プロファイル、辞書に対する UI 契約を提供します。
 
 下記のようなアダプター層は、UI 契約を利用して、設定画面を自動生成できます。
 
@@ -138,7 +138,7 @@ Core API は、長期的な後方互換性を維持します。
 
 ## 8. インポート / エクスポート契約
 
-Profile および Dictionary は移植可能でなければなりません。
+プロファイルおよび辞書は、移植可能でなければなりません。
 
 ### エクスポート形式
 
@@ -191,13 +191,13 @@ Profile および Dictionary は移植可能でなければなりません。
 
 ## 10. 辞書タイプ契約
 
-辞書タイプは Dictionary の役割を定義する値オブジェクトです。
+辞書タイプは、辞書の役割を定義する値オブジェクトです。
 
 アダプター層は、「辞書タイプ」を利用して適切な編集 UI を生成します。
 
 ## 11. パッケージ契約
 
-パッケージ契約は、Profile および Dictionary の配布単位を定義します。
+パッケージ契約は、プロファイルおよび辞書の配布単位を定義します。
 
 パッケージは、エクスポート / インポートの最小単位です。
 
@@ -367,7 +367,7 @@ Profile を集約ルートとします。
 └─ Dictionary
 ```
 
-RuleConfiguration および Dictionary は Profile 経由で管理します。
+RuleConfiguration および辞書は、プロファイル経由で管理します。
 
 ## 22. 値オブジェクト
 
@@ -633,10 +633,10 @@ validateProfile(
 ```
 
 * 検証対象
-  * Rule Existence
-  * Schema Validation
-  * Severity Validation
-  * Dictionary Validation
+  * ルールの存在
+  * スキーマの検証
+  * 重大度の検証
+  * 辞書の検証
 
 * エラー例
 
@@ -781,7 +781,7 @@ interface RuleMetadata {
 
 ### 重大度
 
-利用者は Rule 毎に Severity を変更できます。
+ユーザーは、ルール毎に重大度を変更できます。
 
 下記は、重大度例です。
 
@@ -810,7 +810,7 @@ type Severity =
 
 #### RuleDefinition
 
-RuleDefinition は Metadata、Schema、Capability を持ちます。
+RuleDefinition は、Metadata、Schema、Capability を持ちます。
 
 ```ts
 interface RuleDefinition {
@@ -1156,7 +1156,7 @@ interface ProfileVersion {
 
 ## 36. 辞書メタデータ
 
-Dictionary の表示情報を定義します。
+辞書の表示情報を定義します。
 
 下記は、辞書メタデータ例です。
 
@@ -1191,7 +1191,7 @@ interface DictionaryMetadata {
 
 ## 37. 辞書タイプ
 
-辞書タイプは Dictionary の役割を定義する値オブジェクトです。
+辞書タイプは辞書の役割を定義する値オブジェクトです。
 
 下記は、辞書タイプ例です。
 
@@ -1352,11 +1352,11 @@ Profile が更新されたことを示します。
 
 ### DictionaryImported
 
-Dictionary がインポートされたことを示します。
+辞書がインポートされたことを示します。
 
 ### DictionaryExported
 
-Dictionary がエクスポートされたことを示します。
+辞書がエクスポートされたことを示します。
 
 ### ValidationCompleted
 
@@ -1467,7 +1467,7 @@ if (
 
 ## 42. パッケージ
 
-パッケージは、Profile および Dictionary の配布単位を定義します。
+パッケージは、プロファイルおよび辞書の配布単位を定義します。
 
 下記は、パッケージ例です。
 
@@ -1488,8 +1488,8 @@ if (
 
 ### 設計意図 (ゴール)
 
-* Profile の移植性向上
-* Dictionary の移植性向上
+* プロファイルの移植性向上
+* 辞書の移植性向上
 * バックアップ
 * バージョン管理
 * マイグレーション
@@ -1711,8 +1711,8 @@ interface DictionaryMetadata {
 Core API は、下記を保証します。
 
 * ProfilePackage のロード
-* Deprecated Rule のロード
-* Deprecated Dictionary のロード
+* 非推奨ルールのロード
+* 非推奨辞書のロード
 
 ### 上位互換性
 
@@ -1788,7 +1788,7 @@ Profile
 
 ### 不変条件
 
-「プロファイル集約」は、以下を保証します。
+「プロファイル集約」は、下記を保証します。
 
 #### ルール整合性
 
@@ -1796,13 +1796,13 @@ Profile
 
 #### 辞書整合性
 
-全ての Dictionary は有効な DictionaryType を持たなければなりません。
+全ての辞書は、有効な DictionaryType を持たなければなりません。
 
 #### バージョン整合性
 
-ProfileVersion は「集約」全体に対して適用されます。
+ProfileVersion は、「集約」全体に対して適用されます。
 
-個別 RuleConfiguration に独自 Version を持たせてはなりません。
+個別 RuleConfiguration に独自バージョンを持たせてはなりません。
 
 ## 53. 集約アクセスルール
 
@@ -2198,11 +2198,11 @@ flowchart TD
 
 #### Provides
 
-* Rule Registry
-* Metadata
-* Schema
-* Validation
-* Package 契約
+* ルール・レジストリ
+* メタデータ
+* スキーマ
+* 検証
+* パッケージ契約
 
 ### 下流コンテキスト
 
@@ -2372,9 +2372,9 @@ DictionaryId
 一方、下記による参照は、許可されません。
 
 ```text
-Rule Label
-Profile Name
-Dictionary Name
+ルールのラベル
+プロファイルの名称
+辞書の名称
 ```
 
 ## 71. 完了基準
