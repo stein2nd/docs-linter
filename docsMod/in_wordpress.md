@@ -271,7 +271,7 @@ RuleConfiguration を管理します。
 検証レポート
  ├─ Summary
  ├─ Item
- └─ Violation
+ └─ 指摘事項
 ```
 
 ### 要約
