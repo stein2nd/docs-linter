@@ -1,4 +1,4 @@
-# 📘 S2J Docs Linter - フェーズ1-A - @s2j/docs-linter-core
+# 📘 S2J Docs Linter - @s2j/docs-linter-core (実装契約)
 
 ## 1. 概要
 
