@@ -589,7 +589,7 @@ npm update @s2j/docs-linter
 
 * **WordPress 開発者** は `.textlintrc.wp.json` を指定
 * **Swift 開発者** は `.textlintrc.swift.json` を指定
-* **Cursor/VS Code** は `.vscode/settings.json` の設定を自動で読み込み
+* **Cursor/VS Code** は `.vscode/settings.json` の設定を自動でロード
 * **全プロジェクト** で共通ルールを継承可能
 * **Git submodule によりルール更新が一括反映**
 * **`prelint:docs` によりサブモジュールの最新化が自動化**
