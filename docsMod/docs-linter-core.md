@@ -112,6 +112,10 @@ Core ランタイムは、ストレージの実装詳細を知りません。
 
 Core ランタイムは、ProfileVersion および SchemaVersion を評価します。
 
+## テスト契約
+
+Core ランタイムは、テスト可能でなければなりません。
+
 ## 14. ディレクトリ構造
 
 ```text
@@ -326,10 +330,12 @@ required-word
 
 プロファイルは、集約ルートとします。
 
-```text
-Profile
- ├─ RuleConfiguration
- └─ Dictionary
+```mermaid
+flowchart TD
+    subgraph A [プロファイル]
+        B1[RuleConfiguration]
+        B2[Dictionary]
+    end
 ```
 
 プロファイルの設計例は、下記のようになります。
@@ -557,7 +563,7 @@ RuleDefinition を取得します。
 
 * ルール・レジストリのルックアップ
 * ルール設定のマッピング
-* ルール機能の検証
+* ルール機能性の検証
 
 #### 辞書リゾルバー
 
@@ -2103,7 +2109,297 @@ interface VersionNegotiationResult {
 }
 ```
 
-## 47. 完了条件
+## 47. 汎用言語
+
+本章は、`@s2j/docs-linter-core` における共通用語を定義します。
+
+Core ランタイム、アダプター、拡張機能は、本用語を共有しなければなりません。
+
+### 用語集
+
+| 用語 | Description |
+| --- | --- |
+| Rule | 文章品質の判定ルール |
+| RuleDefinition | ルールの定義情報 |
+| RuleExecutor | ルールの実行実装 |
+| RuleConfiguration | ルールの設定値 |
+| Dictionary | 用語辞書 |
+| DictionaryType | 辞書種別 |
+| Profile | ルールおよび辞書の構成 |
+| ProfilePackage | エクスポート/インポートの単位 |
+| Violation | 単一違反 |
+| Validation | 品質の診断処理 |
+| ValidationReport | 診断結果 |
+| Runtime | 実行環境 |
+| Extension | ランタイム拡張 |
+| Adapter | `WordPress` 等との接続層 |
+
+### ネーミング・ルール
+
+同一概念に対して、複数名称を利用してはなりません。つまり、同義語として利用してはなりません。
+
+下記は、許可されます。
+
+```text
+ValidationReport
+```
+
+下記は、許可されません。
+
+```text
+LintReport
+AnalysisReport
+ValidationResult
+```
+
+## 48. ドメイン不変条件
+
+ドメイン不変条件は、集約の不変条件を定義します。
+
+### プロファイル集約
+
+#### 不変条件
+
+プロファイルは、有効な RuleConfiguration を保持しなければなりません。
+
+下記は、許可されます。
+
+```mermaid
+flowchart TD
+  A["Profile"] --> B["RuleConfiguration"]
+  B --> C["RuleDefinition"]
+```
+
+下記は、許可されません。
+
+```mermaid
+flowchart TD
+  A["Profile"] --> B["Unknown Rule"]
+```
+
+### 辞書
+
+#### 不変条件
+
+辞書は、DictionaryType を持たなければなりません。
+
+下記は、許可されません。
+
+```json
+{
+  "type": null
+}
+```
+
+### RuleDefinition
+
+#### 不変条件
+
+RuleId は、ルール・レジストリ内で一意でなければなりません。
+
+### ValidationReport
+
+#### 不変条件
+
+ValidationReport は、検証の実行結果のみを含みます。
+
+ランタイム状態を保持してはなりません。
+
+## 49. 機能の解決 Strategy
+
+ランタイム機能性は、「ランタイム」と「ルール機能性」の組み合わせによって決定します。
+
+### 解決フロー
+
+```mermaid
+flowchart TD
+  A["ランタイム機能性"] --> B["ルール機能性"]
+  B --> C["有効な機能性"]
+```
+
+下記は、ランタイム機能性の例です。
+
+```json
+{
+  "worker": true,
+  "autofix": false
+}
+```
+
+下記は、ルール機能性の例です。
+
+```json
+{
+  "worker": true,
+  "autofix": true
+}
+```
+
+下記は、有効な機能性の結果例です。
+
+```json
+{
+  "worker": true,
+  "autofix": false
+}
+```
+
+### 解決ルール
+
+最も制限の厳しい機能性を採用します。
+
+下記は、ブラウザー・ランタイムの解決例です。
+
+```mermaid
+flowchart TD
+  A["autofix"] --> B["disabled"]
+```
+
+下記は、Worker ランタイムの解決例です。
+
+```mermaid
+flowchart TD
+  A["batch"] --> B["enabled"]
+```
+
+## 50. 拡張機能の互換性方針
+
+拡張機能は、Core ランタイムの契約に従わなければなりません。
+
+### 互換性チェック
+
+```mermaid
+flowchart TD
+  A["拡張機能"] --> B["apiVersion"]
+  B --> C["互換性チェック"]
+  C --> D["ロード"]
+```
+
+### バージョン状態
+
+```ts
+type ExtensionCompatibility =
+    | "compatible"
+    | "deprecated"
+    | "unsupported";
+```
+
+#### 互換
+
+ロードを許可します。
+
+#### 非推奨
+
+ロードを許可します。警告を生成します。
+
+#### 非サポート
+
+ロードを拒否します。
+
+### 拡張機能ルール
+
+拡張機能は、下記を変更してはなりません。
+
+* 集約契約
+* ID Strategy
+* 検証パイプライン
+* Core ドメイン・モデル
+
+下記の追加は、許可されます。
+
+* Rule 追加
+* DictionaryType 追加
+* Parser 追加
+
+### インターフェイス
+
+#### ExtensionManifest
+
+```ts
+interface ExtensionManifest {
+    extensionId:
+        string;
+
+    version:
+        string;
+
+    apiVersion:
+        string;
+}
+```
+
+## 51. テスト
+
+Core ランタイムは、テスト可能でなければなりません。
+
+### テスト層
+
+#### 単体テスト
+
+下記は、テストの対象です。
+
+* RuleExecutor
+* 辞書エンジン
+* パーサー
+
+#### 統合テスト
+
+下記は、テストの対象です。
+
+* 検証パイプライン
+* リポジトリ
+* リソース・プロバイダー
+
+#### 互換性テスト
+
+下記は、テストの対象です。
+
+* プロファイル移行
+* バージョン・ネゴシエーション
+* 拡張機能の互換性
+
+#### ランタイム・テスト
+
+下記は、テストの対象です。
+
+* ブラウザー・ランタイム
+* Worker ランタイム
+* Node ランタイム
+
+### 必須カバレッジ
+
+下記は、必須とします。
+
+* ルール実行
+* 検証パイプライン
+* バージョン・ネゴシエーション
+* プロファイルの解決
+
+### テストの分離
+
+RuleExecutor は、独立してテスト可能でなければなりません。
+
+下記は、独立してテストできないので、禁止です。
+
+```mermaid
+flowchart TD
+  A["RuleExecutor"] --> B["データベース"]
+```
+
+```mermaid
+flowchart TD
+  A["RuleExecutor"] --> B["ネットワーク・アクセス"]
+```
+
+### 継続的検証
+
+CI は、下記を実行します。
+
+* 単体テスト
+* 統合テスト
+* 互換性テスト
+
+## 52. 完了条件
 
 `@s2j/docs-linter-core` は、下記を実装した時点で完成とみなします。
 
@@ -2162,7 +2458,16 @@ interface VersionNegotiationResult {
 * ストレージの独立性
 * ランタイムの独立性
 
-## 48. 今後のロードマップ
+下記を満たした時点で、ガバナンス層は完成とみなします。
+
+* 汎用言語
+* ドメイン不変条件
+* 機能の解決
+* 拡張機能の互換性
+* テスト契約
+* ガバナンス原則
+
+## 53. 今後のロードマップ
 
 * フェーズ1
   * `@s2j/docs-linter-core` として成立する最小構成
@@ -2178,6 +2483,28 @@ interface VersionNegotiationResult {
 * フェーズ4
   * `Forwarder-PRO` 連携
   * `配配メール` 連携
+
+## ガバナンス原則
+
+### 原則1
+
+* プラットフォームの独立性 - Core ランタイムは、`WordPress` に依存しない。
+
+### 原則2
+
+* ランタイムの独立性 - Core ランタイムは、ブラウザー、Worker、Node.js をサポートする。
+
+### 原則3
+
+* 拡張機能 First - 新機能は、「拡張機能」として実装する。
+
+### 原則4
+
+* 下位互換性 - ProfilePackage の互換性を維持する。
+
+### 原則5
+
+* フェイルセーフ - 単一ルールの失敗で、検証全体を停止しない。
 
 ## ADR (アーキテクチャ決定記録)
 
