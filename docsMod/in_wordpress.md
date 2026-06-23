@@ -2,15 +2,15 @@
 
 ## 概要
 
-`in WordPress` は、`@s2j/docs-linter-core` を WordPress 上で利用するための統合アダプターです。
+`in WordPress` は、`@s2j/docs-linter-core` を `WordPress` 上で利用するための統合アダプターです。
 
-本コンポーネントは WordPress とコアドメインを接続する責務を持ちます。
+本コンポーネントは `WordPress` とコアドメインを接続する責務を持ちます。
 
 文章品質判定ロジックは保持せず、全ての診断処理を `@s2j/docs-linter-core` に委譲します。
 
 ## 再利用可能な仕様
 
-本仕様は WordPress 固有仕様ではなく、統合アダプター仕様の実装例です。
+本仕様は `WordPress` 固有仕様ではなく、統合アダプター仕様の実装例です。
 
 将来的な下記アダプターは、本仕様を継承します。
 
@@ -30,8 +30,8 @@
 
 ## 設計意図 (ゴール)
 
-* WordPress 投稿編集時の品質診断
-* WordPress 投稿群の一括診断
+* `WordPress` 投稿編集時の品質診断
+* `WordPress` 投稿群の一括診断
 * プロファイル管理
 * 辞書管理
 * ルール設定管理
@@ -79,7 +79,7 @@ flowchart TD
 * RuleConfiguration
 * LintResult
 
-### WordPress コンテキスト
+### `WordPress` コンテキスト
 
 管理対象は、下記になります。
 
@@ -168,7 +168,7 @@ Post Content
 
 ```mermaid
 flowchart TD
-  A["Editor"] --> B["Adapter"]
+  A["エディター"] --> B["アダプター"]
   B --> C["`docs-linter-core`"]
   C --> D["Lint 結果"]
   D --> E["エディター UI"]
@@ -194,7 +194,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-  A["Posts"] --> B["Adapter"]
+  A["投稿"] --> B["アダプター"]
   B --> C["`docs-linter-core`"]
   C --> D["検証レポート"]
 ```
@@ -222,7 +222,7 @@ Profile を管理します。
 
 ### ストレージ
 
-WordPress Option または Custom Table に保存します。
+`WordPress` Option または Custom Table に保存します。
 
 ## 共通ユースケース - 辞書管理
 
@@ -289,11 +289,11 @@ RuleConfiguration を管理します。
 
 ### ProfileRepository
 
-WordPress ストレージとコアドメインを接続します。
+`WordPress` ストレージとコアドメインを接続します。
 
 ### DictionaryRepository
 
-WordPress ストレージとコアドメインを接続します。
+`WordPress` ストレージとコアドメインを接続します。
 
 ## ランタイム Strategy
 
@@ -342,7 +342,7 @@ flowchart TD
 
 ## 拡張ポイント
 
-WordPress 固有機能との連携を許容します。
+`WordPress` 固有機能との連携を許容します。
 
 連携例は、下記のようになります。
 
