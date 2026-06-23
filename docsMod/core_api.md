@@ -1,4 +1,4 @@
-# 📘 S2J Docs Linter - フェーズ0 - Core API 仕様
+# 📘 S2J Docs Linter - Core API 仕様
 
 ## 1. 概要
 
