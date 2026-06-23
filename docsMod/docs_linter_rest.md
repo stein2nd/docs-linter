@@ -39,9 +39,9 @@ flowchart TD
 
     subgraph RestLayer ["docs-linter-rest"]
         direction TB
-        r1["REST Controller"]
-        r2["Request Validation"]
-        r3["DTO Mapping"]
+        r1["REST コントローラー"]
+        r2["リクエストの検証"]
+        r3["DTO マッピング"]
     end
 
     core ["docs-linter-core"]
@@ -54,9 +54,9 @@ flowchart TD
 
 ### 薄いアダプター
 
-REST Layer は薄く保ちます。
+REST 層は、薄く保ちます。
 
-REST Layer に業務ロジックを実装してはなりません。
+REST 層に、業務ロジックを実装してはなりません。
 
 ### コア・ファースト
 
@@ -257,7 +257,7 @@ REST API は Domain Model を DTO に変換します。
 
 ## リポジトリの関連付け
 
-REST Layer はリポジトリ・インターフェースを実装します。
+REST 層は、リポジトリ・インターフェースを実装します。
 
 ### ProfileRepository
 
