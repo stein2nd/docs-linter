@@ -7,6 +7,6 @@
 
 * [architecture.md](./architecture.md) — 将来アーキテクチャ
 * [core_api.md](./core_api.md) — フェーズ0 - Core API 仕様
-* [docs-linter-core.md](./docs-linter-core.md) — フェーズ1-A - @s2j/docs-linter-core
-* [docs_linter_rest.md](./docs_linter_rest.md) — フェーズ1-B - @s2j/docs-linter-rest
+* [docs-linter-core.md](./docs-linter-core.md) — フェーズ1-A - @s2j/docs-linter-core 実装契約
+* [docs_linter_rest.md](./docs_linter_rest.md) — フェーズ1-B - @s2j/docs-linter-rest 配送契約
 * [in_wordpress.md](./in_wordpress.md) — フェーズ2 - `in WordPress`
