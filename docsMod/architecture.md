@@ -162,8 +162,8 @@ Core エンジンは、下記の実行環境をサポートします。
 責務は、下記のとおりです。
 
 * textlint
-* YAML Parser
-* JSON Parser
+* YAML パーサー
+* JSON パーサー
 * Storage
 
 ## パッケージ Strategy
