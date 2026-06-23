@@ -98,7 +98,11 @@ Core ランタイムは、リソースの保存場所を知りません。
 
 ResourceProvider を介して取得します。
 
-## 11. ディレクトリ構造
+## 11. リクエスト/応答契約
+
+アプリケーション・サービスは、リクエスト/応答モデルを採用します。
+
+## 12. ディレクトリ構造
 
 ```text
 src/
@@ -121,7 +125,7 @@ src/
 └─ index.ts
 ```
 
-## 12. ドメイン層
+## 13. ドメイン層
 
 ### Profile エンティティ
 
@@ -192,7 +196,7 @@ interface Violation {
 }
 ```
 
-## 13. ドメインサービス
+## 14. ドメインサービス
 
 ### LintEngine
 
@@ -217,7 +221,7 @@ RuleDefinition を実行します。責務は、下記になります。
 * 推奨語の検査
 * 固有名詞の検査
 
-## 14. アプリケーション層
+## 15. アプリケーション層
 
 ### LintService
 
@@ -272,7 +276,7 @@ validateConfig(config);
 validateDictionary(dictionary);
 ```
 
-## 15. ルールエンジン設計
+## 16. ルールエンジン設計
 
 ### ルール定義
 
@@ -308,7 +312,7 @@ required-word
 }
 ```
 
-## 16. プロファイル設計
+## 17. プロファイル設計
 
 プロファイルは、集約のルートとします。
 
@@ -339,7 +343,7 @@ Profile
 }
 ```
 
-## 17. ランタイム要件
+## 18. ランタイム要件
 
 サポート対象は、下記になります。
 
@@ -354,14 +358,14 @@ Profile
 * os
 * process
 
-## 18. textlint 連携
+## 19. textlint 連携
 
 Core は textlint を内部利用します。ただし textlint は、公開 API に露出しません。
 
 `import { TextLintEngine }` は許可します。
 `new TextLintKernel()` をユーザーに公開することは禁止します。
 
-## 19. リポジトリ構成
+## 20. リポジトリ構成
 
 ### ProfileRepository
 
@@ -385,7 +389,7 @@ interface DictionaryRepository {
 
 Core はリポジトリ・インターフェースのみ保持します。
 
-## 20. 公開 API
+## 21. 公開 API
 
 ### `lint()`
 
@@ -472,7 +476,7 @@ registerDictionaryType(
 );
 ```
 
-## 21. 実行モデル
+## 22. 実行モデル
 
 `@s2j/docs-linter-core` は、Core API の定義する契約を実装する、ドメイン・ランタイムです。
 
@@ -596,7 +600,7 @@ ValidationReport を生成します。
 * 詳細の作成
 * 統計の作成
 
-## 22. ルール実行モデル
+## 23. ルール実行モデル
 
 RuleDefinition と RuleExecutor を分離します。
 
@@ -861,9 +865,9 @@ Core ランタイムは、「ドメインイベント」を発行できます。
 
 RuleExecutor は、副作用を持ちません。
 
-## 23. パーサー Strategy
+## 24. パーサー Strategy
 
-`@s2j/docs-linter-core` は、入力コンテンツを抽象構文木 (AST) に変換した上で、検証を実施します。
+`@s2j/docs-linter-core` は、入力コンテンツをAST (抽象構文木) に変換した上で、検証を実施します。
 
 RuleExecutor は、生テキストを直接解析してはなりません。
 
@@ -930,7 +934,7 @@ flowchart TD
   C --> D["AST (抽象構文木)"]
 ```
 
-## 24. コンテンツタイプ Strategy
+## 25. コンテンツタイプ Strategy
 
 コンテンツタイプは、入力コンテンツの種類を表します。
 
@@ -980,7 +984,7 @@ interface RuleCapability {
 }
 ```
 
-## 25. キャッシュ Strategy
+## 26. キャッシュ Strategy
 
 `@s2j/docs-linter-core` は、検証パフォーマンス向上のため、キャッシュを利用できます。
 
@@ -1045,7 +1049,7 @@ interface CacheProvider {
 
 RuleExecutor は、キャッシュの存在を前提としてはなりません。
 
-## 26. エラー処理方針
+## 27. エラー処理方針
 
 `@s2j/docs-linter-core` は、「フェイルセーフ」採用します。
 
@@ -1118,7 +1122,7 @@ interface RuntimeError {
 }
 ```
 
-## 27. 可観測性
+## 28. 可観測性
 
 `@s2j/docs-linter-core` は、ランタイム状態を観測可能でなければなりません。
 
@@ -1208,7 +1212,7 @@ flowchart TD
   B --> C["Vendor SDK"]
 ```
 
-## 28. ランタイム診断
+## 29. ランタイム診断
 
 ランタイム状態を取得します。
 
@@ -1230,7 +1234,7 @@ flowchart TD
 }
 ```
 
-## 29. 拡張
+## 30. 拡張
 
 本章は、ルール拡張、リソース拡張、設定拡張、および「セキュリティ境界」を定義します。
 
@@ -1359,7 +1363,7 @@ flowchart TD
 * パーサーの登録
 * 辞書の登録
 
-## 30. 設定解決 Strategy
+## 31. 設定解決 Strategy
 
 設定は、階層的に解決します。後段の設定が優先されます。
 
@@ -1401,7 +1405,7 @@ Core ランタイムが提供する既定値です。
 
 アダプターが実行時に上書きする値です。
 
-## 31. リソース・ロード
+## 32. リソース・ロード
 
 Core ランタイムは、リソースの保存場所を知りません。ResourceProvider を介して取得します。
 
@@ -1458,7 +1462,7 @@ interface ResourceProvider {
 }
 ```
 
-## 32. セキュリティ境界
+## 33. セキュリティ境界
 
 Core ランタイムは、ユーザー入力を信頼してはなりません。
 
@@ -1529,7 +1533,7 @@ flowchart TD
   B --> C["実行"]
 ```
 
-## 33. サンドボックス化方針
+## 34. サンドボックス化方針
 
 ブラウザー・ランタイムおよび Worker ランタイムを推奨します。
 
@@ -1541,7 +1545,303 @@ flowchart TD
 
 拡張機能は、署名済みまたは信頼済みパッケージとして配布することを推奨します。
 
-## 34. 完了条件
+## 35. アプリケーション・サービス層
+
+アプリケーション・サービス層は、Core ランタイムの公開入口です。
+
+アダプター層は、ドメイン・オブジェクトを直接操作してはなりません。
+
+すべての診断処理は、アプリケーション・サービスを経由します。
+
+### 設計意図 (ゴール)
+
+* ユースケースの統一
+* ランタイムの隠蔽
+* アダプターの単純化
+* トランザクション境界の統一
+
+### アプリケーション・サービス
+
+#### LintApplicationService
+
+文章品質診断を実行します。
+
+##### 責務
+
+* リクエストの検証
+* セッションの管理
+* 検証パイプラインの実行
+* 結果の生成
+
+##### フロー
+
+```mermaid
+flowchart TD
+  A["LintRequest"] --> B["LintApplicationService"]
+  B --> C["検証パイプライン"]
+  C --> D["LintResponse"]
+```
+
+#### BatchLintApplicationService
+
+一括診断を実行します。
+
+##### 責務
+
+* 一括セッションの作成
+* 並列実行
+* 集約
+* レポートの生成
+
+##### フロー
+
+```mermaid
+flowchart TD
+  A["BatchLintRequest"] --> B["BatchLintApplicationService"]
+  B --> C["検証パイプライン"]
+  C --> D["検証レポート"]
+```
+
+### インターフェイス
+
+#### LintRequest
+
+```ts
+interface LintRequest {
+    content: string;
+
+    contentType:
+        ContentType;
+
+    profileId:
+        string;
+
+    runtimeOverride?:
+        RuntimeOverride;
+}
+```
+
+#### LintResponse
+
+```ts
+interface LintResponse {
+    result:
+        LintResult;
+
+    diagnostics:
+        RuntimeDiagnostics;
+}
+```
+
+#### BatchLintRequest
+
+```ts
+interface BatchLintRequest {
+    items:
+        LintRequest[];
+}
+```
+
+#### BatchLintResponse
+
+```ts
+interface BatchLintResponse {
+    report:
+        ValidationReport;
+}
+```
+
+## 36. トランザクション境界
+
+検証の実行単位を Lint セッションと呼びます。
+
+### Lint セッション
+
+下記を一つのセッションとします。
+
+```mermaid
+flowchart TD
+  A["リクエスト"] --> B["リソースのロード"]
+  B --> C["検証"]
+  C --> D["レポートの構築"]
+  D --> E["応答"]
+```
+
+### セッション・ライフサイクル
+
+```mermaid
+flowchart TD
+  A["セッション Start"] --> B["リソースの解決"]
+  B --> C["検証"]
+  C --> D["レポートの生成"]
+  D --> E["リソースの解放"]
+  E --> F["セッション End"]
+```
+
+### 一貫性の原則
+
+同一セッション内では、同じプロファイルと辞書を利用します。
+
+検証中に設定変更が発生しても、反映しません。
+
+## 37. 並行処理の方針
+
+Core ランタイムは、並列実行可能でなければなりません。
+
+### 設計原則
+
+Stateless First (ステートレス・ファースト) とします。
+
+### 要件
+
+RuleExecutor は、状態を保持してはなりません。
+辞書エンジンは、状態を保持してはなりません。
+検証パイプラインは、状態を保持してはなりません。
+
+### 許可
+
+同時実行は、許可されます。
+
+```mermaid
+flowchart TD
+  A["Worker A"] --> B["Lint セッション A"]
+```
+
+```mermaid
+flowchart TD
+  A["Worker B"] --> B["Lint セッション B"]
+```
+
+### 禁止
+
+```mermaid
+flowchart TD
+  A["Worker A"] --> B["グローバルで値変更可能な状態"]
+  C --> B["Worker B"]
+```
+
+### キャッシュと並行性
+
+キャッシュは、共有可能です。
+
+ただしドメイン・ロジックは、キャッシュを前提としてはなりません。
+
+### 一括実行の方針
+
+一括検証は、並列実行を許可します。
+
+下記は、一括実行の例です。
+
+```mermaid
+flowchart TD
+    subgraph Batch [Batch]
+        B1[アイテム1]
+        B2[アイテム2]
+        B3[アイテム3]
+        B4[アイテム4]
+    end
+    
+    subgraph Worker_Pool [Worker プール]
+        W1[Worker1]
+        W2[Worker2]
+        W3[Worker3]
+        W4[Worker4]
+    end
+
+    Batch ==> Worker_Pool
+```
+
+## 38. リソース・ライフサイクル
+
+ランタイム・リソースは、「セッション」に従って管理します。
+
+### リソースリークの防止
+
+セッション終了後に「セッション・リソース」を保持してはなりません。
+
+### 管理対象リソース
+
+* プロファイル
+* 辞書
+* ルール・レジストリ
+* パーサー
+* AST (抽象構文木) 
+
+### リソースの獲得
+
+```mermaid
+flowchart TD
+  A["セッション Start"] --> B["リソースの獲得"]
+```
+
+### リソースの解放
+
+```mermaid
+flowchart TD
+  A["セッション End"] --> B["リソースの解放"]
+```
+
+### リソース所有権
+
+* プロファイル - セッション・オーナー
+* 辞書 - セッション・オーナー
+* AST (抽象構文木) - セッション・オーナー
+* ルール・レジストリ - ランタイム・オーナー
+
+### リソースのクリーンアップ
+
+#### 必須
+
+* AST (抽象構文木) の解放
+* セッション・キャッシュの解放
+* 一時コンテキストの解放
+
+#### 任意
+
+* 共有キャッシュ
+* ランタイム・レジストリ
+
+## 39. ランタイム・コンテキスト
+
+ランタイム・コンテキストは、毎セッション生成します。
+
+RuntimeContext は、セッション内のみ有効とします。
+
+### インターフェイス
+
+#### RuntimeContext
+
+```ts
+interface RuntimeContext {
+    profile:
+        Profile;
+
+    dictionaries:
+        Dictionary[];
+
+    runtime:
+        RuntimeEnvironment;
+}
+```
+
+## 40. 失敗処理
+
+セッション失敗は、他セッションに影響してはなりません。
+
+下記は、並行実行されてるセッションの一方が、失敗した例です。
+
+```mermaid
+flowchart TD
+  A["セッション A"] --> B["ルールの失敗"]
+  B --> C["中断"]
+```
+
+```mermaid
+flowchart TD
+  A["セッション B"] --> B["続行"]
+```
+
+## 41. 完了条件
 
 `@s2j/docs-linter-core` は、下記を実装した時点で完成とみなします。
 
@@ -1566,7 +1866,7 @@ flowchart TD
 * 可観測性
 * ランタイム診断
 
-拡張機能層は、下記を満たした時点で完成とみなします。
+下記を満たした時点で、拡張機能層は完成とみなします。
 
 * 拡張機能プロバイダー
 * ランタイム・レジストリ
@@ -1576,7 +1876,19 @@ flowchart TD
 * ランタイム分離
 * 互換性契約
 
-## 35. 今後のロードマップ
+下記を満たした時点で、アプリケーション層層は完成とみなします。
+
+* LintApplicationService
+* BatchLintApplicationService
+* リクエスト契約
+* 応答契約
+* トランザクション境界
+* 並行処理の方針
+* リソース・ライフサイクル
+* ランタイム・コンテキスト
+* 障害隔離
+
+## 42. 今後のロードマップ
 
 * フェーズ1
   * `@s2j/docs-linter-core` として成立する最小構成
