@@ -102,7 +102,17 @@ ResourceProvider を介して取得します。
 
 アプリケーション・サービスは、リクエスト/応答モデルを採用します。
 
-## 12. ディレクトリ構造
+## 12. リポジトリ契約
+
+Core ランタイムは、ストレージの実装詳細を知りません。
+
+リポジトリは、「集約ルート」の永続化および取得を担当します。
+
+## 13. バージョン・ネゴシエーション契約
+
+Core ランタイムは、ProfileVersion および SchemaVersion を評価します。
+
+## 14. ディレクトリ構造
 
 ```text
 src/
@@ -125,7 +135,7 @@ src/
 └─ index.ts
 ```
 
-## 13. ドメイン層
+## 15. ドメイン層
 
 ### Profile エンティティ
 
@@ -196,7 +206,7 @@ interface Violation {
 }
 ```
 
-## 14. ドメインサービス
+## 16. ドメインサービス
 
 ### LintEngine
 
@@ -221,7 +231,7 @@ RuleDefinition を実行します。責務は、下記になります。
 * 推奨語の検査
 * 固有名詞の検査
 
-## 15. アプリケーション層
+## 17. アプリケーション層
 
 ### LintService
 
@@ -276,7 +286,7 @@ validateConfig(config);
 validateDictionary(dictionary);
 ```
 
-## 16. ルールエンジン設計
+## 18. ルールエンジン設計
 
 ### ルール定義
 
@@ -312,9 +322,9 @@ required-word
 }
 ```
 
-## 17. プロファイル設計
+## 19. プロファイル設計
 
-プロファイルは、集約のルートとします。
+プロファイルは、集約ルートとします。
 
 ```text
 Profile
@@ -343,7 +353,7 @@ Profile
 }
 ```
 
-## 18. ランタイム要件
+## 20. ランタイム要件
 
 サポート対象は、下記になります。
 
@@ -358,14 +368,14 @@ Profile
 * os
 * process
 
-## 19. textlint 連携
+## 21. textlint 連携
 
 Core は textlint を内部利用します。ただし textlint は、公開 API に露出しません。
 
 `import { TextLintEngine }` は許可します。
 `new TextLintKernel()` をユーザーに公開することは禁止します。
 
-## 20. リポジトリ構成
+## 22. リポジトリ構成
 
 ### ProfileRepository
 
@@ -389,7 +399,7 @@ interface DictionaryRepository {
 
 Core はリポジトリ・インターフェースのみ保持します。
 
-## 21. 公開 API
+## 23. 公開 API
 
 ### `lint()`
 
@@ -476,7 +486,7 @@ registerDictionaryType(
 );
 ```
 
-## 22. 実行モデル
+## 24. 実行モデル
 
 `@s2j/docs-linter-core` は、Core API の定義する契約を実装する、ドメイン・ランタイムです。
 
@@ -600,7 +610,7 @@ ValidationReport を生成します。
 * 詳細の作成
 * 統計の作成
 
-## 23. ルール実行モデル
+## 25. ルール実行モデル
 
 RuleDefinition と RuleExecutor を分離します。
 
@@ -865,7 +875,7 @@ Core ランタイムは、「ドメインイベント」を発行できます。
 
 RuleExecutor は、副作用を持ちません。
 
-## 24. パーサー Strategy
+## 26. パーサー Strategy
 
 `@s2j/docs-linter-core` は、入力コンテンツをAST (抽象構文木) に変換した上で、検証を実施します。
 
@@ -934,7 +944,7 @@ flowchart TD
   C --> D["AST (抽象構文木)"]
 ```
 
-## 25. コンテンツタイプ Strategy
+## 27. コンテンツタイプ Strategy
 
 コンテンツタイプは、入力コンテンツの種類を表します。
 
@@ -984,7 +994,7 @@ interface RuleCapability {
 }
 ```
 
-## 26. キャッシュ Strategy
+## 28. キャッシュ Strategy
 
 `@s2j/docs-linter-core` は、検証パフォーマンス向上のため、キャッシュを利用できます。
 
@@ -1049,7 +1059,7 @@ interface CacheProvider {
 
 RuleExecutor は、キャッシュの存在を前提としてはなりません。
 
-## 27. エラー処理方針
+## 29. エラー処理方針
 
 `@s2j/docs-linter-core` は、「フェイルセーフ」採用します。
 
@@ -1122,7 +1132,7 @@ interface RuntimeError {
 }
 ```
 
-## 28. 可観測性
+## 30. 可観測性
 
 `@s2j/docs-linter-core` は、ランタイム状態を観測可能でなければなりません。
 
@@ -1212,7 +1222,7 @@ flowchart TD
   B --> C["Vendor SDK"]
 ```
 
-## 29. ランタイム診断
+## 31. ランタイム診断
 
 ランタイム状態を取得します。
 
@@ -1234,7 +1244,7 @@ flowchart TD
 }
 ```
 
-## 30. 拡張
+## 32. 拡張
 
 本章は、ルール拡張、リソース拡張、設定拡張、および「セキュリティ境界」を定義します。
 
@@ -1363,7 +1373,7 @@ flowchart TD
 * パーサーの登録
 * 辞書の登録
 
-## 31. 設定解決 Strategy
+## 33. 設定解決 Strategy
 
 設定は、階層的に解決します。後段の設定が優先されます。
 
@@ -1405,7 +1415,7 @@ Core ランタイムが提供する既定値です。
 
 アダプターが実行時に上書きする値です。
 
-## 32. リソース・ロード
+## 34. リソース・ロード
 
 Core ランタイムは、リソースの保存場所を知りません。ResourceProvider を介して取得します。
 
@@ -1462,7 +1472,7 @@ interface ResourceProvider {
 }
 ```
 
-## 33. セキュリティ境界
+## 35. セキュリティ境界
 
 Core ランタイムは、ユーザー入力を信頼してはなりません。
 
@@ -1533,7 +1543,7 @@ flowchart TD
   B --> C["実行"]
 ```
 
-## 34. サンドボックス化方針
+## 36. サンドボックス化方針
 
 ブラウザー・ランタイムおよび Worker ランタイムを推奨します。
 
@@ -1545,7 +1555,7 @@ flowchart TD
 
 拡張機能は、署名済みまたは信頼済みパッケージとして配布することを推奨します。
 
-## 35. アプリケーション・サービス層
+## 37. アプリケーション・サービス層
 
 アプリケーション・サービス層は、Core ランタイムの公開入口です。
 
@@ -1564,7 +1574,7 @@ flowchart TD
 
 #### LintApplicationService
 
-文章品質診断を実行します。
+文章品質を診断します。
 
 ##### 責務
 
@@ -1584,7 +1594,7 @@ flowchart TD
 
 #### BatchLintApplicationService
 
-一括診断を実行します。
+一括で診断します。
 
 ##### 責務
 
@@ -1651,13 +1661,13 @@ interface BatchLintResponse {
 }
 ```
 
-## 36. トランザクション境界
+## 38. トランザクション境界
 
 検証の実行単位を Lint セッションと呼びます。
 
 ### Lint セッション
 
-下記を一つのセッションとします。
+下記を1つのセッションとします。
 
 ```mermaid
 flowchart TD
@@ -1684,7 +1694,7 @@ flowchart TD
 
 検証中に設定変更が発生しても、反映しません。
 
-## 37. 並行処理の方針
+## 39. 並行処理の方針
 
 Core ランタイムは、並列実行可能でなければなりません。
 
@@ -1751,7 +1761,7 @@ flowchart TD
     Batch ==> Worker_Pool
 ```
 
-## 38. リソース・ライフサイクル
+## 40. リソース・ライフサイクル
 
 ランタイム・リソースは、「セッション」に従って管理します。
 
@@ -1801,7 +1811,7 @@ flowchart TD
 * 共有キャッシュ
 * ランタイム・レジストリ
 
-## 39. ランタイム・コンテキスト
+## 41. ランタイム・コンテキスト
 
 ランタイム・コンテキストは、毎セッション生成します。
 
@@ -1824,7 +1834,7 @@ interface RuntimeContext {
 }
 ```
 
-## 40. 失敗処理
+## 42. 失敗処理
 
 セッション失敗は、他セッションに影響してはなりません。
 
@@ -1841,7 +1851,259 @@ flowchart TD
   A["セッション B"] --> B["続行"]
 ```
 
-## 41. 完了条件
+
+
+## 43. リポジトリ
+
+リポジトリは、ResourceProvider を利用して集約を構築します。
+
+### 設計意図 (ゴール)
+
+* ストレージの独立性
+* ランタイムの独立性
+* アダプターの独立性
+
+### 集約の所有権
+
+#### プロファイル集約
+
+プロファイルは、唯一の「集約ルート」とします。
+
+#### リポジトリのアクセス・ルール
+
+下記のようなリポジトリ・アクセスは、許可されます。
+
+```mermaid
+flowchart TD
+  A["アプリケーション・サービス"] --> B["リポジトリ"]
+  B --> C["集約"]
+```
+
+一方、下記のようなリポジトリ・アクセスは、許可されません。
+
+```mermaid
+flowchart TD
+  A["アプリケーション・サービス"] --> B["ResourceProvider"]
+```
+
+```mermaid
+flowchart TD
+  A["ランタイム・コンポーネント"] --> B["ResourceProvider"]
+```
+
+### インターフェイス
+
+#### ProfileRepository
+
+```ts
+interface ProfileRepository {
+    findById(
+        profileId: string
+    ): Promise<Profile>;
+
+    save(
+        profile: Profile
+    ): Promise<void>;
+}
+```
+
+#### DictionaryRepository
+
+```ts
+interface DictionaryRepository {
+    findById(
+        dictionaryId: string
+    ): Promise<Dictionary>;
+}
+```
+
+### リソースプロバイダーとの関係
+
+```mermaid
+flowchart TD
+  A["ProfileRepository"] --> B["ResourceProvider"]
+  B --> C["ストレージ"]
+```
+
+## 44. ドメイン・サービス境界
+
+ドメイン・サービスは、ドメイン・ロジックを担当します。
+
+ランタイム・サービスは、ランタイム・ロジックを担当します。
+
+両者を混在させてはなりません。
+
+### ドメイン・サービス
+
+下記は、ドメイン・サービスの例です。
+
+```text
+ValidationService
+ProfileService
+RuleService
+```
+
+#### 責務
+
+* 検証
+* プロファイルの解決
+* 辞書の解決
+* ルールの解決
+
+### ランタイム・サービス
+
+下記は、ランタイム・サービスの例です。
+
+```text
+CacheService
+MetricsService
+WorkerDispatcher
+DiagnosticsService
+```
+
+#### 責務
+
+* キャッシュ
+* ログ採取
+* 指標
+* Worker 配分・制御
+* 診断
+
+### 依存性ルール
+
+下記のようなドメイン・サービスの依存は、許可されます。
+
+```mermaid
+flowchart TD
+  A["アプリケーション・サービス"] --> B["ドメイン・サービス"]
+```
+
+下記のようなランタイム・サービスの依存は、許可されます。
+
+```mermaid
+flowchart TD
+  A["アプリケーション・サービス"] --> B["ランタイム・サービス"]
+```
+
+一方、下記のようなランタイム・サービスの依存は、許可されません。
+
+```mermaid
+flowchart TD
+  A["ドメイン・サービス"] --> B["ランタイム・サービス"]
+```
+
+## 45. プロファイルの解決 Strategy
+
+プロファイルの解決は、ProfileId からプロファイル集約を解決する処理です。
+
+下記は、プロファイルの解決例です。
+
+```mermaid
+flowchart TD
+  A["wordpress/legal"] --> B["プロファイル集約"]
+```
+
+下記は、プロファイルの解決失敗例です。
+
+```mermaid
+flowchart TD
+  A["wordpress/unknown"] --> B["wordpress/default"]
+```
+
+### フロー
+
+```mermaid
+flowchart TD
+  A["ProfileId"] --> B["ProfileRepository"]
+  B --> C["プロファイル集約"]
+```
+
+### プロファイルの解決の順序
+
+#### 完全一致
+
+最初に完全一致を検索します。
+
+#### エイリアスの解決
+
+エイリアスが存在する場合は、変換します。
+
+#### 代替プロファイル
+
+解決できない場合は、デフォルト・プロファイルを利用できます。
+
+### インターフェイス
+
+#### ProfileResolutionResult
+
+```ts
+interface ProfileResolutionResult {
+    profile: Profile;
+
+    fallback: boolean;
+}
+```
+
+## 46. バージョン・ネゴシエーション
+
+Core ランタイムは、ProfileVersion および SchemaVersion を評価します。
+
+下記は、バージョン・ネゴシエーション例です。
+
+```mermaid
+flowchart TD
+  A["Profile v1.0"] --> B["Core v2.0"]
+  B --> C["deprecated"]
+```
+
+### バージョンの状態
+
+```ts
+type VersionState =
+    | "compatible"
+    | "deprecated"
+    | "unsupported";
+```
+
+#### 互換
+
+ロードを許可します。
+
+#### 非推奨
+
+ロードを許可します。警告を生成します。
+
+#### 非サポート
+
+ロードを拒否します。
+
+### ネゴシエーションのフロー
+
+```mermaid
+flowchart TD
+  A["プロファイル・バージョン"] --> B["互換性チェック"]
+  B --> C["バージョンの状態"]
+```
+
+### 移行ルール
+
+非推奨プロファイルは、移行ランタイムの対象とします。
+
+### インターフェイス
+
+#### VersionNegotiationResult
+
+```ts
+interface VersionNegotiationResult {
+    state:
+        VersionState;
+
+    warnings:
+        string[];
+}
+```
+
+## 47. 完了条件
 
 `@s2j/docs-linter-core` は、下記を実装した時点で完成とみなします。
 
@@ -1855,7 +2117,7 @@ flowchart TD
 * ライフサイクル・ハンドリング
 * 移行ランタイム
 * ドメインイベント・ランタイム
-* Core API Compatibility
+* Core API 互換
 
 `@s2j/docs-linter-core` は、下記を実装した時点でランタイム層完了とみなします。
 
@@ -1876,7 +2138,7 @@ flowchart TD
 * ランタイム分離
 * 互換性契約
 
-下記を満たした時点で、アプリケーション層層は完成とみなします。
+下記を満たした時点で、アプリケーション層は完成とみなします。
 
 * LintApplicationService
 * BatchLintApplicationService
@@ -1888,7 +2150,19 @@ flowchart TD
 * ランタイム・コンテキスト
 * 障害隔離
 
-## 42. 今後のロードマップ
+下記を満たした時点で、アーキテクチャ層は完成とみなします。
+
+* リポジトリ契約
+* ドメイン・サービス境界
+* ランタイム・サービス境界
+* プロファイルの解決 Strategy
+* バージョン・ネゴシエーション
+* ADR (アーキテクチャ決定記録)
+* 集約の一貫性
+* ストレージの独立性
+* ランタイムの独立性
+
+## 48. 今後のロードマップ
 
 * フェーズ1
   * `@s2j/docs-linter-core` として成立する最小構成
@@ -1904,3 +2178,90 @@ flowchart TD
 * フェーズ4
   * `Forwarder-PRO` 連携
   * `配配メール` 連携
+
+## ADR (アーキテクチャ決定記録)
+
+Core ランタイムの重要な設計判断を ADR として管理します。
+
+### ADR-001
+
+#### タイトル
+
+* プラットフォームの独立性
+
+#### 決定
+
+* Core ランタイムは、`WordPress` / `Forwarder-PRO` / `配配メール` に依存しない。
+
+### ADR-002
+
+#### タイトル
+
+* Worker First ランタイム
+
+#### 決定
+
+* ブラウザー・ランタイムでは Web Worker を優先する。
+
+### ADR-003
+
+#### タイトル
+
+* 静的ルールの登録
+
+#### 決定
+
+* ルールは、ランタイム・レジストリに静的登録する。
+* 動的 `require()` を利用しない。
+
+### ADR-004
+
+#### タイトル
+
+* Stateless ルール実行
+
+#### 決定
+
+* RuleExecutor は、状態を保持しない。
+
+### ADR-005
+
+#### タイトル
+
+* プロファイル集約ルート
+
+#### 決定
+
+* プロファイルを唯一の集約ルートとする。
+
+### ADR-006
+
+#### タイトル
+
+* ストレージの独立性
+
+#### 決定
+
+* Core ランタイムは、ストレージを知らない。
+* リポジトリと ResourceProvider を介してアクセスする。
+
+### ADR-007
+
+#### タイトル
+
+* フェイルセーフ検証
+
+#### 決定
+
+* 単一ルールの失敗で、検証全体を停止しない。
+
+### ADR-008
+
+#### タイトル
+
+* 拡張機能 First アーキテクチャ
+
+#### 決定
+
+* 新しいルールや DictionaryType の追加は、ExtensionProvider により行う。
+* Core ランタイムの変更を必要としない。
