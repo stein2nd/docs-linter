@@ -1,4 +1,4 @@
-# 📘 S2J Docs Linter - フェーズ1-B - @s2j/docs-linter-rest
+# 📘 S2J Docs Linter - @s2j/docs-linter-rest (配送契約)
 
 ## 概要
 
@@ -226,7 +226,7 @@ REST API は「ドメイン・モデル」を DTO に変換します。
 
 辞書を削除します。
 
-## Import API
+## インポート API
 
 ### POST /import/profile
 
@@ -245,7 +245,7 @@ REST API は「ドメイン・モデル」を DTO に変換します。
 * JSON
 * YAML
 
-## Export API
+## エクスポート API
 
 ### GET /export/profile/{id}
 
