@@ -201,12 +201,14 @@ flowchart TD
 
 ### 結果
 
-```text
-検証レポート
- ├─ Total
- ├─ Errors
- ├─ Warnings
- └─ Infos
+```mermaid
+flowchart TD
+    subgraph A [検証レポート]
+        B1[Total]
+        B2[Errors]
+        B3[Warnings]
+        B4[Infos]
+    end
 ```
 
 ## 共通ユースケース - プロファイル管理
@@ -267,11 +269,13 @@ RuleConfiguration を管理します。
 
 ### 集約
 
-```text
-検証レポート
- ├─ Summary
- ├─ Item
- └─ 指摘事項
+```mermaid
+flowchart TD
+    subgraph A [検証レポート]
+        B1[Summary]
+        B2[Item]
+        B3[指摘事項]
+    end
 ```
 
 ### 要約
