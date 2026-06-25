@@ -248,7 +248,7 @@ const result = await lint({
 });
 ```
 
-* Input
+* 入力
 
 ```ts
 interface LintRequest {
@@ -258,7 +258,7 @@ interface LintRequest {
 }
 ```
 
-* Output
+* 出力
 
 ```ts
 interface LintResult {
@@ -2062,7 +2062,7 @@ flowchart TD
   B --> C["deprecated"]
 ```
 
-### バージョンの状態
+### バージョン状態
 
 ```ts
 type VersionState =
