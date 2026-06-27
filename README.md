@@ -192,7 +192,7 @@ WordPress プリセット向け textlint ルールの安定動作を目的とし
 
 対象スクリプトは、下記の通りです。
 
-* `./scripts/patch-wp-prh-colon-quote.cjs` — 上記 `wordpress.yml` の「コロンの後に半角スペースを入れる」ルールを idempotent に調整 (未インストール時はスキップ)
+* `./scripts/patch-wp-prh-colon-quote.cjs` — 上記 `wordpress.yml` の「コロンの後に半角スペースを入れる」ルールを冪等 (べきとう) に調整 (未インストール時はスキップ)
 
 一部の環境では `npm warn allow-scripts` が表示される場合がありますが、これは npm のセキュリティ機能による確認のための通知であり、インストール失敗を意味するものではありません。
 
