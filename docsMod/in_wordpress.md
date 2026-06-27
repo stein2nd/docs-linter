@@ -139,7 +139,7 @@ flowchart TD
 
     subgraph WordPress ["WordPress"]
         direction TB
-        r1["Post Content"]
+        r1["投稿コンテンツ"]
         r2["Block Content"]
         r3["Excerpt"]
         r4["Custom Field"]
@@ -162,7 +162,7 @@ flowchart TD
 
 #### 入力
 
-Post Content
+* 投稿コンテンツ
 
 #### フロー
 
@@ -232,12 +232,12 @@ Profile を管理します。
 
 ### 対応操作
 
-* Create
-* Read
-* Update
-* Delete
-* Import
-* Export
+* 作成
+* 読み取り
+* 更新
+* 削除
+* インポート
+* エクスポート
 
 ### 対応フォーマット
 
