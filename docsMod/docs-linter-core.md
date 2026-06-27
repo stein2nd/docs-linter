@@ -30,7 +30,7 @@ flowchart TD
     subgraph AdapterLayer ["アダプター層"]
         direction TB
         c1["docs-linter"]
-        c2["docs-linter-rest"]
+        c2["`@s2j/docs-linter-rest`"]
         c3["`WordPress`"]
         c4["`Forwarder-PRO`"]
         c5["`配配メール`"]
@@ -2077,7 +2077,7 @@ type VersionState =
 
 #### 非推奨
 
-ロードを許可します。警告を生成します。
+ロードを許可するが、警告を生成します。
 
 #### 非サポート
 
@@ -2290,7 +2290,7 @@ type ExtensionCompatibility =
 
 #### 非推奨
 
-ロードを許可します。警告を生成します。
+ロードを許可するが、警告を生成します。
 
 #### 非サポート
 
