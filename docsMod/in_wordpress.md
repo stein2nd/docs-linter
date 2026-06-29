@@ -62,7 +62,7 @@ flowchart TD
         c6["検証のマッピング"]
     end
 
-    core ["docs-linter-core"]
+    core ["`@s2j/docs-linter-core`"]
 
     WordPress --> WordPressAdapter
     WordPressAdapter --> core
@@ -169,7 +169,7 @@ flowchart TD
 ```mermaid
 flowchart TD
   A["エディター"] --> B["アダプター"]
-  B --> C["`docs-linter-core`"]
+  B --> C["`@s2j/docs-linter-core`"]
   C --> D["Lint 結果"]
   D --> E["エディター UI"]
 ```
@@ -195,7 +195,7 @@ flowchart TD
 ```mermaid
 flowchart TD
   A["投稿"] --> B["アダプター"]
-  B --> C["`docs-linter-core`"]
+  B --> C["`@s2j/docs-linter-core`"]
   C --> D["検証レポート"]
 ```
 
@@ -316,7 +316,7 @@ flowchart TD
 ```mermaid
 flowchart TD
   A["Block エディター"] --> B["Web Worker"]
-  B --> C["`docs-linter-core`"]
+  B --> C["`@s2j/docs-linter-core`"]
 ```
 
 * パターン B
@@ -324,7 +324,7 @@ flowchart TD
 ```mermaid
 flowchart TD
   A["Block エディター"] --> B["REST API"]
-  B --> C["`docs-linter-core`"]
+  B --> C["`@s2j/docs-linter-core`"]
 ```
 
 * パターン C
@@ -332,8 +332,8 @@ flowchart TD
 ```mermaid
 flowchart TD
   A["管理画面"] --> B["REST API"]
-  B --> C["`docs-linter-rest`"]
-  C --> D["`docs-linter-core`"]
+  B --> C["`@s2j/docs-linter-rest`"]
+  C --> D["`@s2j/docs-linter-core`"]
 ```
 
 ## セキュリティ方針
