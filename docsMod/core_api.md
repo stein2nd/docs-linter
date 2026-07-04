@@ -1,4 +1,4 @@
-# 📘 S2J Docs Linter - Core API 仕様
+# 📘 S2J Docs Linter - Core API 仕様 (ドメイン契約、ユビキタス言語・公開契約)
 
 ## 1. 概要
 
