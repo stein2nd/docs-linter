@@ -1,4 +1,4 @@
-# 📘 S2J Docs Linter - 将来アーキテクチャ
+# 📘 S2J Docs Linter - 将来アーキテクチャとロードマップ
 
 ## 目的
 
