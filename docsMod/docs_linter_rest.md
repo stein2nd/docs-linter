@@ -1,4 +1,4 @@
-# 📘 S2J Docs Linter - `@s2j/docs-linter-rest` (配送契約)
+# 📘 S2J Docs Linter - `@s2j/docs-linter-rest` (配送契約、HTTP 契約)
 
 ## 1. 概要
 
