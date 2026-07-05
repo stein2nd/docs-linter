@@ -2,4 +2,4 @@
 
 最終更新…**2026-06-14**
 
-進行中 initiative の進捗資料です。完了分は [docs/archive/](../docs/archive/README.md) をご覧ください。
+進行中 initiative の進捗資料です。完了分は、[docs/archive/](../docs/archive/README.md) をご覧ください。
