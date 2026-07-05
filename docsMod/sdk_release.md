@@ -1,0 +1,1 @@
+# 📘 S2J Docs Linter - SDK リリース運用
