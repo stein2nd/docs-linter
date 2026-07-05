@@ -378,7 +378,7 @@ flowchart TD
 
 ## 14. textlint 連携
 
-Core は textlint を内部利用します。ただし textlint は、公開 API に露出しません。
+Core は、textlint を内部利用します。ただし textlint は、公開 API に露出しません。
 
 `import { TextLintEngine }` は許可します。
 `new TextLintKernel()` をユーザーに公開することは禁止します。
