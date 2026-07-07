@@ -361,12 +361,12 @@ SDK は、「デフォルトでセキュア」を採用します。
 
 ### デフォルトの要件
 
-* TLS 検証: Enabled
-* 証明書検証: Enabled
-* リダイレクト制限: Limited
-* リトライ数: Conservative
-* タイムアウト: Defined
-* ログ記録: 機密データのマスキング
+* TLS 検証： Enabled
+* 証明書検証： Enabled
+* リダイレクト制限： Limited
+* リトライ数： Conservative
+* タイムアウト： Defined
+* ログ記録： 機密データのマスキング
 
 ### ルール
 
