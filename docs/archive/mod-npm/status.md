@@ -593,7 +593,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 |------|--------|----------|------|------:|
 | P0 | リリースガバナンス | SemVer 準拠の確立 | **済** ([versioning_policy.md](../../versioning_policy.md)) | 100 |
 | P0 | 変更履歴の管理 | リリース履歴の可視化 | **済** ([CHANGELOG.md](../../../CHANGELOG.md) Git 管理 + [release.md](../../release.md#3-changelog-更新)) | 100 |
-| P1 | CI の強化 | マトリックス / 互換性の検証 | **済** ([`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml) Node 20/22/24 · `test:init` · `test:doctor`) | 100 |
+| P1 | CI の強化 | マトリクス / 互換性の検証 | **済** ([`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml) Node 20/22/24 · `test:init` · `test:doctor`) | 100 |
 | P1 | 依存関係のメンテナンス | 依存関係の健全性維持 | **済** ([`.github/dependabot.yml`](../../../.github/dependabot.yml)) | 100 |
 | P2 | エコシステムの拡張 | 追加のプリセット / ツール | **済** | 100 |
 
