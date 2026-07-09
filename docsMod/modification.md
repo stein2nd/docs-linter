@@ -16,5 +16,5 @@
 * [sdk_security.md](./sdk_security.md) - フェーズ1-C - SDK のセキュリティ運用
 * [compatibility.md](./compatibility.md) - フェーズ1-D - バージョン互換表
 * [deployment.md](./deployment.md) - フェーズ1-E - 配置モデル
-* [observability.md](./observability.md) - フェーズ1-F - SLA・指標・トレース
+* [observability.md](./observability.md) - フェーズ1-F - SLA (サービスレベル契約)・指標・トレース
 * [in_wordpress.md](./in_wordpress.md) — フェーズ2 - `in WordPress`
