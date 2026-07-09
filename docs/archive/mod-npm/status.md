@@ -680,7 +680,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 
 * 商用サポート
 * 有償配布
-* エンタープライズ SLA
+* エンタープライズ SLA (サービスレベル契約)
 
 ## フェーズ4で完了した項目
 
