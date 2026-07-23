@@ -4,6 +4,15 @@
 
 ## [Unreleased]
 
+## [1.0.21] - 2026-07-23
+
+* `.npmrc` に `allow-git=root` を追加 — npm **12** 以降で Git 依存 (`textlint-rule-preset-wp-docs-ja`) の取得を許可し、開発時の `npm install` で `EALLOWGIT` が出ないようにした
+* `engines.npm` を `>=10 <11.12.0 || >=11.12.1 || >=12` に更新 — npm 12 を明示的にサポート (最低 v10、不具合のある v11.12.0 のみ除外)
+* README に「npm 12 と Git 依存」を追加 — 利用側向けの `--allow-git=root` / `.npmrc` 手順、`EBADENGINE` 対策、依存更新チェックリストと `install:compat` の説明を整理
+* 依存関係を更新 — `@types/node` ^26.1.1、`typescript` ^7.0.2、`vite` ^8.1.5、`rollup` ^4.62.2、`textlint-rule-preset-swift-docs-ja` ^1.0.3、`textlint-rule-ja-space-around-code` / `textlint-rule-ja-space-between-half-and-full-width` ^3.0.2 など
+* `lint:wp` の対象 glob に `**/**/*.md` を追加 — ネストした Markdown も lint 対象に
+* ドキュメント表記を統一 — 「以下」→「下記」、「読み込み」→「ロード」、`idempotent` →「冪等 (べきとう)」、SLA の日本語注釈など (README、CONTRIBUTING、`docs/` 配下)
+
 ## [1.0.20] - 2026-06-15
 
 * ドキュメント再構成 — 仕様書を `docs/specifications/`、CLI ドキュメントを `docs/cli/` に整理。`cli_tooling_spec.md` から `init.md`、`doctor.md` を分割
