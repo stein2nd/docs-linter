@@ -1,8 +1,8 @@
 # 📘 S2J Docs Linter — *Multiple Preset Textlint Integration*
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
-[![textlint](https://img.shields.io/badge/textlint-15.7-blue.svg)](https://textlint.org/)
-[![Vite](https://img.shields.io/badge/vite-8.1-blue.svg)](https://vite.dev)
+[![textlint](https://img.shields.io/badge/textlint-15.8-blue.svg)](https://textlint.org/)
+[![Vite](https://img.shields.io/badge/vite-8.2-blue.svg)](https://vite.dev)
 [![Rollup](https://img.shields.io/badge/rollup-4.62-blue.svg)](https://rollupjs.org)
 [![WordPress](https://img.shields.io/badge/WordPress-6.3+-blue.svg)](https://wordpress.org/)
 [![Swift](https://img.shields.io/badge/Swift-5.9+-blue.svg)](https://www.swift.org/)
@@ -70,9 +70,9 @@ Node.js LTS が未導入の場合は、先にインストールしてくださ�
   2. 改めて、`Get-ExecutionPolicy` で `RemoteSigned` になってるか確認する。
 3. `node --version`、`npm --version` でバージョンを確認する。
 
-### npm 12 と Git 依存
+### npm v12と Git 依存
 
-npm **12** 以降、セキュリティ強化により Git 依存 (`github:...` 形式) の取得はデフォルトで無効です。`@s2j/docs-linter` は `textlint-rule-preset-wp-docs-ja` を GitHub 参照しているため、npm 12 環境で `EALLOWGIT` が出ることがあります。
+npm **v12** 以降、セキュリティ強化により Git 依存 (`github:...` 形式) の取得はデフォルトで無効です。npm v12環境では `EALLOWGIT` が表示され得ます (`@s2j/docs-linter` は `textlint-rule-preset-wp-docs-ja` を GitHub 参照しているため)。
 
 **本リポジトリを clone して開発する場合** … リポジトリ直下の [`.npmrc`](.npmrc) に `allow-git=root` を設定済みです。通常の `npm install` で問題ありません。
 
@@ -827,13 +827,13 @@ GitHub Actions による tag 連動 publish の手順は [docs/release.md](./doc
 * **依存関係の追加**:
   * 新しい依存関係を追加する際は、`package.json` に適切に追加し、`package-lock.json` を更新してください。
 * **依存関係の更新**:
-  * 定期的に依存関係を更新し、セキュリティパッチを適用してください。手順の詳細は上記「依存更新時チェックリスト (daily routine / ncu 運用)」を参照してください。
+  * 定期的に依存関係を更新し、セキュリティパッチを適用すること。手順の詳細は上記「依存更新時チェックリスト (daily routine / ncu 運用)」を参照すること。
 * **`.npmrc` (`allow-git=root`)**:
-  * **npm 12** 以降で Git 依存を取得するための設定です (上記「npm 12 と Git 依存」)。本リポジトリの開発時に `npm install` が `EALLOWGIT` で失敗しないようにします。
+  * **npm v12** 以降で Git 依存を取得するための設定 (上記「npm v12と Git 依存」)。本リポジトリの開発時に `npm install` が `EALLOWGIT` で失敗しないための処理。
 * **`npm run install:compat`**:
-  * **npm v11.12.0** の `--prefer-offline` / `--prefer-online` 不具合向けの回避用です (上記チェックリストの手順3)。npm 12 の `EALLOWGIT` 対策ではありません。`package.json` の `engines.npm` が v11.12.0 を弾くため、該当バージョンではインストール時に EBADENGINE 警告が出る。凌ぎが必要なら `scripts.install:compat` 内の `npm@11.11.0` を別の安全な版へ差し替えてください。
+  * **npm v11.12.0** の `--prefer-offline` / `--prefer-online` 不具合向けの回避用 (上記チェックリストの手順3)。npm v12の `EALLOWGIT` 対策ではない。`package.json` の `engines.npm` が v11.12.0を弾くため、該当バージョンではインストール時に EBADENGINE 警告が出る。凌ぎが必要なら `scripts.install:compat` 内の `npm@11.11.0` を別の安全な版へ差し替えること。
 * **peer dependencies**:
-  * 必要に応じて peer dependencies を適切に設定してください。
+  * 必要に応じて peer dependencies を適切に設定すること。
 
 ## Contributors & Developers
 
