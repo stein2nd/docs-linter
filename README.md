@@ -28,7 +28,7 @@ WordPress プラグイン/テーマ開発、Xcode (Swift/SwiftUI) アプリケ�
 * **カスタマイズ可能**:
   * プロジェクト固有のルールを追加可能。
 * **WordPress PRH**:
-  * `npm install` / `postinstall` のたびに [jawordpressorg の `wordpress.yml`](https://github.com/jawordpressorg/textlint-rule-preset-wp-docs-ja) に対し、コロン直後スペースと鉤括弧前スペース禁止の往復衝突を避けるパッチ (`scripts/patch-wp-prh-colon-quote.cjs`) を idempotent に適用。
+  * `npm install` / `postinstall` のたびに [jawordpressorg の `wordpress.yml`](https://github.com/jawordpressorg/textlint-rule-preset-wp-docs-ja) に対し、コロン直後スペースと鉤括弧前スペース禁止の往復衝突、および「の分担」→「のぶん担」誤検出を避けるパッチ (`scripts/patch-wp-prh-colon-quote.cjs`) を冪等 (べきとう) に適用。
   上流が同一内容を取り込んだ場合は、自動でスキップ。
 
 ## Requirements
@@ -214,7 +214,7 @@ WordPress プリセット向け textlint ルールの安定動作を目的とし
 
 対象スクリプトは、下記の通りです。
 
-* `./scripts/patch-wp-prh-colon-quote.cjs` — 上記 `wordpress.yml` の「コロンの後に半角スペースを入れる」ルールを冪等 (べきとう) に調整 (未インストール時はスキップ)
+* `./scripts/patch-wp-prh-colon-quote.cjs` — 上記 `wordpress.yml` の「コロンの後に半角スペースを入れる」ルールと、「の分」形式名詞ルールの「分担」除外漏れを冪等 (べきとう) に調整 (未インストール時はスキップ)
 
 一部の環境では `npm warn allow-scripts` が表示される場合がありますが、これは npm のセキュリティ機能による確認のための通知であり、インストール失敗を意味するものではありません。
 

@@ -1,6 +1,6 @@
 {
   "name": "@s2j/docs-linter",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "description": "Reusable textlint toolkit for Swift, WordPress, and general documentation projects.",
   "type": "module",
   "author": "Koutarou ISHIKAWA",
@@ -83,13 +83,13 @@
     "textlint-rule-no-mixed-zenkaku-and-hankaku-alphabet": "^1.0.1",
     "textlint-rule-preset-ja-technical-writing": "^12.0.2",
     "textlint-rule-preset-jtf-style": "^3.0.3",
-    "textlint-rule-preset-swift-docs-ja": "^1.0.5",
+    "textlint-rule-preset-swift-docs-ja": "^1.0.6",
     "textlint-rule-preset-wp-docs-ja": "github:jawordpressorg/textlint-rule-preset-wp-docs-ja",
     "textlint-rule-prh": "^6.1.0",
     "textlint-rule-terminology": "^5.2.16"
   },
   "devDependencies": {
-    "@types/node": "^26.4.0",
+    "@types/node": "^26.5.0",
     "rollup": "^4.63.1",
     "typescript": "^7.0.2",
     "vite": "^8.2.2"

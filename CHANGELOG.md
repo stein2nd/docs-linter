@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.0.24] - 2026-09-09
+
+* WordPress PRH の「の分 → のぶん」ルールが「の分担」を「のぶん担」と誤検出する問題を、`patch-wp-prh-colon-quote.cjs` で除外文字に「担」を足して回避
+* README / `docs/cli/npm_usage.md` に上記 postinstall パッチの説明を追記
+* 依存関係を更新 — `textlint-rule-preset-swift-docs-ja` ^1.0.6、`@types/node` ^26.5.0
+
 ## [1.0.23] - 2026-08-31
 
 * 依存関係を更新 — `textlint-rule-preset-swift-docs-ja` ^1.0.5、`@types/node` ^26.4.0、`vite` ^8.2.2、`rollup` ^4.63.1

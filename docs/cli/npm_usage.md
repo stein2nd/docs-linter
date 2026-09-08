@@ -99,13 +99,17 @@ S2J Docs Linter は、インストール時に `package.json` の `postinstall` 
 
 ### 実行目的
 
-`textlint-rule-preset-wp-docs-ja` (WordPress 向け textlint プリセット) の PRH ルール定義に含まれる、コロン直後スペースと鉤括弧前スペース禁止の往復衝突を避けるためです。
+`textlint-rule-preset-wp-docs-ja` (WordPress 向け textlint プリセット) の PRH ルール定義に含まれる、下記の既知問題を避けるためです。
+
+* コロン直後スペースと鉤括弧前スペース禁止の往復衝突
+* 「の分」形式名詞ルールが「の分担」を「のぶん担」と誤検出する除外漏れ
 
 ### 実行内容
 
 * **変更するファイル (1 件のみ)** … 利用側プロジェクトの `./node_modules/textlint-rule-preset-wp-docs-ja/prh-rules/wordpress.yml`
 * **変更しないもの** … 利用側リポジトリ直下の設定 (`.textlintrc.json`、`.vscode/settings.json`、`package.json` など)
 * `wordpress.yml` 内の「コロンの後に半角スペースを入れる」PRH ルールの `pattern` を書き換え (既に同一パッチ済み、またはファイルが無い場合はスキップ)
+* `wordpress.yml` 内の「の分 → のぶん」PRH ルールの除外文字に「担」を追加 (既に同一パッチ済み、またはルールが見つからない場合はスキップ)
 
 ### 実行しない内容
 
