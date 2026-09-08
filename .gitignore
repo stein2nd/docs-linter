@@ -22,6 +22,9 @@ logs/
 .idea/
 *.swp
 
+# Obsidian (vault-local editor state)
+.obsidian/
+
 # Env files
 .env
 .env.local
