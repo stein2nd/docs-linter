@@ -21,6 +21,7 @@ logs/
 
 .idea/
 *.swp
+docs-linter.code-workspace
 
 # Obsidian (vault-local editor state)
 .obsidian/

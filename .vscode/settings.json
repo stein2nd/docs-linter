@@ -1,4 +1,6 @@
 {
+  "json.schemaDownload.enable": true,
+  "npm.enableScriptExplorer": true,
   "textlint.configPath": "${workspaceFolder}/.textlintrc.json",
   "textlint.nodePath": "${workspaceFolder}/node_modules",
   "textlint.autoFixOnSave": true,  

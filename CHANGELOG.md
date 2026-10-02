@@ -4,6 +4,11 @@
 
 ## [Unreleased]
 
+## [1.0.26] - 2026-10-02
+
+* 依存関係を更新 — `textlint-rule-preset-swift-docs-ja` ^1.0.8、`@types/node` ^26.6.4、`vite` ^8.3.2、`rollup` ^4.63.6
+* `.vscode/settings.json` で JSON Schema のダウンロードと npm スクリプトエクスプローラーを有効化
+
 ## [1.0.25] - 2026-09-26
 
 * 依存関係を更新 — `textlint-rule-preset-swift-docs-ja` ^1.0.7、`@types/node` ^26.6.3、`vite` ^8.3.1、`rollup` ^4.63.5
