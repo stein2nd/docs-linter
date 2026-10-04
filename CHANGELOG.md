@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 
+## [1.0.27] - 2026-10-04
+
+* プリセット (base / Swift / WordPress) とルート設定の allowlist に誤検出除外を追加 — リファラー、エントリー / エントリ、レイヤー / レイヤ (プレイヤーは対象外)、ローダー、スクロール、ロールバック、「の分担」、など
+* WordPress プリセットの allowlist に `@wordpress/*` パッケージ名を追加
+* 依存関係を更新 — `textlint-rule-preset-swift-docs-ja` ^1.0.9、`rollup` ^4.64.0
+* README のバッジを更新 — Rollup v4.64
+
 ## [1.0.26] - 2026-10-02
 
 * 依存関係を更新 — `textlint-rule-preset-swift-docs-ja` ^1.0.8、`@types/node` ^26.6.4、`vite` ^8.3.2、`rollup` ^4.63.6
