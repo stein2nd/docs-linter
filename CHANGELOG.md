@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+## [1.0.29] - 2026-10-15
+
+* 依存関係を更新 — `textlint-rule-preset-swift-docs-ja` ^1.0.10、`@types/node` ^26.6.5、`vite` ^8.3.4、`rollup` ^4.64.6
+
 ## [1.0.28] - 2026-10-15
 
 * base プリセット allowlist: 見出しの公式 id アンカー `{#…}` を固有名詞 (PRH) 等の対象外に (`/\{#[^}]+\}/`)
