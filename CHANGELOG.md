@@ -4,9 +4,14 @@
 
 ## [Unreleased]
 
+## [1.0.31] - 2026-10-29
+
+* 依存関係を更新 — `textlint-rule-preset-swift-docs-ja` ^1.0.12、`@types/node` ^26.6.6、`rollup` ^4.66.0
+* README のバッジを更新 — Rollup v4.66
+
 ## [1.0.30] - 2026-10-24
 
-* 依存関係を更新 — `sudachi-synonyms-dictionary` >=20.0.0、`textlint-rule-preset-swift-docs-ja` ^1.0.11、`textlint-rule-ja-space-around-code` / `textlint-rule-ja-space-between-half-and-full-width` ^3.0.4、`textlint-rule-prh` ^6.1.1、`vite` ^8.3.5、`rollup` ^4.65.0
+* 依存関係を更新 — `sudachi-synonyms-dictionary` 20.0.0以降、`textlint-rule-preset-swift-docs-ja` ^1.0.11、`textlint-rule-ja-space-around-code` / `textlint-rule-ja-space-between-half-and-full-width` ^3.0.4、`textlint-rule-prh` ^6.1.1、`vite` ^8.3.5、`rollup` ^4.65.0
 * README のバッジを更新 — Rollup v4.65
 
 ## [1.0.29] - 2026-10-15
