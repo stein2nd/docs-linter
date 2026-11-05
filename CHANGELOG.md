@@ -4,6 +4,12 @@
 
 ## [Unreleased]
 
+## [1.0.32] - 2026-11-05
+
+* WordPress PRH の「の分 → のぶん」ルールによる「の分母」「の分子」の誤検出を、`patch-wp-prh-colon-quote.cjs`（除外文字に「母」「子」）とプリセット allowlist で回避
+* 依存関係を更新 — `textlint-rule-preset-swift-docs-ja` ^1.0.13、`vite` ^8.3.6、`rollup` ^4.67.5
+* README のバッジを更新 — Rollup v4.67
+
 ## [1.0.31] - 2026-10-29
 
 * 依存関係を更新 — `textlint-rule-preset-swift-docs-ja` ^1.0.12、`@types/node` ^26.6.6、`rollup` ^4.66.0

@@ -8,8 +8,8 @@
  *    コロン直後が鉤括弧・読点・句点・改行のいずれかのときはスペース挿入を行わないよう pattern を絞る。
  *
  * 2. 「の分」形式名詞ルールの除外漏れ
- *    `/の分([^散割類解野離析岐])/` が「の分担」にマッチし、「のぶん担」と誤検出する。
- *    除外文字クラスに「担」を追加する。
+ *    `/の分([^散割類解野離析岐…])/` が「の分担」「の分母」「の分子」等にマッチし誤検出する。
+ *    除外文字クラスに「担」「母」「子」を追加する。
  *
  * @see https://github.com/jawordpressorg/textlint-rule-preset-wp-docs-ja
  */
@@ -58,14 +58,35 @@ applyPatch({
   appliedMessage: "[docs-linter] PRH: colon / quote 衝突回避パッチを適用しました"
 });
 
-applyPatch({
-  marker: "pattern: /の分([^散割類解野離析岐担])/",
-  needle: "  - pattern: /の分([^散割類解野離析岐])/\n    expected: のぶん$1",
-  replacement: "  - pattern: /の分([^散割類解野離析岐担])/\n    expected: のぶん$1",
-  missingWarning:
-    "[docs-linter] wordpress.yml の「の分」形式名詞ルールが見つからないためパッチをスキップ（上流 PRH の更新を確認）",
-  appliedMessage: "[docs-linter] PRH: 「の分担」誤検出回避パッチを適用しました"
-});
+const NOBUN_EXCLUDED_CHARS = "散割類解野離析岐担母子";
+const nobunRuleBlock = (excludedChars) =>
+  `  - pattern: /の分([^${excludedChars}])/\n    expected: のぶん$1`;
+
+function applyNobunPatch() {
+  const finalMarker = `pattern: /の分([^${NOBUN_EXCLUDED_CHARS}])/`;
+  if (s.includes(finalMarker)) {
+    return;
+  }
+
+  for (const variant of ["散割類解野離析岐担", "散割類解野離析岐"]) {
+    const needle = nobunRuleBlock(variant);
+    if (!s.includes(needle)) {
+      continue;
+    }
+    s = s.replace(needle, nobunRuleBlock(NOBUN_EXCLUDED_CHARS));
+    changed = true;
+    console.log(
+      "[docs-linter] PRH: 「の分担 / の分母 / の分子」誤検出回避パッチを適用しました"
+    );
+    return;
+  }
+
+  console.warn(
+    "[docs-linter] wordpress.yml の「の分」形式名詞ルールが見つからないためパッチをスキップ（上流 PRH の更新を確認）"
+  );
+}
+
+applyNobunPatch();
 
 if (changed) {
   fs.writeFileSync(target, s, "utf8");
