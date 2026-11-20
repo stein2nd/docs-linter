@@ -1,9 +1,9 @@
 # 📘 S2J Docs Linter — *Multiple Preset Textlint Integration*
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
-[![textlint](https://img.shields.io/badge/textlint-15.8-blue.svg)](https://textlint.org/)
+[![textlint](https://img.shields.io/badge/textlint-16.1-blue.svg)](https://textlint.org/)
 [![Vite](https://img.shields.io/badge/vite-8.3-blue.svg)](https://vite.dev)
-[![Rollup](https://img.shields.io/badge/rollup-4.67-blue.svg)](https://rollupjs.org)
+[![Rollup](https://img.shields.io/badge/rollup-4.68-blue.svg)](https://rollupjs.org)
 [![WordPress](https://img.shields.io/badge/WordPress-6.3+-blue.svg)](https://wordpress.org/)
 [![Swift](https://img.shields.io/badge/Swift-5.9+-blue.svg)](https://www.swift.org/)
 [![Xcode](https://img.shields.io/badge/Xcode-15.0+-blue.svg)](https://developer.apple.com/xcode/)
