@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+## [1.0.34] - 2026-11-20
+
+* CI / npm publish ワークフローを更新 — `ubuntu-24.04` に固定、`actions/checkout@v5`、`actions/setup-node@v5`、`upload-artifact@v6`、`action-gh-release@v3`（Node v24ランタイム向け）
+
 ## [1.0.33] - 2026-11-20
 
 * 依存関係を更新 — `textlint` ^16.1.1、`textlint-rule-preset-swift-docs-ja` ^1.0.15、`textlint-rule-preset-jtf-style` ^3.1.0、`textlint-rule-ja-space-around-code` / `textlint-rule-ja-space-between-half-and-full-width` ^3.1.0、`sudachi-synonyms-dictionary` >=20.0.1、`vite` ^8.3.8、`rollup` ^4.68.7
