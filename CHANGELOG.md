@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+* `reset-sandbox-dir.sh` で親ディレクトリを先に `mkdir -p`（in-tree doctor 時に `.sandbox/doctor` 未作成で CI が落ちる問題）
+
 ## [1.0.36] - 2026-11-26
 
 * `engines.node` を `>=22.12.0` に更新 (textlint v16系と整合)

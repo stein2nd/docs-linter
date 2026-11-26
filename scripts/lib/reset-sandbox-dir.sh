@@ -9,11 +9,11 @@ reset_sandbox_dir() {
   local parent
   local base
 
-  parent="$(cd "$(dirname "$dir")" && pwd)"
+  parent="$(dirname "$dir")"
   base="$(basename "$dir")"
-  dir="${parent}/${base}"
-
   mkdir -p "${parent}"
+  parent="$(cd "${parent}" && pwd)"
+  dir="${parent}/${base}"
 
   shopt -s nullglob
   local stale
