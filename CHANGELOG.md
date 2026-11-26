@@ -4,7 +4,9 @@
 
 ## [Unreleased]
 
-* `reset-sandbox-dir.sh` で親ディレクトリを先に `mkdir -p`（in-tree doctor 時に `.sandbox/doctor` 未作成で CI が落ちる問題）
+## [1.0.37] - 2026-11-26
+
+* `reset-sandbox-dir.sh` で親ディレクトリを先に `mkdir -p` (in-tree doctor 時に `.sandbox/doctor` 未作成で CI が落ちる問題)
 
 ## [1.0.36] - 2026-11-26
 
