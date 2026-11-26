@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+## [1.0.38] - 2026-11-26
+
+* `init` テンプレート、examples、ドキュメントの GHA `runs-on` を `ubuntu-24.04` に統一 (`ubuntu-latest` の移行アノテーション回避)
+
 ## [1.0.37] - 2026-11-26
 
 * `reset-sandbox-dir.sh` で親ディレクトリを先に `mkdir -p` (in-tree doctor 時に `.sandbox/doctor` 未作成で CI が落ちる問題)

@@ -222,7 +222,7 @@ on:
 
 jobs:
   docs-linter:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       # docs-linter のディレクトリパス
       DOCS_LINTER_DIR: tools/docs-linter
