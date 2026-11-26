@@ -1204,8 +1204,7 @@ runtime 依存関係を明確化します。
 
 * devDependencies (例):
   * `typescript`
-  * `vite`
-  * `rollup`
+  * `vite` (バンドルは Vite v8 の Rolldown)
   * `@types/node`
   * build tools
 * dependencies (例):

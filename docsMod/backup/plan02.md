@@ -20,7 +20,7 @@ module.exports = function(context) {
 
 ## まず分けるべきもの
 
-### 1. ルールエンジン（開発者管理）
+### 1. ルールエンジン (開発者管理)
 
 例えば、下記のようなものは `@s2j/docs-linter-core` に同梱します。
 
@@ -32,7 +32,7 @@ module.exports = function(context) {
 
 ---
 
-### 2. ルール設定（ユーザー管理）
+### 2. ルール設定 (ユーザー管理)
 
 `max-kanji-continuous` で例示します。
 
@@ -119,7 +119,7 @@ module.exports = function(context) {
 
 ## さらに進めるなら「ルール DSL」
 
-もし将来的に「ユーザーが独自ルールを作りたい」まで考えるなら、JavaScript を書かせるのではなく DSL（設定言語）を作る方が安全です。
+もし将来的に「ユーザーが独自ルールを作りたい」まで考えるなら、JavaScript を書かせるのではなく DSL (設定言語) を作る方が安全です。
 
 下記のような DSL 例が挙げられます。
 

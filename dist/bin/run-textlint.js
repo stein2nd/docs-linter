@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
 import { existsSync } from "node:fs";
-import { resolve, dirname, join } from "node:path";
+import { resolve, dirname, join, delimiter as pathDelimiter } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
@@ -100,10 +100,11 @@ function buildNodePath() {
         resolve(packageRoot, "node_modules"),
         resolve(process.cwd(), "node_modules")
     ];
-    if (process.env.NODE_PATH) {
-        paths.push(process.env.NODE_PATH);
+    const existing = process.env.NODE_PATH;
+    if (existing) {
+        paths.push(...existing.split(pathDelimiter).filter(Boolean));
     }
-    return paths.join(":");
+    return paths.join(pathDelimiter);
 }
 function resolveTextlintBin() {
     const candidates = [

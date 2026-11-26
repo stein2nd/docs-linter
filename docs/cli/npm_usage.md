@@ -4,7 +4,7 @@
 
 本ドキュメントでは、`@s2j/docs-linter` を npm モジュールとして利用する方法を定義します。
 
-Git Submodule 導線は [git_submodule.md](../archive/git_submodule.md) を参照してください（非推奨・後方互換）。npm の手順は [README](../../README.md) の Quick Start / Installation と本ガイドで揃えています。パッケージ全体の仕様は [npm パッケージ仕様](../specifications/npm_package_spec.md) を参照してください。
+Git Submodule 導線は [git_submodule.md](../archive/git_submodule.md) を参照してください (非推奨・後方互換)。npm の手順は [README](../../README.md) の Quick Start / Installation と本ガイドで揃えています。パッケージ全体の仕様は [npm パッケージ仕様](../specifications/npm_package_spec.md) を参照してください。
 
 ## インストール
 
@@ -221,6 +221,51 @@ Git Submodule から npm へ移行する際、利用側の `scripts > lint:docs`
 ### Submodule → npm: `lint:docs` の移行例
 
 段階移行を許容します。まず `textlint` 直実行のまま `NODE_PATH` と config パスだけ差し替え、続いて CLI (`s2j-docs-linter`) へ寄せることを推奨します。
+
+表の `NODE_PATH=...` 形式は **macOS / Linux (bash)** 向けです。**Windows** では cmd / PowerShell が同じ構文を解釈しないため、利用側で `cross-env` を使うか、**推奨どおり CLI に切り替え**てください。
+
+### Windows (cross-env 不要)
+
+**設計意図** — Windows 11 でも、利用側の `package.json` に POSIX 専用の環境変数代入を書かない。
+
+**推奨** — `s2j-docs-linter` のみを `scripts` に登録する。CLI が子プロセス向けに `NODE_PATH` を設定する (プラットフォームの `path.delimiter` に従う。Windows では `;`)。
+
+```json
+{
+  "scripts": {
+    "lint:docs": "s2j-docs-linter ./README.md ./docs/**/*.md"
+  }
+}
+```
+
+```powershell
+npm run lint:docs
+```
+
+PowerShell 7+ または Git Bash からの `npm run` を想定しています。`npx s2j-docs-linter doctor` で環境を確認できます。
+
+**移行期 (textlint 直実行を残す場合のみ)** — 利用側の `devDependencies` に `cross-env` を追加し、scripts で使います。`@s2j/docs-linter` パッケージ本体に `cross-env` を同梱することはありません。
+
+```json
+{
+  "devDependencies": {
+    "@s2j/docs-linter": "^1.0.34",
+    "cross-env": "^7.0.3"
+  },
+  "scripts": {
+    "lint:docs": "cross-env NODE_PATH=./node_modules textlint --config ./.textlintrc.json ./README.md ./docs/**/*.md"
+  }
+}
+```
+
+手動 (PowerShell) の例は、下記の通り。
+
+```powershell
+$env:NODE_PATH = "./node_modules"
+npx textlint --config ./.textlintrc.json ./README.md
+```
+
+**非推奨** — `@s2j/docs-linter` リポジトリやパッケージの `scripts` に `cross-env` を必須化すること、および Git Submodule 時代の `NODE_PATH=./tools/docs-linter/...` を Windows 向けにそのまま残すこと。
 
 **WordPress 向けプロジェクト**
 

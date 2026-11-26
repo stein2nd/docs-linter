@@ -23,7 +23,7 @@ WordPress プラグイン (外部コントリビューターに実装しても�
 * textlint
 * preset-ja-technical-writing
 * prh
-* 独自ルール（space-around-english.js など）
+* 独自ルール (space-around-english.js など)
 
 ---
 

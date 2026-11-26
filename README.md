@@ -1,9 +1,9 @@
 # 📘 S2J Docs Linter — *Multiple Preset Textlint Integration*
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/)
 [![textlint](https://img.shields.io/badge/textlint-16.1-blue.svg)](https://textlint.org/)
 [![Vite](https://img.shields.io/badge/vite-8.3-blue.svg)](https://vite.dev)
-[![Rollup](https://img.shields.io/badge/rollup-4.68-blue.svg)](https://rollupjs.org)
+[![Rolldown](https://img.shields.io/badge/rolldown-1.2-blue.svg)](https://rolldown.rs/)
 [![WordPress](https://img.shields.io/badge/WordPress-6.3+-blue.svg)](https://wordpress.org/)
 [![Swift](https://img.shields.io/badge/Swift-5.9+-blue.svg)](https://www.swift.org/)
 [![Xcode](https://img.shields.io/badge/Xcode-15.0+-blue.svg)](https://developer.apple.com/xcode/)
@@ -20,7 +20,7 @@ WordPress プラグイン/テーマ開発、Xcode (Swift/SwiftUI) アプリケ�
 * **複数プリセット統合**:
   * Swift Docs / WordPress Docs など、複数のプリセットを統合して利用可能。
 * **柔軟な導入方法**:
-  * npm パッケージとして利用可能（推奨）。Git Submodule は [Git Submodule での利用](./docs/archive/git_submodule.md) を参照（後方互換・非推奨）。
+  * npm パッケージとして利用可能 (推奨)。Git Submodule は [Git Submodule での利用](./docs/archive/git_submodule.md) を参照 (後方互換・非推奨)。
 * **CI/CD 対応**:
   * GitHub Actions による自動 lint 検証が、安定稼働。
 * **エディター統合**:
@@ -69,6 +69,36 @@ Node.js LTS が未導入の場合は、先にインストールしてくださ�
   1. `Restricted` の場合は、`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` を実行する。
   2. 改めて、`Get-ExecutionPolicy` で `RemoteSigned` になってるか確認する。
 3. `node --version`、`npm --version` でバージョンを確認する。
+
+#### Windows と `package.json` の scripts
+
+Windows 11 の **cmd** や **PowerShell** では、Unix 形式の `NODE_PATH=./node_modules textlint ...` を `package.json` の `scripts` にそのまま書くと動きません。`cross-env` を足す必要は **ありません**。
+
+**推奨** — `init` と同様に CLI だけを指定します (`s2j-docs-linter` が内部で `NODE_PATH` を組み立てます。Windows では `;` 区切り)。
+
+```json
+{
+  "scripts": {
+    "lint:docs": "s2j-docs-linter ./README.md ./docs/**/*.md"
+  }
+}
+```
+
+```powershell
+npm run lint:docs
+```
+
+**移行期のみ (非推奨)** — どうしても `textlint` を scripts から直実行する場合は、利用側プロジェクトに `cross-env` を **devDependency** として追加し、次のようにします。
+
+```json
+{
+  "scripts": {
+    "lint:docs": "cross-env NODE_PATH=./node_modules textlint --config ./.textlintrc.json ./README.md ./docs/**/*.md"
+  }
+}
+```
+
+`@s2j/docs-linter` 本体には `cross-env` は含みません。移行期の `cross-env` 例は [npm 使い方ガイド — Windows (cross-env 不要)](docs/cli/npm_usage.md) を参照してください。
 
 ### npm v12と Git 依存
 

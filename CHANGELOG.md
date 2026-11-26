@@ -4,18 +4,27 @@
 
 ## [Unreleased]
 
+## [1.0.35] - 2026-11-26
+
+* CLI の `NODE_PATH` 連結に `path.delimiter` を使用 (Windows では `;`) — Issue #1
+* README / `docs/cli/npm_usage.md` に Windows 向け scripts 方針を追記 (CLI 推奨・`cross-env` は利用側の移行期オプション) — Issue #1
+* Vite v8 (Rolldown) に合わせ、直接の `rollup` devDependency と `overrides` を削除
+* `tsconfig.build.json` に `rootDir` / `outDir` / `include` を明示 (TypeScript v7の出力レイアウト警告回避)
+* README のバッジを Rollup から Rolldown に更新
+* `no-dead-link` で `https://www.gnu.org` を `ignore`（到達不能・タイムアウト時の誤検出回避。GPL バッジ用の安定 URL）
+
 ## [1.0.34] - 2026-11-20
 
-* CI / npm publish ワークフローを更新 — `ubuntu-24.04` に固定、`actions/checkout@v5`、`actions/setup-node@v5`、`upload-artifact@v6`、`action-gh-release@v3`（Node v24ランタイム向け）
+* CI / npm publish ワークフローを更新 — `ubuntu-24.04` に固定、`actions/checkout@v5`、`actions/setup-node@v5`、`upload-artifact@v6`、`action-gh-release@v3` (Node v24ランタイム向け)
 
 ## [1.0.33] - 2026-11-20
 
-* 依存関係を更新 — `textlint` ^16.1.1、`textlint-rule-preset-swift-docs-ja` ^1.0.15、`textlint-rule-preset-jtf-style` ^3.1.0、`textlint-rule-ja-space-around-code` / `textlint-rule-ja-space-between-half-and-full-width` ^3.1.0、`sudachi-synonyms-dictionary` >=20.0.1、`vite` ^8.3.8、`rollup` ^4.68.7
+* 依存関係を更新 — `textlint` ^16.1.1、`textlint-rule-preset-swift-docs-ja` ^1.0.15、`textlint-rule-preset-jtf-style` ^3.1.0、`textlint-rule-ja-space-around-code` / `textlint-rule-ja-space-between-half-and-full-width` ^3.1.0、`sudachi-synonyms-dictionary` ^20.0.1、`vite` ^8.3.8、`rollup` ^4.68.7
 * README のバッジを更新 — textlint v16.1、Rollup v4.68
 
 ## [1.0.32] - 2026-11-05
 
-* WordPress PRH の「の分 → のぶん」ルールによる「の分母」「の分子」の誤検出を、`patch-wp-prh-colon-quote.cjs`（除外文字に「母」「子」）とプリセット allowlist で回避
+* WordPress PRH の「の分 → のぶん」ルールによる「の分母」「の分子」の誤検出を、`patch-wp-prh-colon-quote.cjs` (除外文字に「母」「子」) とプリセット allowlist で回避
 * 依存関係を更新 — `textlint-rule-preset-swift-docs-ja` ^1.0.13、`vite` ^8.3.6、`rollup` ^4.67.5
 * README のバッジを更新 — Rollup v4.67
 

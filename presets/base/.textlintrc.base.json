@@ -31,7 +31,14 @@
       "rulePaths": []
     },
     "no-dead-link": {
-      "ignoreRedirects": true
+      "ignoreRedirects": true,
+      "ignore": [
+        "https://www.gnu.org",
+        "https://www.gnu.org/**"
+      ],
+      "preferGET": [
+        "https://www.npmjs.com"
+      ]
     }
   }
 }
