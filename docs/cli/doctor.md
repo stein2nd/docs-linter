@@ -196,6 +196,12 @@ doctor コマンドは、診断対象ディレクトリ直下の `node_modules` 
 
 textlint の存在確認は、Node.js のモジュール解決 (`require.resolve` 等) を利用せず、診断対象ディレクトリ配下を明示的に確認します。
 
+`scripts/helpers/setup-doctor-pass.sh` は、`textlint` を `npm install` し、`@s2j/docs-linter` はルートで `npm pack` した tarball を `node_modules/@s2j/docs-linter` に展開します (フィクスチャ上で tarball を `npm install` しない — npm **12** の `allow-git=root` は推移的 Git 依存を許可しないため、`EALLOWGIT` を避ける)。
+
+`.sandbox` の作り直しは `scripts/lib/reset-sandbox-dir.sh` の `reset_sandbox_dir` を使います (`rm -rf` の代わりに退避 `mv`)。
+
+Cursor サンドボックス等で `.sandbox/**/.vscode` の作成・削除が拒否される環境では、`scripts/lib/doctor-sandbox-paths.sh` が診断先を `scripts/fixtures/doctor/pass` (追跡済み `.vscode`) に切り替え、各テスト前に `git restore` でフィクスチャを戻します。`no-textlint` 用の一時ディレクトリは `.sandbox/doctor/no-textlint` を使います。
+
 ### テストケース一覧
 
 | ID | 項目 | 期待結果 |
@@ -247,7 +253,7 @@ textlint の存在確認は、Node.js のモジュール解決 (`require.resolve
   1. 下記スクリプトで、「[テスト用の設定ファイル4つ](#validated-フィクスチャ)」を生成する (生成時点の記載内容は、全て validated なもの)。
     * `scripts/helpers/setup-doctor-pass.sh`
       * 内部的に右記を実行している `cp -R scripts/fixtures/doctor/pass .sandbox/doctor/pass` シェルスクリプト。
-  2. 下記ファイルの `engines.node` 値に、`>=20` を記載する。
+  2. 下記ファイルの `engines.node` 値に、`>=22.12.0` を記載する。
     * `.sandbox/doctor/pass/package.json`
 
 * 下記スクリプトで、テストを実施する。

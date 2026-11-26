@@ -33,7 +33,7 @@ WordPress プラグイン/テーマ開発、Xcode (Swift/SwiftUI) アプリケ�
 
 ## Requirements
 
-* Node.js v20以上
+* Node.js v22.12以上 (textlint 16 系の要件。`package.json` `engines.node` と一致)
 * npm v10以上 (npm **12** 以降は Git 依存の追加設定が必要 — 下記「npm 12 と Git 依存」を参照)
 * Git
 

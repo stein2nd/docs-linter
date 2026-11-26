@@ -711,7 +711,7 @@ Git Submodule から `@s2j/docs-linter` (npm) へ移行し、`npm run lint:docs`
 | [`.github/dependabot.yml`](../../../.github/dependabot.yml) | npm / github-actions、weekly スケジュール | 必須 #3 |
 | [`.github/workflows/ci.yml`](../../../.github/workflows/ci.yml) | Node 20/22/24 matrix CI · `test:init` · `test:doctor` | 必須 #4 / P2 |
 | [scripts/test-doctor.sh](../../../scripts/test-doctor.sh) | DOCTOR-001〜015 自動テスト | P2 / D4 |
-| [scripts/helpers/setup-doctor-pass.sh](../../../scripts/helpers/setup-doctor-pass.sh) | DOCTOR-001 基準フィクスチャ (tarball + textlint 一括 install) | P2 / D3 |
+| [scripts/helpers/setup-doctor-pass.sh](../../../scripts/helpers/setup-doctor-pass.sh) | DOCTOR-001 基準フィクスチャ (`npm pack` 展開 + `textlint` のみ install。npm 12 `EALLOWGIT` 回避) | P2 / D3 |
 | [scripts/fixtures/doctor/](../../../scripts/fixtures/doctor/) · [scripts/lib/doctor-fixture.sh](../../../scripts/lib/doctor-fixture.sh) | doctor テスト用フィクスチャ・ヘルパ | P2 / D3 |
 | [README.md](../../../README.md) | `init` (セットアップ) · `doctor` (環境チェック) · [npm_usage.md](../../cli/npm_usage.md) 導線 | P2 / S1–S2 · **2026-06-02** |
 | [docs/archive/git_submodule.md](../git_submodule.md) | Git Submodule 利用手順 (非推奨) — README から切り出し | ドキュメント構成 · **2026-06-02** |

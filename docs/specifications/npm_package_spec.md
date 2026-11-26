@@ -1185,7 +1185,7 @@ push:
 ### フェーズ1の状態
 
 * `.github/workflows/npm-publish.yml` を追加済み。
-* トリガー `push.tags: 'v*'`、`setup-node` (Node 20)、`npm ci`、`verify:tarball`、`npm publish --access public` を定義。
+* トリガー `push.tags: 'v*'`、`setup-node` (Node 24)、`npm ci`、`verify:tarball`、`npm publish --access public` を定義。
 * 運用開始は [Automation After Validation](#automation-after-validation) に従い、初回手動 `npm publish` 成功および `NPM_TOKEN` 設定後 (フェーズ2)。
 
 ## 依存関係レビュー

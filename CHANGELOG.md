@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+## [1.0.36] - 2026-11-26
+
+* `engines.node` を `>=22.12.0` に更新 (textlint v16系と整合)
+* README / `init` 生成ワークフロー / ドキュメントの Node 前提を v22.12に統一
+* `vite.config.ts` の `build.target` を `node22` にし、本番ビルドは tsc である旨をコメント
+* `setup-doctor-pass.sh` で `@s2j/docs-linter` を tarball 展開のみ配置 (npm 12 `EALLOWGIT` 回避)
+* `scripts/lib/reset-sandbox-dir.sh` / `doctor-sandbox-paths.sh` — Cursor サンドボックス向け (`.vscode` 作成不可時は in-tree フィクスチャ + `git restore`、DOCTOR-011は `.vscode` なし複製先で検証)
+
 ## [1.0.35] - 2026-11-26
 
 * CLI の `NODE_PATH` 連結に `path.delimiter` を使用 (Windows では `;`) — Issue #1

@@ -1,5 +1,22 @@
 #!/usr/bin/env bash
 
+ROOT_DIR_FOR_FIXTURE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+# shellcheck source=reset-sandbox-dir.sh
+source "${ROOT_DIR_FOR_FIXTURE}/scripts/lib/reset-sandbox-dir.sh"
+
+## Copy pass fixture without `.vscode/` (sandbox-safe WARN VSCode 用).
+## @param $1 prepared pass directory
+## @param $2 output directory
+prepare_doctor_dir_without_vscode() {
+  local pass_dir="$1"
+  local out_dir="$2"
+
+  reset_sandbox_dir "${out_dir}"
+  cp "${pass_dir}/package.json" "${pass_dir}/.textlintrc.json" "${out_dir}/"
+  cp -R "${pass_dir}/.github" "${out_dir}/"
+  cp -R "${pass_dir}/node_modules" "${out_dir}/"
+}
+
 ## @param $1 .textlintrc.json path
 ## @return $STATUS exit code of command
 set_invalid_preset() {

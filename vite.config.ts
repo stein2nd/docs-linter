@@ -4,9 +4,10 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+/** `npm run dev` 専用。公開物ビルドは tsc。`target` は package.json `engines.node` に合わせる。 */
 export default defineConfig({
   build: {
-    target: "node20",
+    target: "node22",
     emptyOutDir: false,
     minify: false,
     sourcemap: true,

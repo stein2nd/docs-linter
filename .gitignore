@@ -46,6 +46,9 @@ coverage/
 .sandbox/
 !.sandbox/.gitkeep
 
+# doctor in-tree テストで生成 (Cursor サンドボックス等)
+scripts/fixtures/doctor/pass/node_modules/
+
 # macOS
 .DS_Store
 

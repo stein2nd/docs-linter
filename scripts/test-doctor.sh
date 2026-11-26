@@ -7,10 +7,14 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 source "${ROOT_DIR}/scripts/lib/assert.sh"
 source "${ROOT_DIR}/scripts/lib/doctor-fixture.sh"
+source "${ROOT_DIR}/scripts/lib/reset-sandbox-dir.sh"
+source "${ROOT_DIR}/scripts/lib/doctor-sandbox-paths.sh"
+
+configure_doctor_sandbox_paths "${ROOT_DIR}"
 
 CLI="node dist/bin/cli.js"
-PASS_DIR="${ROOT_DIR}/.sandbox/doctor/pass"
-NO_TEXTLINT_DIR="${ROOT_DIR}/.sandbox/doctor/no-textlint"
+PASS_DIR="${DOCTOR_PASS_DIR}"
+NO_TEXTLINT_DIR="${DOCTOR_NO_TEXTLINT_DIR}"
 
 echo "Building..."
 npm run build --silent
@@ -26,7 +30,7 @@ prepare_pass_fixture() {
 ## @return $STATUS exit code of doctor command
 ## @return $OUTPUT output of doctor command
 prepare_no_textlint_fixture() {
-    rm -rf "${NO_TEXTLINT_DIR}"
+    reset_sandbox_dir "${NO_TEXTLINT_DIR}"
 
     mkdir -p "${NO_TEXTLINT_DIR}/node_modules"
 
@@ -145,8 +149,14 @@ pass_test "DOCTOR-005"
 
 log_test "DOCTOR-011"
 prepare_pass_fixture
-remove_vscode_settings "${PASS_DIR}/.vscode/settings.json"
-run_doctor "${PASS_DIR}"
+if [ "${DOCTOR_USE_IN_TREE_FIXTURE}" = "1" ]; then
+  PASS_NO_VSCODE_DIR="${ROOT_DIR}/.sandbox/doctor/pass-no-vscode"
+  prepare_doctor_dir_without_vscode "${PASS_DIR}" "${PASS_NO_VSCODE_DIR}"
+  run_doctor "${PASS_NO_VSCODE_DIR}"
+else
+  remove_vscode_settings "${PASS_DIR}/.vscode/settings.json"
+  run_doctor "${PASS_DIR}"
+fi
 assert_exit_code "${STATUS}" 0
 assert_contains "${OUTPUT}" "⚠ WARN VSCode"
 pass_test "DOCTOR-011"
